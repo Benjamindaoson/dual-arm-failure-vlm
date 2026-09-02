@@ -1,0 +1,28 @@
+{
+  "source_root": "D:\\备课\\强化学习自学资料\\【课件】大模型强化学习实战\\阶段三：新兴大模型强化学习技术实战\\视觉强化学习实战",
+  "copied": [
+    {
+      "source": "D:\\备课\\强化学习自学资料\\【课件】大模型强化学习实战\\阶段三：新兴大模型强化学习技术实战\\视觉强化学习实战\\【视觉强化学习实战项目】Qwen3_VL_(8B)_GSPO.ipynb",
+      "target": "D:\\01_project\\找工作的项目\\03_multimodal_chart_gspo\\legacy_reproduction\\【视觉强化学习实战项目】Qwen3_VL_(8B)_GSPO.ipynb",
+      "sha256": "15d5f91287c302588bd2be1428da77acdadcf8e248d2f21698d7533cda7ab294",
+      "bytes": 696410
+    },
+    {
+      "source": "D:\\备课\\强化学习自学资料\\【课件】大模型强化学习实战\\阶段三：新兴大模型强化学习技术实战\\视觉强化学习实战\\baseline_records.json",
+      "target": "D:\\01_project\\找工作的项目\\03_multimodal_chart_gspo\\legacy_reproduction\\baseline_records.json",
+      "sha256": "8ef25df1f978e2bffb42e1bc244e7482556281f5aacf2c5c03ec2722793f2f00",
+      "bytes": 170047
+    },
+    {
+      "source": "D:\\备课\\强化学习自学资料\\【课件】大模型强化学习实战\\阶段三：新兴大模型强化学习技术实战\\视觉强化学习实战\\after_records.json",
+      "target": "D:\\01_project\\找工作的项目\\03_multimodal_chart_gspo\\legacy_reproduction\\after_records.json",
+      "sha256": "161361e6052be88819e781b43d1db3f0a9234a43961539836c897a836ce7865c",
+      "bytes": 170775
+    }
+  ],
+  "external_only": [
+    {
+      "reason": "base model and visual training data are downloaded only on the GPU machine"
+    }
+  ]
+}
