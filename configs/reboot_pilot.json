@@ -1,0 +1,25 @@
+{
+  "dataset_repo": "REBOOT26/sample_recovery-demonstration",
+  "annotation_file": "meta/phase.json",
+  "task": "16mm-cylinder-install",
+  "base_model": "Qwen/Qwen2.5-VL-3B-Instruct",
+  "cameras": [
+    "observation.images.cam_high",
+    "observation.images.cam_low"
+  ],
+  "frames_per_window": 6,
+  "window_span_seconds": 2.0,
+  "split_seed": 42,
+  "train_ratio": 0.8,
+  "val_ratio": 0.1,
+  "targets": [
+    "phase",
+    "execution_state",
+    "failure_mode"
+  ],
+  "training_gates": {
+    "run_sft_only_after_base_eval": true,
+    "run_rl_only_after_sft_eval": true,
+    "run_gspo_only_if_rl_signal_exists": true
+  }
+}
