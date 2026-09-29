@@ -21,12 +21,11 @@ class MetricsTests(unittest.TestCase):
             },
             {
                 "reference": {"phase_name": "Align (pick)", "execution_state": "nominal", "failure_mode": "none", "anchor_kind": "nominal"},
-                "output": 'not-json',
+                "output": "not-json",
             },
         ]
         metrics = evaluate_predictions(rows)
-        self.assertAlmostEqual(1/3, metrics["json_valid_rate"] * 0 + 1/3)  # sanity without rounding assumptions
-        self.assertAlmostEqual(2/3, metrics["json_valid_rate"])
+        self.assertAlmostEqual(2 / 3, metrics["json_valid_rate"])
         self.assertAlmostEqual(0.5, metrics["failure_recall"])
         self.assertEqual(3, metrics["n"])
 
