@@ -180,5 +180,5 @@ N/A — 同上。已验证的配置合同为 sequence-level importance sampling�
 ## 【Git】
 
 - 分支：`reboot-precision-recovery`
-- 实现基线：`7428822e0a580d976683b2984e7433f4e7ef963b`
-- 本报告生成时：变更尚待最终验证、commit、push 和 PR；最终状态以交付消息和远端读回为准。
+- 实现与证据 commit：`81da1f1924128feba4d9d9b9758e01dccf6ab471`
+- 架构与交付状态：待最终架构验证、push、PR 和远端读回；最终状态以交付消息为准。

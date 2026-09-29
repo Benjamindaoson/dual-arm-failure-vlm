@@ -29,7 +29,7 @@
 
 ## 5. Documentation and Architecture
 
-- [ ] 5.1 Create and validate the repository architecture source and standalone HTML
+- [x] 5.1 Create and validate the repository architecture source and standalone HTML
 - [x] 5.2 Rewrite README with executed, implemented-not-executed, limitations, and legacy sections
 - [x] 5.3 Add Chinese resume bullets, interview stories, and deep-dive Q&A with claim boundaries
 
