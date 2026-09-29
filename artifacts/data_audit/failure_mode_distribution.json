@@ -1,0 +1,28 @@
+{
+  "all_annotations": {
+    "delayed_start": 1,
+    "excessive_force": 5,
+    "freeze": 1,
+    "jamming": 2,
+    "misalignment": 28,
+    "poor_engagement": 1,
+    "premature_grasp": 1,
+    "premature_release": 6,
+    "retention_failure": 3,
+    "slip": 9,
+    "sub_mm_misalignment": 3
+  },
+  "valid_episodes": {
+    "delayed_start": 1,
+    "excessive_force": 5,
+    "freeze": 1,
+    "jamming": 2,
+    "misalignment": 22,
+    "poor_engagement": 1,
+    "premature_grasp": 1,
+    "premature_release": 6,
+    "retention_failure": 3,
+    "slip": 8,
+    "sub_mm_misalignment": 3
+  }
+}

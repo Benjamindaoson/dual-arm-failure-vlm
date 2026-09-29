@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections import Counter
+from dataclasses import dataclass, field
 import json
 from pathlib import Path
 import random
 from typing import Any, Iterable
 
 EXPECTED_PHASE_COUNT = 5
+WINDOWS_PER_STATE = 3
 
 
 @dataclass(frozen=True)
@@ -57,6 +59,8 @@ class RebootAnnotations:
     fps: int
     phase_names: tuple[str, ...]
     episodes: tuple[EpisodeAnnotation, ...]
+    load_issues: dict[str, list[str]] = field(default_factory=dict)
+    episodes_observed: int = 0
 
 
 @dataclass(frozen=True)
@@ -127,14 +131,35 @@ def _parse_episode(raw: dict[str, Any]) -> EpisodeAnnotation:
 def load_annotations(path: str | Path) -> RebootAnnotations:
     raw = json.loads(Path(path).read_text(encoding="utf-8"))
     phase_names = tuple(str(x) for x in _require(raw, "phase_names"))
-    episodes = tuple(_parse_episode(x) for x in _require(raw, "episodes"))
+    episode_rows = _require(raw, "episodes")
+    if not isinstance(episode_rows, list):
+        raise ValueError("episodes must be an array")
+    ids = [
+        str(row.get("episode_index", f"<row:{index}>")) if isinstance(row, dict) else f"<row:{index}>"
+        for index, row in enumerate(episode_rows)
+    ]
+    duplicates = {episode_id for episode_id, count in Counter(ids).items() if count > 1}
+    episodes: list[EpisodeAnnotation] = []
+    load_issues: dict[str, list[str]] = {}
+    for index, row in enumerate(episode_rows):
+        episode_id = ids[index]
+        issue_key = f"{episode_id}@row:{index}" if episode_id in duplicates else episode_id
+        if episode_id in duplicates:
+            load_issues[issue_key] = ["duplicate_episode"]
+            continue
+        try:
+            episodes.append(_parse_episode(row))
+        except (KeyError, TypeError, ValueError) as error:
+            load_issues[issue_key] = [f"invalid_annotation:{error}"]
     return RebootAnnotations(
         dataset=str(_require(raw, "dataset")),
         task_id=str(_require(raw, "task_id")),
         task_description=str(_require(raw, "task_description")),
         fps=int(_require(raw, "fps")),
         phase_names=phase_names,
-        episodes=episodes,
+        episodes=tuple(episodes),
+        load_issues=load_issues,
+        episodes_observed=len(episode_rows),
     )
 
 
@@ -151,7 +176,8 @@ def validate_episode(ep: EpisodeAnnotation) -> list[str]:
     if any(a > b for a, b in zip(ep.phase_boundaries, ep.phase_boundaries[1:])):
         warnings.append("non_monotonic_phase_boundaries")
     f = ep.failure
-    if not 0 <= f.originating_phase < len(ep.phase_names):
+    # Official REBOOT documentation numbers the five phases from 1 through 5.
+    if not 1 <= f.originating_phase <= len(ep.phase_names):
         warnings.append("originating_phase_out_of_range")
     if not 0 <= f.induced_at_frame < ep.duration_frames:
         warnings.append("failure_frame_out_of_range")
@@ -179,7 +205,7 @@ def usable_episode(ep: EpisodeAnnotation) -> bool:
     return not severe.intersection(validate_episode(ep))
 
 
-def _sample_frames(center: int, duration: int, fps: int, n_frames: int, span_seconds: float) -> tuple[int, ...]:
+def sample_frames(center: int, duration: int, fps: int, n_frames: int, span_seconds: float) -> tuple[int, ...]:
     if n_frames < 1:
         raise ValueError("n_frames must be >= 1")
     if span_seconds <= 0:
@@ -192,6 +218,41 @@ def _sample_frames(center: int, duration: int, fps: int, n_frames: int, span_sec
     return tuple(round(lo + i * (hi - lo) / (n_frames - 1)) for i in range(n_frames))
 
 
+def causal_sample_frames(end_frame: int, duration: int, fps: int, n_frames: int, span_seconds: float) -> tuple[int, ...]:
+    if n_frames < 1:
+        raise ValueError("n_frames must be >= 1")
+    if span_seconds <= 0:
+        raise ValueError("span_seconds must be > 0")
+    end = min(max(end_frame, 0), duration - 1)
+    start = max(0, end - int(round(fps * span_seconds)))
+    if n_frames == 1:
+        return (end,)
+    if start == end:
+        return (end,) * n_frames
+    return tuple(round(start + index * (end - start) / (n_frames - 1)) for index in range(n_frames))
+
+
+def state_anchor_frames(ep: EpisodeAnnotation, *, min_gap_frames: int = 15) -> dict[str, list[int]]:
+    def between(start: int, end: int) -> list[int]:
+        if end < start:
+            return []
+        if start == end:
+            return [start]
+        return sorted({
+            round(start + index * (end - start) / (WINDOWS_PER_STATE - 1))
+            for index in range(WINDOWS_PER_STATE)
+        })
+
+    failure = ep.failure
+    nominal_end = max(0, failure.induced_at_frame - max(min_gap_frames, ep.fps))
+    recovery_start = min(ep.duration_frames - 1, failure.recovery_started_at_frame + min_gap_frames)
+    return {
+        "nominal": between(0, nominal_end),
+        "failure": between(failure.induced_at_frame, failure.recovery_started_at_frame - 1),
+        "recovery": between(recovery_start, ep.duration_frames - 1),
+    }
+
+
 def split_episode_ids(
     episodes: Iterable[EpisodeAnnotation],
     seed: int = 42,
@@ -200,7 +261,7 @@ def split_episode_ids(
 ) -> dict[str, str]:
     if not 0 < train_ratio < 1 or not 0 <= val_ratio < 1 or train_ratio + val_ratio >= 1:
         raise ValueError("invalid split ratios")
-    ids = [ep.episode_index for ep in episodes]
+    ids = sorted(ep.episode_index for ep in episodes)
     rng = random.Random(seed)
     rng.shuffle(ids)
     n = len(ids)
@@ -219,25 +280,28 @@ def build_training_windows(
     n_frames: int = 6,
     span_seconds: float = 2.0,
     min_gap_frames: int = 15,
+    assignments: dict[str, str] | None = None,
 ) -> tuple[list[TrainingWindow], dict[str, list[str]]]:
-    """Build three balanced, episode-disjoint anchors: nominal, failure, recovery.
+    """Build dense, causal, episode-disjoint nominal/failure/recovery windows.
 
     Annotation-inconsistent episodes are excluded rather than silently repaired.
     """
-    audit = {ep.episode_index: validate_episode(ep) for ep in annotations.episodes}
-    usable = [ep for ep in annotations.episodes if usable_episode(ep)]
-    split = split_episode_ids(usable, seed=seed)
+    audit = dict(annotations.load_issues)
+    audit.update({ep.episode_index: validate_episode(ep) for ep in annotations.episodes})
+    usable = [
+        ep for ep in annotations.episodes
+        if usable_episode(ep) and (assignments is None or ep.episode_index in assignments)
+    ]
+    split = split_episode_ids(usable, seed=seed) if assignments is None else assignments
     windows: list[TrainingWindow] = []
 
     for ep in usable:
         f = ep.failure
-        anchors: list[tuple[str, int]] = []
-        nominal_center = max(0, f.induced_at_frame - max(min_gap_frames, ep.fps))
-        anchors.append(("nominal", nominal_center))
-        if f.recovery_started_at_frame > f.induced_at_frame:
-            anchors.append(("failure", (f.induced_at_frame + f.recovery_started_at_frame) // 2))
-        recovery_center = min(ep.duration_frames - 1, f.recovery_started_at_frame + max(min_gap_frames, ep.fps))
-        anchors.append(("recovery", recovery_center))
+        anchors = [
+            (state, frame)
+            for state, frames in state_anchor_frames(ep, min_gap_frames=min_gap_frames).items()
+            for frame in frames
+        ]
 
         for anchor_kind, center in anchors:
             phase_idx = ep.phase_at(center)
@@ -248,7 +312,7 @@ def build_training_windows(
                     split=split[ep.episode_index],
                     anchor_kind=anchor_kind,
                     anchor_frame=center,
-                    sampled_frames=_sample_frames(center, ep.duration_frames, ep.fps, n_frames, span_seconds),
+                    sampled_frames=causal_sample_frames(center, ep.duration_frames, ep.fps, n_frames, span_seconds),
                     phase_index=phase_idx,
                     phase_name=ep.phase_names[phase_idx],
                     execution_state=state,

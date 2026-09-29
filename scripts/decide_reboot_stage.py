@@ -3,6 +3,12 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+
+from reboot_recovery.gates import decide_stage
 
 
 def _read(path: Path) -> dict:
@@ -13,41 +19,22 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Evidence gate for REBOOT post-training stages")
     parser.add_argument("--base", type=Path, required=True)
     parser.add_argument("--sft", type=Path, default=None)
-    parser.add_argument("--target-failure-recall", type=float, default=0.90)
-    parser.add_argument("--target-state-macro-f1", type=float, default=0.85)
-    parser.add_argument("--min-rl-headroom", type=float, default=0.03)
+    parser.add_argument("--config", type=Path, default=ROOT / "configs" / "evidence_gates.json")
+    parser.add_argument("--output", type=Path, default=None)
     args = parser.parse_args()
 
-    base = _read(args.base)
-    if args.sft is None:
-        needs_sft = (
-            float(base.get("failure_recall", 0.0)) < args.target_failure_recall
-            or float(base.get("state_macro_f1", 0.0)) < args.target_state_macro_f1
-        )
-        result = {
-            "decision": "RUN_SFT" if needs_sft else "STOP_BASE_SUFFICIENT",
-            "reason": "held-out base critic leaves measurable headroom" if needs_sft else "base meets frozen pilot targets",
-        }
-    else:
-        sft = _read(args.sft)
-        base_score = float(base.get("state_macro_f1", 0.0))
-        sft_score = float(sft.get("state_macro_f1", 0.0))
-        sft_failure = float(sft.get("failure_recall", 0.0))
-        needs_rl = (
-            sft_failure < args.target_failure_recall
-            or sft_score < args.target_state_macro_f1
-        )
-        learned = sft_score >= base_score + args.min_rl_headroom
-        result = {
-            "decision": "RUN_RLVR" if needs_rl and learned else ("STOP_SFT_SUFFICIENT" if not needs_rl else "REVISIT_DATA_OR_SFT"),
-            "base_state_macro_f1": base_score,
-            "sft_state_macro_f1": sft_score,
-            "sft_failure_recall": sft_failure,
-            "reason": (
-                "SFT helps but leaves outcome-level errors" if needs_rl and learned
-                else ("SFT meets frozen pilot targets" if not needs_rl else "SFT did not establish a clean learning signal")
-            ),
-        }
+    config = _read(args.config)
+    result = decide_stage(
+        _read(args.base),
+        _read(args.sft) if args.sft else None,
+        target_failure_recall=float(config["base"]["failure_recall"]),
+        target_state_macro_f1=float(config["base"]["state_macro_f1"]),
+        min_failure_gain=float(config["sft_minimum_gain"]["failure_recall"]),
+        min_state_gain=float(config["sft_minimum_gain"]["state_macro_f1"]),
+    )
+    if args.output:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result, indent=2))
     return 0
 

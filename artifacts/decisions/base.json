@@ -1,0 +1,8 @@
+{
+  "decision": "BLOCKED_NO_CUDA",
+  "dataset_revision": "0633573d0438be1185bddebdf1a2c8f5505f7b2a",
+  "base_metrics": null,
+  "authorized_next_stage": null,
+  "reason": "Fresh SSH and PyTorch probes found no /dev/nvidia* device and torch.cuda.is_available() was false; CPU inference was intentionally not substituted.",
+  "environment_receipt": "artifacts/environment/gpu_environment.json"
+}

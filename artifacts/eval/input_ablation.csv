@@ -1,0 +1,5 @@
+variant,status,num_frames,cameras,trace,state_macro_f1,failure_recall,recovery_recall,phase_macro_f1,failure_mode_macro_f1,json_valid_rate
+A0,BLOCKED_NO_CUDA,1,cam_high,false,,,,,,
+A1,BLOCKED_NO_CUDA,4,cam_high,false,,,,,,
+A2,BLOCKED_NO_CUDA,4,cam_high+cam_low,false,,,,,,
+A3,BLOCKED_NO_CUDA,4,cam_high+cam_low,true,,,,,,

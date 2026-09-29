@@ -1,0 +1,2 @@
+status,episode_index,detection_delay_seconds,false_alarms_before_failure,reason
+BLOCKED_NO_CUDA,,,,no NVIDIA device in supplied container; 84-row timing manifest prepared only

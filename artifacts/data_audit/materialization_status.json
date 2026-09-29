@@ -1,0 +1,27 @@
+{
+  "a0": {
+    "images": 469,
+    "receipt_sha256": "7d399be05538d9906d4e3d075fcb94498e3ce8f7e77992aaa8ccca38567044d9",
+    "rows": {
+      "test": 54,
+      "train": 372,
+      "val": 43
+    },
+    "status": "COMPLETE"
+  },
+  "a1": {
+    "images": 24,
+    "status": "PARTIAL_STOPPED_AFTER_PLATFORM_BLOCK"
+  },
+  "a2": {
+    "images": 2,
+    "status": "REAL_DECODE_SMOKE_VERIFIED",
+    "train_rows": 1
+  },
+  "a3": {
+    "status": "NOT_MATERIALIZED"
+  },
+  "captured_at": "2026-09-29T22:04:26.267478+00:00",
+  "reason": "Supplied container has no NVIDIA device; CPU-only bulk decoding stopped after A0 to avoid wasting the instance.",
+  "status": "BLOCKED_NO_CUDA_AFTER_A0"
+}

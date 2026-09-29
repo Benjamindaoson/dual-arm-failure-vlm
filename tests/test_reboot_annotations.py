@@ -7,7 +7,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from reboot_recovery.annotations import build_training_windows, load_annotations, validate_episode
+from reboot_recovery.annotations import build_training_windows, causal_sample_frames, load_annotations, sample_frames, validate_episode
 
 FIXTURE = {
     "dataset": "REBOOT26/sample_recovery-demonstrations",
@@ -59,8 +59,9 @@ class RebootAnnotationTests(unittest.TestCase):
         for row in windows:
             by_episode.setdefault(row.episode_index, set()).add(row.split)
         self.assertTrue(all(len(v) == 1 for v in by_episode.values()))
-        self.assertEqual(6, len(windows))
+        self.assertEqual(18, len(windows))
         self.assertEqual({"nominal", "failure", "recovery"}, {x.execution_state for x in windows})
+        self.assertTrue(all(max(x.sampled_frames) <= x.anchor_frame for x in windows))
 
     def test_bad_annotation_is_quarantined(self):
         fixture = json.loads(json.dumps(FIXTURE))
@@ -72,6 +73,26 @@ class RebootAnnotationTests(unittest.TestCase):
             windows, audit = build_training_windows(anns)
         self.assertIn("recovery_before_failure", audit["00"])
         self.assertTrue(all(x.episode_index != "00" for x in windows))
+
+    def test_missing_and_duplicate_annotations_are_quarantined(self):
+        fixture = json.loads(json.dumps(FIXTURE))
+        fixture["episodes"].append(json.loads(json.dumps(fixture["episodes"][0])))
+        fixture["episodes"].append({"episode_index": "02"})
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "phase.json"
+            path.write_text(json.dumps(fixture), encoding="utf-8")
+            annotations = load_annotations(path)
+            windows, audit = build_training_windows(annotations)
+        self.assertTrue(any("duplicate_episode" in issues for issues in audit.values()))
+        self.assertTrue(any(any(issue.startswith("invalid_annotation:") for issue in issues) for issues in audit.values()))
+        self.assertNotIn("00", {row.episode_index for row in windows})
+        self.assertNotIn("02", {row.episode_index for row in windows})
+
+    def test_frame_window_sampling_is_bounded_and_causal_when_required(self):
+        self.assertEqual((0, 5, 10), sample_frames(5, 20, 10, 3, 1.0))
+        frames = causal_sample_frames(12, 20, 10, 4, 1.0)
+        self.assertEqual(12, frames[-1])
+        self.assertTrue(all(0 <= frame <= 12 for frame in frames))
 
 if __name__ == "__main__":
     unittest.main()

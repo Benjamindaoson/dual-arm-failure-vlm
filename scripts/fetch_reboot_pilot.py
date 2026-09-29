@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 from pathlib import Path
 
 
@@ -8,9 +9,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Download REBOOT pilot metadata or the full 2.84 GB pilot dataset")
     parser.add_argument("--repo-id", default="REBOOT26/sample_recovery-demonstration")
     parser.add_argument("--local-dir", type=Path, default=Path("data/reboot_sample"))
+    parser.add_argument("--revision", default=None)
+    parser.add_argument("--endpoint", default=None, help="Override Hugging Face with HF_ENDPOINT-compatible mirror")
     parser.add_argument("--full", action="store_true", help="Download data/videos as well as metadata")
     args = parser.parse_args()
 
+    if args.endpoint:
+        os.environ["HF_ENDPOINT"] = args.endpoint
     try:
         from huggingface_hub import snapshot_download
     except ImportError as exc:
@@ -22,6 +27,7 @@ def main() -> int:
         repo_type="dataset",
         local_dir=args.local_dir,
         allow_patterns=allow_patterns,
+        revision=args.revision,
     )
     print(path)
     return 0

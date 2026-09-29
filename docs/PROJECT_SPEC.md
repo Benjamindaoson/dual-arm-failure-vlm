@@ -29,7 +29,7 @@ Every model sample is a temporal window from exactly one episode. Dataset splits
 
 Annotation-inconsistent episodes are quarantined instead of repaired automatically. This is required because the public annotation file contains edge cases that must be audited before training.
 
-Pilot visual input: six ordered frames spanning two seconds from `cam_high` and `cam_low`. Wrist cameras and robot state/action traces are ablations, not mandatory inputs.
+Pilot visual input: four ordered timestamps spanning two seconds from `cam_high` and `cam_low` (eight images). Wrist cameras and robot state/action traces are ablations, not mandatory inputs.
 
 ## Experiment gates
 

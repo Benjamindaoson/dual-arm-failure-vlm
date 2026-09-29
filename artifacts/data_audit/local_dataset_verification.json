@@ -1,0 +1,12 @@
+{
+  "full_payload_present": true,
+  "metadata_present": true,
+  "missing": [],
+  "parse_errors": [],
+  "payload_file_counts": {
+    "data": 60,
+    "videos": 18
+  },
+  "root": "/root/autodl-tmp/reboot_sample",
+  "valid": true
+}

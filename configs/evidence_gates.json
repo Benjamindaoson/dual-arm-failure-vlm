@@ -1,0 +1,10 @@
+{
+  "base": {
+    "failure_recall": 0.9,
+    "state_macro_f1": 0.85
+  },
+  "sft_minimum_gain": {
+    "failure_recall": 0.03,
+    "state_macro_f1": 0.03
+  }
+}

@@ -10,6 +10,8 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
+from reboot_recovery.ablations import resolve_ablation, select_window_frames, summarize_trace
+from reboot_recovery.evidence import file_sha256, write_json
 from reboot_recovery.prompts import build_prompt
 
 
@@ -29,10 +31,15 @@ def _target(row: dict[str, Any]) -> str:
     )
 
 
-def _window_prompt(row: dict[str, Any]) -> str:
+def _window_prompt(
+    row: dict[str, Any], trace_summary: str | None = None, failure_modes: tuple[str, ...] = ()
+) -> str:
     class _Obj:
         task_description = row["task_description"]
-    return build_prompt(_Obj())  # type: ignore[arg-type]
+    return build_prompt(
+        _Obj(), include_trace_summary=trace_summary is not None, trace_summary=trace_summary,
+        failure_modes=failure_modes,
+    )  # type: ignore[arg-type]
 
 
 def _tensor_to_pil(value: Any):
@@ -61,17 +68,30 @@ def main() -> int:
     parser.add_argument("--root", type=Path, default=None, help="Optional local LeRobot dataset root")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "prepared" / "reboot_vlm")
     parser.add_argument("--cameras", nargs="+", default=["observation.images.cam_high", "observation.images.cam_low"])
+    parser.add_argument("--num-frames", type=int, default=4)
+    parser.add_argument("--ablation", choices=["A0", "A1", "A2", "A3"], default="A2")
+    parser.add_argument("--video-backend", default="pyav")
+    parser.add_argument("--split-receipt", type=Path, default=ROOT / "artifacts" / "splits" / "split_receipt.json")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
     rows = _read_jsonl(args.manifest)
-    requested = {(int(r["episode_index"]), int(f)) for r in rows for f in r["sampled_frames"]}
+    if not args.split_receipt.is_file():
+        raise SystemExit(f"split receipt not found: {args.split_receipt}")
+    split_receipt_sha256 = file_sha256(args.split_receipt)
+    failure_modes = tuple(sorted({str(row["failure_mode"]) for row in rows if row["failure_mode"] != "none"}))
+    spec = resolve_ablation(args.ablation, num_frames=args.num_frames, cameras=args.cameras)
+    requested = {(int(r["episode_index"]), int(f)) for r in rows for f in select_window_frames(r, spec)}
     if args.dry_run:
         print(json.dumps({
             "windows": len(rows),
             "unique_episode_frame_pairs": len(requested),
-            "cameras": args.cameras,
-            "estimated_images": len(requested) * len(args.cameras),
+            "ablation": spec.name,
+            "num_frames": spec.num_frames,
+            "cameras": spec.cameras,
+            "include_trace": spec.include_trace,
+            "estimated_images": len(requested) * len(spec.cameras),
+            "split_receipt_sha256": split_receipt_sha256,
         }, indent=2))
         return 0
 
@@ -80,11 +100,11 @@ def main() -> int:
     except ImportError as exc:
         raise SystemExit("Install LeRobot >=0.4.3 before materializing frames") from exc
 
-    kwargs: dict[str, Any] = {"repo_id": args.repo_id, "return_uint8": True}
+    kwargs: dict[str, Any] = {"repo_id": args.repo_id, "video_backend": args.video_backend}
     if args.root is not None:
         kwargs["root"] = args.root
     dataset = LeRobotDataset(**kwargs)
-    index_table = dataset.select_columns(["episode_index", "frame_index"])
+    index_table = dataset.hf_dataset.select_columns(["episode_index", "frame_index"])
     lookup: dict[tuple[int, int], int] = {}
     for row_idx, meta in enumerate(index_table):
         key = (int(meta["episode_index"]), int(meta["frame_index"]))
@@ -102,9 +122,14 @@ def main() -> int:
 
     for window_idx, row in enumerate(rows):
         images: list[str] = []
-        for frame in row["sampled_frames"]:
+        states: list[Any] = []
+        actions: list[Any] = []
+        for frame in select_window_frames(row, spec):
             item = dataset[lookup[(int(row["episode_index"]), int(frame))]]
-            for camera in args.cameras:
+            if spec.include_trace:
+                states.append(item["observation.state"])
+                actions.append(item["action"])
+            for camera in spec.cameras:
                 if camera not in item:
                     raise KeyError(f"camera {camera!r} missing from dataset item")
                 pil = _tensor_to_pil(item[camera])
@@ -113,13 +138,18 @@ def main() -> int:
                 pil.convert("RGB").save(args.output_dir / rel, quality=90)
                 images.append(str(rel))
 
+        trace_summary = summarize_trace(states, actions) if spec.include_trace else None
         image_blocks = [{"type": "image"} for _ in images]
+        anchor_kind = row.get("anchor_kind", row.get("event_kind", "window"))
         record = {
-            "id": f"ep{row['episode_index']}-{row['anchor_kind']}",
+            "id": row.get("id", f"ep{row['episode_index']}-{anchor_kind}-f{row['anchor_frame']}"),
             "images": images,
-            "prompt": [{"role": "user", "content": image_blocks + [{"type": "text", "text": _window_prompt(row)}]}],
+            "ablation": spec.name,
+            "trace_summary": trace_summary,
+            "prompt": [{"role": "user", "content": image_blocks + [{"type": "text", "text": _window_prompt(row, trace_summary, failure_modes)}]}],
             "completion": [{"role": "assistant", "content": [{"type": "text", "text": _target(row)}]}],
             "reference": row,
+            "split_receipt_sha256": split_receipt_sha256,
         }
         out_by_split[row["split"]].append(record)
 
@@ -129,6 +159,12 @@ def main() -> int:
             for record in split_rows:
                 f.write(json.dumps(record, ensure_ascii=False) + "\n")
         print(f"{split}: {len(split_rows)} -> {path}")
+    write_json(args.output_dir / "dataset_receipt.json", {
+        "manifest": str(args.manifest.resolve()),
+        "split_receipt": str(args.split_receipt.resolve()),
+        "split_receipt_sha256": split_receipt_sha256,
+        "ablation": spec.name,
+    })
     return 0
 
 
