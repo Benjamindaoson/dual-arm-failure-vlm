@@ -30,8 +30,7 @@ def _generate_one(model, processor, row: dict[str, Any], image_base: Path, max_n
     import torch
 
     images = _load_images(image_base, row["images"])
-    prompt = row["prompt"]
-    rendered = processor.apply_chat_template(prompt, tokenize=False, add_generation_prompt=True)
+    rendered = processor.apply_chat_template(row["prompt"], tokenize=False, add_generation_prompt=True)
     inputs = processor(text=[rendered], images=images, padding=True, return_tensors="pt")
     inputs = {k: v.to(model.device) if hasattr(v, "to") else v for k, v in inputs.items()}
     start = time.perf_counter()
@@ -50,7 +49,7 @@ def _generate_one(model, processor, row: dict[str, Any], image_base: Path, max_n
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Evaluate an untouched VLM on held-out REBOOT execution windows")
+    parser = argparse.ArgumentParser(description="Evaluate an untouched or adapted VLM on held-out REBOOT execution windows")
     parser.add_argument("--data", type=Path, required=True, help="Prepared val/test JSONL")
     parser.add_argument("--model", default="Qwen/Qwen2.5-VL-3B-Instruct")
     parser.add_argument("--output", type=Path, default=ROOT / "outputs" / "reboot_base_predictions.jsonl")
@@ -76,16 +75,19 @@ def main() -> int:
     import torch
     from transformers import AutoProcessor, BitsAndBytesConfig, Qwen2_5_VLForConditionalGeneration
 
+    if not torch.cuda.is_available():
+        raise SystemExit("GPU evaluation is required for this VLM pilot.")
+    compute_dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
     quantization = None
     if args.load_in_4bit:
         quantization = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_quant_type="nf4",
-            bnb_4bit_compute_dtype=torch.bfloat16,
+            bnb_4bit_compute_dtype=compute_dtype,
         )
     model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
         args.model,
-        torch_dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
+        torch_dtype=compute_dtype,
         device_map="auto",
         quantization_config=quantization,
     )
