@@ -22,23 +22,64 @@ Public metadata declares 60 episodes, 53,886 frames, 30 FPS, 14-D robot state, 1
 
 The pilot uses the annotations as ground truth rather than inventing labels from video.
 
-## CPU-first data audit
+## Run the pilot
 
-After downloading the dataset metadata:
+Start with metadata and annotation audit; no GPU is needed:
 
 ```bash
+python -m pip install huggingface_hub
+python scripts/fetch_reboot_pilot.py
 python scripts/build_reboot_manifest.py \
-  --phase-json /path/to/meta/phase.json \
+  --phase-json data/reboot_sample/meta/phase.json \
   --output outputs/reboot_manifest.jsonl \
   --audit outputs/reboot_manifest_audit.json
-
+python scripts/prepare_reboot_vlm_dataset.py \
+  --manifest outputs/reboot_manifest.jsonl \
+  --dry-run
 python -m unittest discover -s tests -v
 ```
+
+Then download the 2.84 GB pilot and materialize only the temporal windows used by the experiment:
+
+```bash
+python scripts/fetch_reboot_pilot.py --full
+python -m pip install -r requirements-reboot.txt
+python scripts/prepare_reboot_vlm_dataset.py \
+  --manifest outputs/reboot_manifest.jsonl \
+  --root data/reboot_sample \
+  --output-dir prepared/reboot_vlm
+```
+
+Run the untouched VLM on held-out episodes:
+
+```bash
+python scripts/eval_reboot_base_vlm.py \
+  --data prepared/reboot_vlm/test.jsonl \
+  --load-in-4bit \
+  --output outputs/reboot_base_predictions.jsonl \
+  --metrics outputs/reboot_base_metrics.json
+
+python scripts/decide_reboot_stage.py \
+  --base outputs/reboot_base_metrics.json
+```
+
+Only when the Base gate says `RUN_SFT`:
+
+```bash
+python scripts/train_reboot_sft.py \
+  --train prepared/reboot_vlm/train.jsonl \
+  --eval prepared/reboot_vlm/val.jsonl \
+  --output-dir outputs/reboot_sft
+```
+
+Re-run the same evaluator with `--model outputs/reboot_sft`, save SFT metrics, then call `decide_reboot_stage.py --base ... --sft ...`. RL is intentionally not the default next step.
+
+## Data integrity
 
 The builder:
 
 - splits at episode level to prevent frame leakage;
-- creates balanced nominal/failure/recovery temporal anchors;
+- creates nominal/failure/recovery temporal anchors from the published annotations;
 - samples frame indices deterministically;
 - quarantines inconsistent annotations rather than silently repairing them;
 - emits class counts and an annotation audit.
@@ -49,13 +90,13 @@ The builder:
 
 ## Experiment plan
 
-Read [`docs/PROJECT_SPEC.md`](docs/PROJECT_SPEC.md). The next executable stages are:
+Read [`docs/PROJECT_SPEC.md`](docs/PROJECT_SPEC.md). The evidence gates are:
 
-1. run annotation/data audit on all 60 pilot episodes;
-2. build Base VLM evaluation with two fixed camera views and short temporal windows;
-3. run SFT only if Base has measurable headroom;
-4. add robot state/action trace as an ablation;
-5. run GRPO/GSPO only if structured outcome reward improves beyond SFT.
+1. Base VLM on held-out episodes.
+2. SFT only if Base has measurable headroom.
+3. Single frame vs temporal window; robot state/action trace only as an ablation.
+4. RLVR only if SFT improves but leaves meaningful outcome errors.
+5. GRPO vs sequence-level GSPO only after a real RL signal exists.
 
 ## Legacy material
 
