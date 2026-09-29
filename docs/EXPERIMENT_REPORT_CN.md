@@ -181,4 +181,6 @@ N/A — 同上。已验证的配置合同为 sequence-level importance sampling�
 
 - 分支：`reboot-precision-recovery`
 - 实现与证据 commit：`81da1f1924128feba4d9d9b9758e01dccf6ab471`
-- 架构与交付状态：待最终架构验证、push、PR 和远端读回；最终状态以交付消息为准。
+- 架构交付 commit：`4a9ee5c30561d8a2f2b0c1f1e8fb96611bf65e70`
+- Push：已完成；上述架构 commit 已通过 `git ls-remote` 读回，最终 status-only commit 由交付消息给出。
+- PR：[#1 Complete audited REBOOT precision-assembly recovery pipeline](https://github.com/Benjamindaoson/multimodal-chart-gspo/pull/1)，目标 `master`，保持未合并。

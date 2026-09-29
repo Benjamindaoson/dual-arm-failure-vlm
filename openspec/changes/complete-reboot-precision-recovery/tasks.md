@@ -38,7 +38,7 @@
 - [x] 6.1 Add tests for parser, leakage, windows, quarantine, metrics, timing, local mode, config, resume, and dry-run
 - [x] 6.2 Run all tests, compile/static checks, dry-runs, and remote CPU verification
 - [x] 6.3 Review diff for secrets, dead code, duplicate implementation, and unsupported claims
-- [ ] 6.4 Commit, push `reboot-precision-recovery`, and create an unmerged pull request to the default branch
+- [x] 6.4 Commit, push `reboot-precision-recovery`, and create an unmerged pull request to the default branch
 
 ## 7. Real 4090 Experiment
 
