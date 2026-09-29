@@ -1,0 +1,15 @@
+# Data / audit
+huggingface_hub>=0.27
+datasets>=3.0
+pillow>=10
+numpy>=1.26
+
+# Robot dataset reader (REBOOT uses LeRobot v3)
+lerobot>=0.4.3
+
+# VLM post-training stage
+transformers>=4.57
+trl>=0.29
+peft>=0.14
+accelerate>=1.0
+bitsandbytes>=0.45
