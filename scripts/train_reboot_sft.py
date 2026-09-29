@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-import sys
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -62,21 +61,25 @@ def main() -> int:
         return 0
 
     import torch
+    if not torch.cuda.is_available():
+        raise SystemExit("CUDA GPU is required for the SFT pilot.")
     from datasets import Dataset
     from peft import LoraConfig
     from transformers import AutoProcessor, BitsAndBytesConfig, Qwen2_5_VLForConditionalGeneration
     from trl import SFTConfig, SFTTrainer
 
+    compute_dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+    use_bf16 = compute_dtype == torch.bfloat16
     train_ds = Dataset.from_list(_with_images(train_rows, args.train.parent))
     eval_ds = Dataset.from_list(_with_images(eval_rows, args.eval.parent))
     quantization = BitsAndBytesConfig(
         load_in_4bit=True,
         bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=torch.bfloat16,
+        bnb_4bit_compute_dtype=compute_dtype,
     )
     model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
         args.model,
-        torch_dtype=torch.bfloat16,
+        torch_dtype=compute_dtype,
         device_map="auto",
         quantization_config=quantization,
     )
@@ -103,7 +106,8 @@ def main() -> int:
         save_strategy="epoch",
         logging_steps=1,
         report_to="none",
-        bf16=True,
+        bf16=use_bf16,
+        fp16=not use_bf16,
         remove_unused_columns=False,
     )
     trainer = SFTTrainer(
