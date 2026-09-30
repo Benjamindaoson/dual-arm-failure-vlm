@@ -1,5 +1,5 @@
 {
-  "verified_run_count": 15,
+  "verified_run_count": 19,
   "runs": [
     {
       "run_id": "c0-base-val",
@@ -189,6 +189,60 @@
     },
     {
       "run_id": "c2-sft-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "dense-sft",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "4faaaee6dcddef75e44ab9eae273d42c38ac4c9958353b20746639e44c4d0365"
+      },
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "dense-sft-smoke",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "f7fb806db7b9066b5b484363962401bbd02c7a14ebc265f56a9b978f7dc280a6"
+      },
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "dense-sft-v1-diagnostic",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "dense-sft-val",
       "status": "VERIFIED",
       "hashed_outputs": {
         "memory.json": "BYTE_MATCH",

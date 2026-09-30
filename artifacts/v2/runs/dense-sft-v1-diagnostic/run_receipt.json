@@ -1,0 +1,28 @@
+{
+  "bitsandbytes": "0.49.2",
+  "config_sha256": "98e6062bf4a0be747bd623e586da839e9f6714d8c2171c044df8de4a8b19946e",
+  "cuda": "12.4",
+  "dataset_revision": "0633573d0438be1185bddebdf1a2c8f5505f7b2a",
+  "end_time": "2026-09-30T18:14:55.253901+00:00",
+  "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b",
+  "gpu": "NVIDIA GeForce RTX 4090 D",
+  "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+  "output_sha256": {
+    "memory.json": "f53614e20c8c1b1e673d4a623c99e4bf553066f1932682e0691b2e8d55e02722",
+    "metrics.json": "a4697f9ddfd1af67eeff7ec2dae7fa36f59ac2de5ede05e21fab08c3913c6306",
+    "predictions.jsonl": "650f7dc425d434f9b0554ec5afc047b5fbfb5b78cab043e2e1c143beb1f7eff2",
+    "timing.json": "1dd2e22e274a301152a12d1a330519c7dbc900740276d1a19d1ddd126d6a6ad4"
+  },
+  "peft": "0.21.1",
+  "run_id": "dense-sft-v1-diagnostic",
+  "seed": 42,
+  "start_time": "2026-09-30T18:13:56.703926+00:00",
+  "status": "COMPLETED",
+  "torch": "2.6.0",
+  "trainable_parameters": null,
+  "transformers": "4.57.6",
+  "trl": "0.29.1",
+  "vram_peak_bytes": 3753902080,
+  "vram_total_bytes": 25252724736,
+  "wall_clock_seconds": 58.549975
+}

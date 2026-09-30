@@ -1,0 +1,54 @@
+{
+  "dataset": "REBOOT26/sample_recovery-demonstrations",
+  "task_id": "16mm-cylinder-install",
+  "episodes_total": 60,
+  "episodes_excluded": 7,
+  "windows_total": 1545,
+  "split_counts": {
+    "train": 1220,
+    "test": 177,
+    "val": 148
+  },
+  "state_counts": {
+    "nominal": 423,
+    "failure": 645,
+    "recovery": 477
+  },
+  "failure_mode_counts": {
+    "none": 423,
+    "misalignment": 462,
+    "slip": 174,
+    "jamming": 44,
+    "premature_release": 119,
+    "poor_engagement": 22,
+    "premature_grasp": 22,
+    "delayed_start": 22,
+    "retention_failure": 64,
+    "excessive_force": 105,
+    "freeze": 22,
+    "sub_mm_misalignment": 66
+  },
+  "annotation_warnings": {
+    "00": [
+      "excluded_by_split_receipt"
+    ],
+    "15": [
+      "excluded_by_split_receipt"
+    ],
+    "16": [
+      "originating_phase_out_of_range"
+    ],
+    "26": [
+      "originating_phase_out_of_range"
+    ],
+    "34": [
+      "excluded_by_split_receipt"
+    ],
+    "37": [
+      "recovery_before_failure"
+    ],
+    "38": [
+      "excluded_by_split_receipt"
+    ]
+  }
+}

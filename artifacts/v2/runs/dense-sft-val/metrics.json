@@ -1,0 +1,147 @@
+{
+  "balanced_accuracy": 0.3846153846153846,
+  "episode_bootstrap": {
+    "failure_recall_95ci": [
+      1.0,
+      1.0
+    ],
+    "samples": 1000,
+    "seed": 42,
+    "state_macro_f1_95ci": [
+      0.1851851851851852,
+      0.3420479302832244
+    ],
+    "unit": "episode"
+  },
+  "failure_correct": 15,
+  "failure_f1": 0.5555555555555556,
+  "failure_precision": 0.38461538461538464,
+  "failure_recall": 1.0,
+  "failure_support": 15,
+  "gold_state_counts": {
+    "failure": 15,
+    "nominal": 13,
+    "recovery": 15
+  },
+  "json_valid_rate": 1.0,
+  "mean_latency_seconds": 0.7412819301189725,
+  "n": 43,
+  "nominal_recall": 0.15384615384615385,
+  "outer_fence_removed_count": 0,
+  "pre_failure_false_positive_rate": 0.8461538461538461,
+  "predicted_state_counts": {
+    "failure": 39,
+    "nominal": 4
+  },
+  "predicted_state_distribution": {
+    "collapse_ratio": 0.9069767441860465,
+    "counts": {
+      "failure": 39,
+      "nominal": 4,
+      "recovery": 0
+    },
+    "invalid_count": 0,
+    "prediction_entropy_nats": 0.3094772867741259,
+    "probabilities": {
+      "failure": 0.9069767441860465,
+      "nominal": 0.09302325581395349,
+      "recovery": 0.0
+    },
+    "valid_count": 43
+  },
+  "recovery_recall": 0.0,
+  "semantic_diagnostic": {
+    "balanced_accuracy": 0.3846153846153846,
+    "episode_bootstrap": {
+      "failure_recall_95ci": [
+        1.0,
+        1.0
+      ],
+      "samples": 1000,
+      "seed": 42,
+      "state_macro_f1_95ci": [
+        0.1851851851851852,
+        0.3420479302832244
+      ],
+      "unit": "episode"
+    },
+    "failure_correct": 15,
+    "failure_f1": 0.5555555555555556,
+    "failure_precision": 0.38461538461538464,
+    "failure_recall": 1.0,
+    "failure_support": 15,
+    "gold_state_counts": {
+      "failure": 15,
+      "nominal": 13,
+      "recovery": 15
+    },
+    "json_valid_rate": 1.0,
+    "n": 43,
+    "nominal_recall": 0.15384615384615385,
+    "pre_failure_false_positive_rate": 0.8461538461538461,
+    "predicted_state_counts": {
+      "failure": 39,
+      "nominal": 4
+    },
+    "predicted_state_distribution": {
+      "collapse_ratio": 0.9069767441860465,
+      "counts": {
+        "failure": 39,
+        "nominal": 4,
+        "recovery": 0
+      },
+      "invalid_count": 0,
+      "prediction_entropy_nats": 0.3094772867741259,
+      "probabilities": {
+        "failure": 0.9069767441860465,
+        "nominal": 0.09302325581395349,
+        "recovery": 0.0
+      },
+      "valid_count": 43
+    },
+    "recovery_recall": 0.0,
+    "state_macro_f1": 0.26361655773420484,
+    "state_per_class": {
+      "failure": {
+        "f1": 0.5555555555555556,
+        "precision": 0.38461538461538464,
+        "recall": 1.0,
+        "support": 15.0
+      },
+      "nominal": {
+        "f1": 0.23529411764705882,
+        "precision": 0.5,
+        "recall": 0.15384615384615385,
+        "support": 13.0
+      },
+      "recovery": {
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 15.0
+      }
+    }
+  },
+  "state_macro_f1": 0.26361655773420484,
+  "state_per_class": {
+    "failure": {
+      "f1": 0.5555555555555556,
+      "precision": 0.38461538461538464,
+      "recall": 1.0,
+      "support": 15.0
+    },
+    "nominal": {
+      "f1": 0.23529411764705882,
+      "precision": 0.5,
+      "recall": 0.15384615384615385,
+      "support": 13.0
+    },
+    "recovery": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 15.0
+    }
+  },
+  "task_schema": "state-only"
+}
