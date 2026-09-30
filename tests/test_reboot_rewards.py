@@ -16,7 +16,7 @@ class RebootRewardTests(unittest.TestCase):
         ref = {"phase_name": "Transport", "execution_state": "failure", "failure_mode": "misalignment"}
         wrong_state = '{"phase":"Transport","state":"recovery","failure_mode":"misalignment"}'
         right_state = '{"phase":"Transport","state":"failure","failure_mode":"misalignment"}'
-        self.assertEqual(0.0, scorer(ref, wrong_state))
+        self.assertEqual(-1.0, scorer(ref, wrong_state))
         self.assertEqual(1.0, scorer(ref, right_state))
         self.assertEqual(0.0, scorer(ref, "not-json"))
 
@@ -26,6 +26,25 @@ class RebootRewardTests(unittest.TestCase):
         ref = {"phase_name": "Align (pick)", "execution_state": "nominal", "failure_mode": "none"}
         output = '{"phase":"Align (pick)","state":"nominal","failure_mode":"none"}'
         self.assertEqual(1.0, scorer(ref, output))
+
+    def test_state_gated_wrong_states_and_modes(self):
+        scorer = rewards.score_state_gated_prediction
+        refs = {
+            "failure": {"phase_name": "Transport", "execution_state": "failure", "failure_mode": "slip"},
+            "recovery": {"phase_name": "Transport", "execution_state": "recovery", "failure_mode": "slip"},
+            "nominal": {"phase_name": "Transport", "execution_state": "nominal", "failure_mode": "none"},
+        }
+        def output(state, mode):
+            import json
+            return json.dumps({"phase": "Transport", "state": state, "failure_mode": mode})
+        self.assertEqual(-1.0, scorer(refs["failure"], output("nominal", "none")))
+        self.assertEqual(-1.0, scorer(refs["failure"], output("recovery", "slip")))
+        self.assertEqual(0.0, scorer(refs["recovery"], output("failure", "slip")))
+        self.assertEqual(0.0, scorer(refs["nominal"], output("failure", "slip")))
+        self.assertAlmostEqual(0.8, scorer(refs["failure"], output("failure", "jamming")))
+        self.assertEqual(1.0, scorer(refs["failure"], output("failure", "slip")))
+        self.assertEqual(0.0, scorer(refs["failure"], "not json"))
+        self.assertEqual(0.0, scorer(refs["failure"], output("failure", "unknown")))
 
     def test_invalid_json_gets_zero(self):
         ref = {"phase_name": "Transport", "execution_state": "failure", "failure_mode": "slip"}

@@ -11,5 +11,11 @@
   "beta": 0.01,
   "reward_scheme": "state_gated_v2",
   "reward_weights": [1.0],
+  "state_gated_reward": {
+    "failure_miss_penalty": -1.0,
+    "correct_state_base": 0.7,
+    "phase_bonus": 0.1,
+    "failure_mode_bonus": 0.2
+  },
   "trl_contract": ">=0.29,<0.30"
 }

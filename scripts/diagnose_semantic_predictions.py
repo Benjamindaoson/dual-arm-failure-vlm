@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import json
 from pathlib import Path
@@ -33,8 +34,11 @@ def _source_receipt_evidence(path: Path, row_count: int) -> dict[str, str]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Separate strict protocol and mechanical semantic scores")
     parser.add_argument("--run", nargs=2, action="append", metavar=("NAME", "PREDICTIONS"), required=True)
-    parser.add_argument("--output", type=Path, required=True)
+    destination = parser.add_mutually_exclusive_group(required=True)
+    destination.add_argument("--output", type=Path)
+    destination.add_argument("--output-dir", type=Path)
     args = parser.parse_args(argv)
+    output = args.output or args.output_dir / "strict_vs_semantic.json"
 
     results = {}
     baseline = None
@@ -62,16 +66,38 @@ def main(argv: list[str] | None = None) -> int:
         baseline = identity
         split_hash = hashes.pop()
         results[name] = {"input_sha256": file_sha256(path), **_source_receipt_evidence(path, len(rows)), **diagnose_predictions(rows)}
-    if args.output.resolve() in input_paths:
+    if output.resolve() in input_paths:
         raise SystemExit("output must not overwrite raw predictions")
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    write_json(args.output, {
+    output.parent.mkdir(parents=True, exist_ok=True)
+    write_json(output, {
         "status": "RETROSPECTIVE_DIAGNOSTIC",
-        "normalization": "outer whitespace and one exact lowercase json fence only",
+        "normalization": "outer whitespace and one exact lowercase json or unlabelled fence only",
         "split_receipt_sha256": split_hash,
         "sample_ids": sorted(baseline),
         "runs": results,
     })
+    if args.output_dir:
+        distributions = {name: value["semantic_state_distribution"] for name, value in results.items()}
+        write_json(args.output_dir / "predicted_state_distribution.json", distributions)
+        write_json(args.output_dir / "collapse_metrics.json", {
+            name: {key: distribution[key] for key in ("collapse_ratio", "prediction_entropy_nats", "valid_count", "invalid_count")}
+            for name, distribution in distributions.items()
+        })
+        fields = ("model", "protocol", "n", "json_valid_rate", "state_macro_f1", "failure_recall",
+                  "failure_precision", "failure_f1", "recovery_recall", "balanced_accuracy", "collapse_ratio", "prediction_entropy_nats")
+        with (args.output_dir / "strict_vs_semantic.csv").open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=fields)
+            writer.writeheader()
+            for name, value in results.items():
+                for protocol in ("protocol", "semantic"):
+                    metrics = value[protocol]
+                    distribution = value["semantic_state_distribution"] if protocol == "semantic" else None
+                    writer.writerow({
+                        "model": name, "protocol": protocol,
+                        **{field: metrics.get(field) for field in fields[2:10]},
+                        "collapse_ratio": distribution["collapse_ratio"] if distribution else "",
+                        "prediction_entropy_nats": distribution["prediction_entropy_nats"] if distribution else "",
+                    })
     print(json.dumps({name: {"n": value["protocol"]["n"], "semantic_failure_recall": value["semantic"]["failure_recall"]}
                       for name, value in results.items()}, indent=2))
     return 0

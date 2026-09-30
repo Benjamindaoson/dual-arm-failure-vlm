@@ -32,7 +32,8 @@ def _verify_reward(references: list[dict]) -> bool:
         for wrong_state in {"nominal", "failure", "recovery"} - {str(ref["execution_state"])}:
             wrong = {**exact, "state": wrong_state,
                      "failure_mode": "none" if wrong_state == "nominal" else (ref["failure_mode"] if ref["failure_mode"] != "none" else fallback_mode)}
-            if score_state_gated_prediction(ref, json.dumps(wrong)) != 0.0:
+            expected = -1.0 if ref["execution_state"] == "failure" else 0.0
+            if score_state_gated_prediction(ref, json.dumps(wrong)) != expected:
                 return False
     return True
 
@@ -59,7 +60,8 @@ def main(argv: list[str] | None = None) -> int:
     sft_metrics = diagnose_predictions(sft.values())["semantic"]
     verifier_validated = _verify_reward([row["reference"] for row in base.values()])
     decision = decide_v2_rl_gate(
-        {**base_metrics, "task_schema": "full"}, {**sft_metrics, "task_schema": "full"},
+        {**base_metrics, "task_schema": "full"},
+        {**sft_metrics, "task_schema": "full", "strict_json_valid_rate": diagnose_predictions(sft.values())["protocol"]["json_valid_rate"]},
         verifier_validated=verifier_validated,
     )
     decision.update({

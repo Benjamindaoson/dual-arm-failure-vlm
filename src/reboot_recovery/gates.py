@@ -18,11 +18,12 @@ def decide_v2_rl_gate(
         raise ValueError("failure correct counts must be within support")
     state_gain = float(sft["state_macro_f1"]) - float(base["state_macro_f1"])
     false_alarm_gain = float(sft.get("pre_failure_false_positive_rate", 0.0)) - float(base.get("pre_failure_false_positive_rate", 0.0))
-    if state_gain < 0 or false_alarm_gain > 0:
+    compliance = float(sft.get("strict_json_valid_rate", sft.get("json_valid_rate", 0.0)))
+    if state_gain < 0 or false_alarm_gain > 0 or compliance < 0.95:
         decision = "REVISIT_REPRESENTATION_OR_SUPERVISION"
-    elif sft_correct == sft_support:
+    elif sft_correct == sft_support and float(sft["state_macro_f1"]) >= 0.95:
         decision = "SFT_SUFFICIENT"
-    elif sft_correct == 0 or sft_correct - base_correct < 1:
+    elif sft_correct == 0 or sft_correct < base_correct:
         decision = "REVISIT_REPRESENTATION_OR_SUPERVISION"
     elif not verifier_validated:
         decision = "VERIFY_REWARD_FIRST"
@@ -36,6 +37,7 @@ def decide_v2_rl_gate(
         "sft_failure_correct": sft_correct,
         "failure_support": sft_support,
         "failure_correct_gain": sft_correct - base_correct,
+        "strict_json_valid_rate": compliance,
         "state_macro_f1_gain": state_gain,
         "pre_failure_false_positive_rate_gain": false_alarm_gain,
         "verifier_validated": verifier_validated,

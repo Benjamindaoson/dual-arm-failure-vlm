@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Mapping
 
+from .rewards import DEFAULT_STATE_GATED_REWARD
+
 
 def validate_rl_config(config: Mapping[str, Any]) -> dict[str, Any]:
     value = dict(config)
@@ -27,10 +29,16 @@ def validate_rl_config(config: Mapping[str, Any]) -> dict[str, Any]:
     if reward_scheme not in {"additive_v1", "state_gated_v2"}:
         raise ValueError("unknown reward_scheme")
     if reward_scheme == "state_gated_v2":
-        if algorithm != "grpo":
-            raise ValueError("V2 state-gated reward is authorized for GRPO only")
         if value.get("reward_weights") != [1.0]:
             raise ValueError("state_gated_v2 requires reward_weights=[1.0]")
+        reward_config = value.get("state_gated_reward", DEFAULT_STATE_GATED_REWARD)
+        if not isinstance(reward_config, Mapping) or set(reward_config) != set(DEFAULT_STATE_GATED_REWARD):
+            raise ValueError("state_gated_reward requires exactly four configured components")
+        if float(reward_config["failure_miss_penalty"]) >= 0 or any(
+            float(reward_config[key]) < 0 for key in ("correct_state_base", "phase_bonus", "failure_mode_bonus")
+        ):
+            raise ValueError("state-gated reward penalty must be negative and bonuses nonnegative")
+        value["state_gated_reward"] = {key: float(reward_config[key]) for key in DEFAULT_STATE_GATED_REWARD}
     value.update({"algorithm": algorithm, "importance_sampling_level": importance, "loss_type": loss_type,
                   "num_generations": generations, "max_completion_length": completion,
                   "reward_scheme": reward_scheme})

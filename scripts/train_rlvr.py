@@ -191,6 +191,7 @@ def main(argv: list[str] | None = None) -> int:
             score_state_gated_prediction(
                 ref, completion_text(output), phase_labels=phase_labels,
                 failure_mode_labels=failure_mode_labels,
+                reward_config=config["state_gated_reward"],
             )
             for output, ref in zip(completions, reference, strict=True)
         ]

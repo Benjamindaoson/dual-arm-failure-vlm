@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import json
-from typing import Any
+from typing import Any, Mapping
 
 
 PHASE_LABELS = {
@@ -25,6 +25,13 @@ FAILURE_MODE_LABELS = {
     "retention_failure",
     "slip",
     "sub_mm_misalignment",
+}
+
+DEFAULT_STATE_GATED_REWARD = {
+    "failure_miss_penalty": -1.0,
+    "correct_state_base": 0.7,
+    "phase_bonus": 0.1,
+    "failure_mode_bonus": 0.2,
 }
 
 
@@ -120,6 +127,7 @@ def score_prediction(
 def score_state_gated_prediction(
     reference: dict[str, Any], output: str, *,
     phase_labels: set[str] | None = None, failure_mode_labels: set[str] | None = None,
+    reward_config: Mapping[str, float] = DEFAULT_STATE_GATED_REWARD,
 ) -> float:
     pred = parse_structured_prediction(
         output, phase_labels=phase_labels, failure_mode_labels=failure_mode_labels,
@@ -128,10 +136,12 @@ def score_state_gated_prediction(
         return 0.0
     state = str(reference["execution_state"]).strip().casefold()
     if pred["state"] != state:
+        if state == "failure":
+            return float(reward_config["failure_miss_penalty"])
         return 0.0
     phase = pred["phase"] == str(reference["phase_name"]).strip().casefold()
     if state == "nominal":
-        return 0.7 + 0.3 * phase
+        return float(reward_config["correct_state_base"]) + float(reward_config["phase_bonus"] + reward_config["failure_mode_bonus"]) * phase
     mode = pred["failure_mode"] == str(reference["failure_mode"]).strip().casefold()
-    # ponytail: no negative false-negative term; add it only if this gate still collapses.
-    return 0.7 + 0.1 * phase + 0.2 * mode
+    return (float(reward_config["correct_state_base"]) + float(reward_config["phase_bonus"]) * phase
+            + float(reward_config["failure_mode_bonus"]) * mode)

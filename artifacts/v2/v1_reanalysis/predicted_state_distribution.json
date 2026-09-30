@@ -1,0 +1,66 @@
+{
+  "Base": {
+    "collapse_ratio": 0.7777777777777778,
+    "counts": {
+      "failure": 12,
+      "nominal": 42,
+      "recovery": 0
+    },
+    "invalid_count": 0,
+    "prediction_entropy_nats": 0.5297061990576545,
+    "probabilities": {
+      "failure": 0.2222222222222222,
+      "nominal": 0.7777777777777778,
+      "recovery": 0.0
+    },
+    "valid_count": 54
+  },
+  "GRPO": {
+    "collapse_ratio": 1.0,
+    "counts": {
+      "failure": 0,
+      "nominal": 0,
+      "recovery": 54
+    },
+    "invalid_count": 0,
+    "prediction_entropy_nats": -0.0,
+    "probabilities": {
+      "failure": 0.0,
+      "nominal": 0.0,
+      "recovery": 1.0
+    },
+    "valid_count": 54
+  },
+  "GSPO": {
+    "collapse_ratio": 0.9629629629629629,
+    "counts": {
+      "failure": 0,
+      "nominal": 2,
+      "recovery": 52
+    },
+    "invalid_count": 0,
+    "prediction_entropy_nats": 0.15841057013179086,
+    "probabilities": {
+      "failure": 0.0,
+      "nominal": 0.037037037037037035,
+      "recovery": 0.9629629629629629
+    },
+    "valid_count": 54
+  },
+  "SFT": {
+    "collapse_ratio": 0.6666666666666666,
+    "counts": {
+      "failure": 0,
+      "nominal": 36,
+      "recovery": 18
+    },
+    "invalid_count": 0,
+    "prediction_entropy_nats": 0.6365141682948128,
+    "probabilities": {
+      "failure": 0.0,
+      "nominal": 0.6666666666666666,
+      "recovery": 0.3333333333333333
+    },
+    "valid_count": 54
+  }
+}

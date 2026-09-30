@@ -2,17 +2,27 @@ from __future__ import annotations
 
 from collections import Counter, defaultdict
 import json
+import math
 import random
-import re
 from typing import Any, Callable, Iterable
 
 from .rewards import parse_structured_prediction, score_prediction
+from .semantic_parser import normalize_semantic_output
 
 
-def normalize_semantic_output(text: str) -> str:
-    stripped = text.strip()
-    fenced = re.fullmatch(r"```json\r?\n(.*?)\r?\n```", stripped, flags=re.DOTALL)
-    return fenced.group(1) if fenced else stripped
+def predicted_state_distribution(states: Iterable[str]) -> dict[str, Any]:
+    counts = Counter(states)
+    labels = ("nominal", "failure", "recovery")
+    valid = sum(counts[label] for label in labels)
+    probabilities = {label: counts[label] / valid if valid else 0.0 for label in labels}
+    return {
+        "counts": {label: counts[label] for label in labels},
+        "probabilities": probabilities,
+        "valid_count": valid,
+        "invalid_count": sum(counts.values()) - valid,
+        "collapse_ratio": max(probabilities.values()) if valid else None,
+        "prediction_entropy_nats": -sum(p * math.log(p) for p in probabilities.values() if p),
+    }
 
 
 def parse_state_prediction(text: str) -> dict[str, str] | None:
@@ -35,6 +45,7 @@ def diagnose_predictions(
         (parse_structured_prediction(row["output"]) or {}).get("state", "__invalid__")
         for row in normalized
     )
+    distribution = predicted_state_distribution(states.elements())
     return {
         "protocol": evaluate_predictions(items, bootstrap_samples=bootstrap_samples, bootstrap_seed=bootstrap_seed),
         "semantic": evaluate_predictions(normalized, bootstrap_samples=bootstrap_samples, bootstrap_seed=bootstrap_seed),
@@ -43,6 +54,7 @@ def diagnose_predictions(
             for original, updated in zip(items, normalized, strict=True)
         ),
         "semantic_predicted_state_counts": dict(states),
+        "semantic_state_distribution": distribution,
         "semantic_exact_count": sum(
             score_prediction(row["reference"], row["output"]).total == 1.0 for row in normalized
         ),
@@ -180,6 +192,9 @@ def evaluate_predictions(
         "phase_macro_f1": phase_macro,
         "state_macro_f1": state_macro,
         "failure_recall": failure_correct / failure_support if failure_support else 0.0,
+        "failure_precision": state_detail.get("failure", {}).get("precision", 0.0),
+        "failure_f1": state_detail.get("failure", {}).get("f1", 0.0),
+        "balanced_accuracy": sum(value["recall"] for value in state_detail.values()) / len(state_detail) if state_detail else 0.0,
         "failure_correct": failure_correct,
         "failure_support": failure_support,
         "recovery_recall": recovery_correct / recovery_support if recovery_support else 0.0,
@@ -212,6 +227,9 @@ def evaluate_state_predictions(
         "json_valid_rate": sum(value is not None for value in parsed) / len(items) if items else 0.0,
         "state_macro_f1": macro,
         "failure_recall": correct["failure"] / support["failure"] if support["failure"] else 0.0,
+        "failure_precision": detail.get("failure", {}).get("precision", 0.0),
+        "failure_f1": detail.get("failure", {}).get("f1", 0.0),
+        "balanced_accuracy": sum(value["recall"] for value in detail.values()) / len(detail) if detail else 0.0,
         "failure_correct": correct["failure"],
         "failure_support": support["failure"],
         "nominal_recall": correct["nominal"] / support["nominal"] if support["nominal"] else 0.0,
@@ -220,5 +238,6 @@ def evaluate_state_predictions(
         "state_per_class": detail,
         "gold_state_counts": dict(support),
         "predicted_state_counts": dict(Counter(pred)),
+        "predicted_state_distribution": predicted_state_distribution(pred),
         "episode_bootstrap": _bootstrap_episode_ci(items, samples=bootstrap_samples, seed=bootstrap_seed, parser=parse_state_prediction),
     }

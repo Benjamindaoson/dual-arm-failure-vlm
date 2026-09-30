@@ -15,14 +15,14 @@ class GateTests(unittest.TestCase):
         decide = getattr(gates, "decide_v2_rl_gate", None)
         self.assertIsNotNone(decide)
         base = {"task_schema": "full", "failure_correct": 6, "failure_support": 18, "state_macro_f1": 0.30}
-        sft = {"task_schema": "full", "failure_correct": 0, "failure_support": 18, "state_macro_f1": 0.40}
+        sft = {"task_schema": "full", "failure_correct": 0, "failure_support": 18, "state_macro_f1": 0.40, "strict_json_valid_rate": 1.0}
         self.assertEqual("REVISIT_REPRESENTATION_OR_SUPERVISION", decide(base, sft, verifier_validated=True)["decision"])
 
     def test_v2_requires_one_more_failure_hit_and_verified_reward(self):
         decide = getattr(gates, "decide_v2_rl_gate", None)
         self.assertIsNotNone(decide)
         base = {"task_schema": "full", "failure_correct": 6, "failure_support": 18, "state_macro_f1": 0.30}
-        sft = {"task_schema": "full", "failure_correct": 7, "failure_support": 18, "state_macro_f1": 0.40}
+        sft = {"task_schema": "full", "failure_correct": 7, "failure_support": 18, "state_macro_f1": 0.40, "strict_json_valid_rate": 1.0}
         self.assertEqual("VERIFY_REWARD_FIRST", decide(base, sft, verifier_validated=False)["decision"])
         self.assertEqual("RUN_RLVR", decide(base, sft, verifier_validated=True)["decision"])
         self.assertEqual(
