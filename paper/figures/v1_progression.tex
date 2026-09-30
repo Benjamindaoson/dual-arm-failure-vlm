@@ -1,0 +1,24 @@
+% Generated from frozen V1 prediction reanalysis.
+\begin{tikzpicture}[x=1cm,y=3.4cm]
+\draw[->] (0.35,0) -- (6.9,0);
+\draw[->] (0.45,0) -- (0.45,1.12);
+\foreach \y in {0,0.5,1} {\draw (0.40,\y) -- (0.50,\y); \node[left,font=\tiny] at (0.40,\y) {\y};}
+
+\fill[red!65] (0.66,0) rectangle (0.86,0.3333);
+\fill[blue!70] (0.92,0) rectangle (1.12,0.0000);
+\fill[orange!80] (1.18,0) rectangle (1.38,0.7778);
+\node[below,font=\scriptsize] at (1.00,0) {Base};
+\fill[red!65] (2.21,0) rectangle (2.41,0.0000);
+\fill[blue!70] (2.47,0) rectangle (2.67,1.0000);
+\fill[orange!80] (2.73,0) rectangle (2.93,0.6667);
+\node[below,font=\scriptsize] at (2.55,0) {SFT};
+\fill[red!65] (3.76,0) rectangle (3.96,0.0000);
+\fill[blue!70] (4.02,0) rectangle (4.22,1.0000);
+\fill[orange!80] (4.28,0) rectangle (4.48,1.0000);
+\node[below,font=\scriptsize] at (4.10,0) {GRPO};
+\fill[red!65] (5.31,0) rectangle (5.51,0.0000);
+\fill[blue!70] (5.57,0) rectangle (5.77,1.0000);
+\fill[orange!80] (5.83,0) rectangle (6.03,0.9630);
+\node[below,font=\scriptsize] at (5.65,0) {GSPO};
+\node[font=\tiny,anchor=west] at (0.55,1.13) {\textcolor{red!65}{\rule{5pt}{5pt}} Failure recall (semantic) \quad \textcolor{blue!70}{\rule{5pt}{5pt}} Strict valid \quad \textcolor{orange!80}{\rule{5pt}{5pt}} Collapse};
+\end{tikzpicture}

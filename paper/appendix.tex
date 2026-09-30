@@ -1,0 +1,5 @@
+\section{Reproducibility details}
+The source of every V1 figure and table is recorded in \texttt{asset\_sources.json}. V2 run directories must contain configuration, environment, metrics, predictions, timings, memory, and receipt files. The original V1 predictions and receipts are immutable. The V1 diagnostic episode IDs are 02, 08, 18, 20, 47, and 54; none may be reused as a newly untouched final episode. Any new final split must be committed with a source-annotation hash, method commit, dataset revision, timestamp, and disjoint episode lists before final-test inference.
+
+\section{Reward truth table}
+For a valid prediction, a true failure predicted as nominal or recovery receives $-1$ from the state-gated verifier. A non-failure row with wrong state receives zero. A correct state receives $0.7$, with up to $0.1$ for phase and $0.2$ for failure mode. Invalid JSON receives zero. The actual reward implementation and unit tests, not this prose, define the executable contract.

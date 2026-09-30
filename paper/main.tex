@@ -1,0 +1,75 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[margin=0.75in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\title{More Compliant, Less Aware:\\Diagnosing Post-Training Collapse in Multimodal Robot Failure Critics}
+\author{Anonymous workshop submission}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+Can a robot execution critic become more compliant with its output protocol while losing the ability to recognize failure? We study this question using causal multi-view windows from REBOOT precision assembly and a Qwen2.5-VL-3B critic. In a retrospective six-episode discovery set, an exact-schema parser scores the Base model at zero because all 54 responses carry outer Markdown fences; a fixed mechanical fence-removal diagnostic instead recovers 54 valid responses and 6/18 failure windows. After supervised fine-tuning (SFT), strict JSON validity reaches 100\%, but failure recall falls to 0/18. Historical GRPO and exploratory GSPO runs also predict no failure, with recovery dominating their state distributions. These observations motivate, rather than establish, a mechanism claim: interface compliance, supervision density, camera observability, output-task coupling, and verifier reward must be disentangled. We define paired, episode-disjoint experiments and a failure-first RL gate. The independent V2 evaluation is in progress; no cross-task or causal reward-intervention result is claimed here.
+\end{abstract}
+
+\section{Introduction}
+Robot policies can fail at contact-rich assembly without a clean binary boundary between success and failure. A monitor that returns syntactically valid output but misses the failure interval cannot reliably support recovery. REBOOT supplies phase- and failure-annotated bimanual demonstrations across precision tasks \cite{reboot2026}. Existing monitors combine action consistency and VLM progress checks \cite{sentinel2024}; recent work has shown both positive effects of temporal monitoring supervision \cite{robomonitor2026} and serious transfer limitations of fine-tuned failure detectors \cite{failbench2026}. Thus, the question is not whether training is categorically good or bad. It is which part of a critic's measured improvement is protocol compliance, which part is state recognition, and which objective creates a shortcut.
+
+We treat three claims separately. H1: strict interface compliance and semantic failure recognition need not track one another. H2: this specific SFT setup may erase failure predictions, but camera visibility, class balance, and output coupling are competing explanations. H3: an additive phase/state/failure-mode reward may allow state errors to receive positive credit; a state-gated reward removes that shortcut. H3 remains a hypothesis unless same-checkpoint, same-budget RL controls are executed and evaluated on held-out episodes. Reward misspecification is a general risk \cite{pan2022}; its manifestation here cannot be inferred from theory alone.
+
+\section{Experimental Setup}
+\paragraph{Data and model.} We use the locally available 60-episode REBOOT cylinder recovery sample. Full annotation and frame audit excludes seven unusable episodes; 53 remain. Each example is a four-timestamp, two-second causal history whose sampled frames never exceed the anchor frame. V1 splits are by complete episode, not frame. The six V1 test episodes were used to discover and diagnose the effect and are therefore renamed \emph{V1 diagnostic}, not untouched final test. V2 screens on existing train/validation episodes, selects the method using validation only, then freezes a new episode split and retrains final models from the same Qwen2.5-VL-3B base \cite{qwen2025}. The final split is single-task if additional labeled tasks are unavailable.
+
+\paragraph{Two noninterchangeable protocols.} Strict scoring requires a naked JSON object with exactly the required keys and taxonomy labels. Semantic scoring strips outer whitespace and, only when it encloses the whole response, one unlabeled or lowercase \texttt{json} Markdown fence. It does not repair JSON, change fields, remap labels, or extract from prose. The identical schema evaluator is then applied. Strict validity measures deployable interface adherence; semantic scoring is a diagnostic of recoverable task content. The normalization was motivated by the V1 outputs, so retrospective V1 semantic scores are not substituted for V1's frozen strict scores.
+
+\paragraph{Endpoints.} We report State Macro-F1, failure recall/precision/F1, nominal and recovery recall, balanced accuracy, strict JSON-valid rate, and prediction collapse ratio $\max_c P(\hat{s}=c)$, with invalid outputs counted separately. Confidence intervals resample \emph{episodes}, never correlated windows. Timing uses onset-relative windows at $-2,-1,-0.5,0,+0.5,+1,+2$ seconds and requires two consecutive correct post-onset predictions; an undetected episode has delay N/A, not zero.
+
+\section{Retrospective Discovery: Compliance Versus Awareness}
+Table~\ref{tab:v1} and Figures~\ref{fig:progression}--\ref{fig:distribution} are generated directly from the frozen V1 prediction files. The Base model's strict zero is largely a parser artifact: all 54 outputs become valid after only outer-fence removal, and six of 18 failure windows are recognized. SFT produces valid bare JSON but no failure predictions. GRPO and GSPO similarly have zero failure recall, while their recovery prediction shares are 54/54 and 52/54. The result is a descriptive progression, not a controlled causal comparison: V1 model stages differ in objective, training exposure, and possibly other implementation details.
+
+\begin{table}[t]
+\centering\scriptsize
+\resizebox{\columnwidth}{!}{\input{tables/v1.tex}}
+\caption{V1 diagnostic only. Valid, F1, recall, and collapse are percentages. Semantic normalization is not a replacement for strict evaluation.}
+\label{tab:v1}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{figures/v1_progression.tex}}
+\caption{V1 semantic failure recall, strict JSON validity, and collapse ratio. Historical discovery runs, not matched interventions.}
+\label{fig:progression}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{figures/state_distribution.tex}}
+\caption{Predicted state distributions after the fixed semantic parser. Base: 42 nominal/12 failure/0 recovery; SFT: 36/0/18; GRPO: 0/0/54; GSPO: 2/0/52.}
+\label{fig:distribution}
+\end{figure}
+
+\section{Mechanism Isolation in V2}
+We first remove phase and failure-mode outputs, training a critic with only a state field. Three matched two-camera views test observability: high+low, left+right wrist, and high+left wrist. We then compare sparse anchors with denser causal supervision on the validation-selected camera, holding the optimizer update budget fixed. Dense windows alter the class-frequency distribution; this is reported as a joint density/class-balance intervention unless a balancing control disentangles them. Finally, we compare separately trained visual-only and visual-plus-14-D-state/14-D-action Trace-Text models. Appending trace only at inference would be distribution shift and is excluded as a fair ablation.
+
+Only if state-only validation predicts failure on at least two episodes do we test output-task interference: the same image input, episode split, seed, and update budget for a state-only versus phase/state/failure-mode adapter. No outcome is entered in this manuscript until the saved V2 predictions and receipts are audited. Camera selection ranks validation failure recall, then State Macro-F1, with a fixed tie order; high recall can still arise from an all-failure predictor, so precision, false alarms, and class distribution remain essential.
+
+\section{Controlled Reward Intervention}
+The historical additive verifier is
+\begin{equation}
+R_{\mathrm{add}}=0.25R_{\mathrm{phase}}+0.35R_{\mathrm{state}}+0.40R_{\mathrm{mode}}.
+\end{equation}
+Correct phase or mode can give positive reward despite a wrong execution state. Our state-gated verifier instead gives zero to invalid JSON, $-1$ to a missed true failure, zero to other wrong states, and $0.7+0.1R_{\mathrm{phase}}+0.2R_{\mathrm{mode}}$ only after the state is correct. This structure is validated with explicit wrong-state cases. Both controlled GRPO arms, if permitted, start from one SFT checkpoint and differ only in reward formulation; class reweighting is disabled in the additive arm. GRPO uses token-level importance ratios \cite{deepseekmath2024}; GSPO uses sequence-level ratios \cite{gspo2025} and is not automatically run.
+
+The formal RL gate requires nonzero SFT semantic failure recall, no regression versus matched Base in failure recall or State Macro-F1, no greater pre-failure false-alarm rate, at least 95\% strict JSON validity, residual outcome-level headroom, and a verified structured reward. If it fails, the RL outcome is \emph{not run}; V1 RL remains mechanism-discovery evidence only.
+
+\section{Limitations and Status}
+This is a small workshop study of a critic, not a recovery controller or production safety system. The V1 diagnostic set has six episodes and cannot yield a general cross-task claim. The state labels are annotation-grounded intervals, not independent human judgments of visual identifiability. A new single-task split, if used, is freshly frozen and its models retrained, but its episode pool overlaps the method-development pool; therefore it is weaker than a truly new task. FailBench already reports failure-detector fine-tuning regressions \cite{failbench2026}, while RoboMonitor reports effective temporal SFT \cite{robomonitor2026}; any final conclusion must be recipe- and evidence-specific. The V2 results, controlled RL gate, and final-test statistics will be inserted only from completed, machine-readable runs.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

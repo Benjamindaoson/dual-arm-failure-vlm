@@ -1,0 +1,12 @@
+{
+  "generator": "scripts/generate_paper_assets.py",
+  "source_sha256": {
+    "artifacts\\v2\\v1_reanalysis\\strict_vs_semantic.json": "b2f977ac3d7a025e67475b7ed62ae63994b46515f41f08aef966c60266dda077",
+    "artifacts\\v2\\v1_reanalysis\\predicted_state_distribution.json": "77d2de53cc2ce04d132e5f349a956660ae9ac341fee455e785cc3621683ba296"
+  },
+  "generated_files": [
+    "figures/state_distribution.tex",
+    "figures/v1_progression.tex",
+    "tables/v1.tex"
+  ]
+}
