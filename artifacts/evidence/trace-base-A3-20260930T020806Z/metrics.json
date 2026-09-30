@@ -1,0 +1,119 @@
+{
+  "episode_bootstrap": {
+    "failure_recall_95ci": [
+      0.0,
+      0.0
+    ],
+    "samples": 1000,
+    "seed": 42,
+    "state_macro_f1_95ci": [
+      0.0,
+      0.0
+    ],
+    "unit": "episode"
+  },
+  "failure_mode_macro_f1": 0.0,
+  "failure_mode_macro_f1_non_nominal": 0.0,
+  "failure_mode_per_class": {
+    "excessive_force": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 6.0
+    },
+    "jamming": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 6.0
+    },
+    "misalignment": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 12.0
+    },
+    "retention_failure": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 6.0
+    },
+    "slip": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 6.0
+    }
+  },
+  "failure_recall": 0.0,
+  "gold_state_counts": {
+    "failure": 18,
+    "nominal": 18,
+    "recovery": 18
+  },
+  "json_valid_rate": 0.0,
+  "mean_latency_seconds": 1.6539022937865444,
+  "n": 54,
+  "phase_macro_f1": 0.0,
+  "phase_per_class": {
+    "align (pick)": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 12.0
+    },
+    "align (place)": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 12.0
+    },
+    "engage (pick)": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 13.0
+    },
+    "engage (place)": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 11.0
+    },
+    "transport": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 6.0
+    }
+  },
+  "pre_failure_false_positive_rate": 0.0,
+  "recovery_recall": 0.0,
+  "state_macro_f1": 0.0,
+  "state_per_class": {
+    "failure": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 18.0
+    },
+    "nominal": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 18.0
+    },
+    "recovery": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 18.0
+    }
+  },
+  "timing_slices": {
+    "failure": 0.0,
+    "nominal": 0.0,
+    "recovery": 0.0
+  }
+}

@@ -35,14 +35,20 @@ def main(argv: list[str] | None = None) -> int:
             "gold_state": reference["execution_state"],
             "predicted_state": parsed["state"] if parsed else "__invalid__",
         })
-    result = evaluate_failure_timing(rows, consecutive=args.consecutive)
+    target_state = "recovery" if args.event_kind == "recovery_onset" else "failure"
+    result = evaluate_failure_timing(rows, consecutive=args.consecutive, target_state=target_state)
     args.output_json.parent.mkdir(parents=True, exist_ok=True)
     args.output_json.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     with args.output_csv.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["episode_index", "detection_delay_seconds", "false_alarms_before_failure", "windows"])
+        writer = csv.DictWriter(handle, fieldnames=["episode_index", "detection_delay_seconds", "false_alarms_before_onset", "windows"])
         writer.writeheader()
         for episode, values in result["episodes"].items():
-            writer.writerow({"episode_index": episode, **values})
+            writer.writerow({
+                "episode_index": episode,
+                "detection_delay_seconds": values["detection_delay_seconds"],
+                "false_alarms_before_onset": values["false_alarms_before_onset"],
+                "windows": values["windows"],
+            })
     print(json.dumps({key: value for key, value in result.items() if key != "episodes"}, indent=2))
     return 0
 

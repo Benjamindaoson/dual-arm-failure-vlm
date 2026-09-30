@@ -1,0 +1,179 @@
+[2026-09-30T10:09:56+08:00] trace sft start
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.73s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:07<00:00,  3.60s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:07<00:00,  3.62s/it]
+The image processor of type `Qwen2VLImageProcessor` is now loaded as a fast processor by default, even if the model checkpoint was saved with a slow processor. This is a breaking change and may produce slightly different outputs. To continue using the slow processor, instantiate this class with `use_fast=False`. Note that this behavior will be extended to all models in a future release.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+[1/54] ep02-nominal-f0 2.22s
+[2/54] ep02-nominal-f165 1.78s
+[3/54] ep02-nominal-f330 1.79s
+[4/54] ep02-failure-f360 1.76s
+[5/54] ep02-failure-f510 2.28s
+[6/54] ep02-failure-f659 2.34s
+[7/54] ep02-recovery-f675 2.38s
+[8/54] ep02-recovery-f786 2.32s
+[9/54] ep02-recovery-f896 1.83s
+[10/54] ep08-nominal-f0 2.32s
+[11/54] ep08-nominal-f75 2.35s
+[12/54] ep08-nominal-f150 1.91s
+[13/54] ep08-failure-f180 1.81s
+[14/54] ep08-failure-f284 1.92s
+[15/54] ep08-failure-f389 1.76s
+[16/54] ep08-recovery-f405 1.73s
+[17/54] ep08-recovery-f650 1.70s
+[18/54] ep08-recovery-f896 2.35s
+[19/54] ep18-nominal-f0 2.23s
+[20/54] ep18-nominal-f60 1.78s
+[21/54] ep18-nominal-f120 1.76s
+[22/54] ep18-failure-f150 1.74s
+[23/54] ep18-failure-f284 1.78s
+[24/54] ep18-failure-f419 1.84s
+[25/54] ep18-recovery-f435 1.73s
+[26/54] ep18-recovery-f666 1.78s
+[27/54] ep18-recovery-f896 1.77s
+[28/54] ep20-nominal-f0 1.78s
+[29/54] ep20-nominal-f135 1.71s
+[30/54] ep20-nominal-f270 1.76s
+[31/54] ep20-failure-f300 1.71s
+[32/54] ep20-failure-f390 1.73s
+[33/54] ep20-failure-f479 1.86s
+[34/54] ep20-recovery-f495 1.81s
+[35/54] ep20-recovery-f696 1.84s
+[36/54] ep20-recovery-f896 1.85s
+[37/54] ep47-nominal-f0 1.81s
+[38/54] ep47-nominal-f180 1.72s
+[39/54] ep47-nominal-f360 1.75s
+[40/54] ep47-failure-f390 1.77s
+[41/54] ep47-failure-f420 1.78s
+[42/54] ep47-failure-f449 1.71s
+[43/54] ep47-recovery-f465 1.75s
+[44/54] ep47-recovery-f680 1.77s
+[45/54] ep47-recovery-f896 1.72s
+[46/54] ep54-nominal-f0 2.34s
+[47/54] ep54-nominal-f135 1.88s
+[48/54] ep54-nominal-f270 1.74s
+[49/54] ep54-failure-f300 1.77s
+[50/54] ep54-failure-f390 1.74s
+[51/54] ep54-failure-f479 1.71s
+[52/54] ep54-recovery-f495 1.75s
+[53/54] ep54-recovery-f696 1.75s
+[54/54] ep54-recovery-f896 1.72s
+{
+  "n": 54,
+  "json_valid_rate": 1.0,
+  "phase_macro_f1": 0.07272727272727272,
+  "state_macro_f1": 0.16666666666666666,
+  "failure_recall": 0.0,
+  "recovery_recall": 0.0,
+  "pre_failure_false_positive_rate": 0.0,
+  "failure_mode_macro_f1": 0.0,
+  "failure_mode_macro_f1_non_nominal": 0.0,
+  "phase_per_class": {
+    "align (pick)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 12.0
+    },
+    "align (place)": {
+      "precision": 0.2222222222222222,
+      "recall": 1.0,
+      "f1": 0.3636363636363636,
+      "support": 12.0
+    },
+    "engage (pick)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 13.0
+    },
+    "engage (place)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 11.0
+    },
+    "transport": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    }
+  },
+  "state_per_class": {
+    "failure": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 18.0
+    },
+    "nominal": {
+      "precision": 0.3333333333333333,
+      "recall": 1.0,
+      "f1": 0.5,
+      "support": 18.0
+    },
+    "recovery": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 18.0
+    }
+  },
+  "failure_mode_per_class": {
+    "excessive_force": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    },
+    "jamming": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    },
+    "misalignment": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 12.0
+    },
+    "retention_failure": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    },
+    "slip": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    }
+  },
+  "timing_slices": {
+    "failure": 0.0,
+    "nominal": 1.0,
+    "recovery": 0.0
+  },
+  "gold_state_counts": {
+    "nominal": 18,
+    "failure": 18,
+    "recovery": 18
+  },
+  "episode_bootstrap": {
+    "unit": "episode",
+    "samples": 1000,
+    "seed": 42,
+    "state_macro_f1_95ci": [
+      0.16666666666666666,
+      0.16666666666666666
+    ],
+    "failure_recall_95ci": [
+      0.0,
+      0.0
+    ]
+  },
+  "mean_latency_seconds": 1.8740584319284945
+}
+[2026-09-30T10:11:59+08:00] trace sft complete

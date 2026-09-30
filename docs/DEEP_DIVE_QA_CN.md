@@ -1,83 +1,81 @@
-# 深挖问答
+# 深挖问答：REBOOT 真实 GPU 实验
 
-## 1. 为什么选 REBOOT？
+## 1. 项目研究什么？
 
-它把 failure 当成一等信号，提供真实双臂精密装配轨迹、共享五阶段、失败模式、失败注入点与恢复起点，适合研究“何时失败、为什么失败、何时恢复”，而不是只做终局成功率。项目先用 60-episode sample 做端到端审计，避免直接在 full suite 上放大数据错误。
+把公开双臂精密装配轨迹中的历史视觉和可选机器人 trace 映射为阶段、执行状态、失败模式三个结构化字段，并测量失败是否在正确时间被发现。没有训练机器人动作策略。
 
-## 2. 为什么不是普通 CV？
+## 2. 为什么选 REBOOT？
 
-目标不是框、mask 或静态类别，而是从执行历史判断阶段和状态转移。misalignment、slip、jamming 与 recovery 都依赖任务语义和时间上下文；传统检测可以成为底层能力，但不是本项目的学习目标。
+它提供真实操作视频、共享装配阶段、失败模式及失败/恢复起点，允许按 episode 做时序评测。本轮只使用 60 个 episode 的公开 cylinder-install sample。
 
-## 3. 为什么 VLM？
+## 3. 为什么先隔离 7 个 episode？
 
-输入同时包含任务指令、多图历史和可选 trace，输出是可被后续 planner 消费的结构化语义状态。VLM 适合把视觉证据与任务阶段、failure taxonomy 对齐；是否优于更小的专用模型仍需 Base/ablation 结果，而不是预设结论。
+全量审计发现越界帧、非法 originating phase 和 recovery 早于 failure。将有问题的完整轨迹隔离，保留原因与哈希，避免模型被矛盾标签监督。
 
-## 4. 为什么 temporal context？
+## 4. 为什么按 episode 划分？
 
-单帧无法稳定区分“正在接近目标”“已经偏离”“正在重新对齐”。时序窗口提供运动方向、接触前后变化和 recovery transition。A0 与 A1/A2 的 held-out 差异直接验证它是否有增益。
+同一轨迹的相邻帧高度相关。frame-level random split 会让 train/test 共享几乎相同的观察；本项目固定 42/5/6 个完整 episode，测试集为 `02, 08, 18, 20, 47, 54`。
 
-## 5. 为什么 action trace？
+## 5. 为什么输入必须因果？
 
-视觉外观相似时，state/action 可以揭示停滞、反向修正或持续施力。第一版只把窗口压缩成 state delta 与 latest action，避免把 14-D 序列冗长地文本化。A3 不优于 A2 就删除 trace，而不是为故事保留。
+在线诊断不能提前看到 failure 或 recovery 之后的画面。469 个窗口和 84 条 onset 样本只采样当前及过去时间点；未来信息不进入 prompt。
 
-## 6. 为什么 SFT？
+## 6. A0/A1/A2 有何区别？
 
-只有 Base 在 failure recall 或 state macro-F1 上留下明显 headroom 时才做。SFT 主要学习数据 taxonomy、阶段边界和严格短输出，不假设它一定改善视觉识别。
+A0 为当前单帧，A1 为同一相机四个历史时间点，A2 为四个时间点×两个相机。Base 在三组严格 JSON 评测中均为 0，因而没有证据说时序或第二相机带来增益。
 
-## 7. 为什么 RL？
+## 7. Base 全零是否说明视觉没有信号？
 
-结构化标签允许 outcome-level 可验证 reward。只有 SFT 明显改善但仍有稳定 outcome error 时，RLVR 才有存在资格；否则 RL 只会增加成本和 reward hacking 面。
+不能。Base 常输出带 Markdown 围栏的 JSON，还出现非法阶段标签；严格解析后任务分数为 0。这同时包含格式和语义失败，我们没有事后改解析规则。
 
-## 8. 为什么 GRPO？
+## 8. 为什么还选 A2 做 SFT？
 
-它可以对同一 prompt 的多条短诊断进行组内相对优化，不需要单独训练 value model。这里把它作为 RLVR baseline，而不是项目卖点。
+Base 严格分数同为 0，无法凭它挑出视觉最优输入。A2 保留完整的多视角历史，下一步用一次受限的 SFT 检验该输入是否能学到状态信号；这不是基于 Base 显著优势的选择。
 
-## 9. 为什么 GSPO？
+## 9. SFT 具体改善了什么？
 
-诊断 reward 是 sequence-level，GSPO 的 sequence-level importance sampling 与这个 credit unit 更一致。但“更一致”不是“更好”；必须与 token-level GRPO 在同一数据、checkpoint、reward 和 test split 上比较。
+2-epoch NF4 QLoRA 后，54 样本 test 的 JSON Valid Rate 为 100%，State Macro-F1 为 0.4012，Recovery Recall 为 0.6111；结果级配对有 7 条由 Base 错转为 SFT 对。
 
-## 10. reward hacking 怎么处理？
+## 10. SFT 没解决什么？
 
-JSON parse 只做 gate，不给正奖励；有效但错误的 JSON 不会因为格式漂亮得分。reward component 单独记录，nominal 不奖励 taxonomy 猜测，未知状态得零。最终仍用 held-out task metrics，而不是训练 reward 证明能力。
+Failure Recall 仍为 0/18，K=2 failure timing 仍为 0/6 episode 检出。State Macro-F1 的提升不能替代 primary metric。
 
-## 11. 为什么 JSON format 不能算核心 reward？
+## 11. 为什么 JSON 有效率单独报告？
 
-格式提升只说明模型更会遵循协议，不能说明它更会识别 failure。JSON valid rate 独立报告；能力结论依赖 failure recall、state/phase/failure-mode F1 与 timing。
+协议正确只表明输出可解析。reward 中无“格式正确”正奖励，解析失败只使任务 reward 为零；冻结测试集还必须看状态、阶段、failure mode 和时点。
 
-## 12. 如何防 leakage？
+## 12. Verifier reward 如何避免明显投机？
 
-先固定 episode split，再让所有 frame/window 继承所属 episode。split receipt 写出 episode ids、分布和 SHA-256；消融比较检查四组 test episode 集合完全一致。禁止 frame-level random split。
+phase、state、适用 failure mode 分开给分；nominal 不因猜 failure taxonomy 获奖，未知标签没有分。最终选择仍依赖 held-out 指标，不依赖训练 reward 曲线。
 
-## 13. 为什么 episode split？
+## 13. RL Gate 为什么允许 GRPO？
 
-同一 episode 的相邻帧高度相关。frame random split 会让模型在 test 看到几乎相同的场景、操作者和轨迹，虚高指标。episode 是这个数据中最低合理独立单位。
+已实现 gate 依据 SFT 的 State Macro-F1 相对 Base 提高 0.4012、仍有 47/54 个结果级错误、verifier 可计算而输出 `RUN_RLVR`。Failure Recall 的增益为 0，因此只是有总体 headroom 的机制实验。
 
-## 14. vision encoder 是否需要微调？
+## 14. GRPO 与 GSPO 的真实配置差异？
 
-不知道，所以比较 `SFT-Language` 与 `SFT-VisionLanguage`。如果 language-only 已解决大部分错误，瓶颈更可能是 label/状态解释；如果 vision-language 稳定改善且显存成本可接受，才有证据支持视觉适配。
+两者同源 SFT adapter、同一数据/seed、4 generations、100 steps、同一 reward 和 `loss_type=grpo`。GRPO 使用 token-level importance sampling；GSPO 使用 sequence-level。`sequence + dr_grpo` 不被称为本项目的 GSPO。
 
-## 15. failure detection delay 有什么意义？
+## 15. 为什么 GSPO 标为探索性？
 
-普通 accuracy 不告诉系统多久才发现失败。工业恢复越晚，越可能继续施力、损伤零件或把可恢复状态推成不可恢复。delay 与 false alarm 一起衡量“快且不过度报警”。
+GRPO 的 held-out State Macro-F1 从 SFT 的 0.4012 降为 0.1667，Failure Recall 仍为 0，未满足“GRPO 有真实增益才进入正式 GSPO”的更严格门槛。GSPO 只为同预算算法对照运行。
 
-## 16. 如果 SFT 比 RL 好怎么办？
+## 16. RL 最终结果如何？
 
-保留 SFT，停止 RL。RL 不是必须阶段；更简单、稳定、可复现的方案就是更好的工程答案。
+GRPO State Macro-F1 0.1667、Recovery Recall 1.0、Failure Recall 0；探索性 GSPO 分别为 0.1619、0.9444、0。两者结果级全对样本均为相同的 4/54，不能宣称 GSPO 优于 GRPO。
 
-## 17. 如果 GSPO 不如 GRPO 怎么办？
+## 17. GRPO Recovery Recall 1.0 是否代表恢复判断很好？
 
-如实报告并分析 reward variance、KL、completion length 与 rare-class slice。项目名称和结论不会预设 GSPO 优胜；sequence-level IS 只是待检验机制。
+不代表。K=2 recovery timing 仅检出 3/6 episode，且在 18 个恢复 onset 前窗口中误报 12 次；test 状态分布中它几乎把所有窗口预测为 recovery。
 
-## 18. 真实汽车制造有什么迁移价值？
+## 18. Failure Detection Delay 为何是 N/A 而非 0？
 
-公开数据中的 connector、fastener、插接和精密定位与汽车 harness/connector/fastener 工位共享 failure 形态：偏轴、打滑、卡滞、未完全啮合、提前释放。可迁移的是 failure-aware Critic、评测协议和 recovery gate，不是对某家车企产线效果的直接声明。
+首次连续两次预测 failure 才产生 delay。四个模型在 6 个失败 episode 上都没有稳定检出，故没有观测到可计算的 delay；0 秒会伪造“刚好及时发现”。
 
-## 19. 和过去 Agent trace/recovery 工作有什么关系？
+## 19. Trace-Text 为什么变差？
 
-共同点是把长任务失败建模为可观测状态与可恢复转移：Agent 侧读取 tool/action trace，机器人侧读取视觉与 state/action trace。差异是机器人具有连续物理状态、传感误差和接触风险，因此必须强调 causal window、false alarm、delay 与真实数据 annotation audit。
+同一 SFT adapter 在 A2 Visual-only 的 State Macro-F1 为 0.4012，直接加 14-D state/action 的因果文字摘要后 A3 为 0.1667；adapter 没有针对新 prompt 再训练，因此只能说该附加方法在本测试集退化，不能说 trace 信息本身无用。
 
-## 20. 当前哪些数字可以说？
+## 20. 有哪些可用和不可用的结论？
 
-可以说：固定 revision、60 个 observed episodes、53 valid、7 quarantined、53,886 条 frame rows、30 FPS、4 RGB cameras、14-D state/action、42/5/6 episode split、469 个因果窗口、84 条 timing-manifest rows，以及本地和远端各通过 39 项测试。
-
-不能说：Base/SFT/GRPO/GSPO 的任何准确率、F1、recall、提升比例、显存、耗时或跨任务泛化。完整数据与模型虽已下载，但目标容器没有 GPU 设备节点，因而没有正式 GPU run receipt。
+可说：4090 D 上完成 Base/SFT/GRPO/探索性 GSPO 的真实运行，40 项单测通过，保留逐样本预测及运行回执；SFT 是本轮 State Macro-F1 最好的 checkpoint。不可说：已可靠识别失败、RL 改善 primary metric、跨装配任务泛化、真实机器人闭环成功、佐治亚理工或企业官方合作。完整结果见 [`实验报告`](EXPERIMENT_REPORT_CN.md) 与 [`最终比较表`](../artifacts/eval/final_model_comparison.json)。

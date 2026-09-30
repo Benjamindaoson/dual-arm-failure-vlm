@@ -1,0 +1,76 @@
+{
+  "log_history": [
+    {
+      "entropy": 3.3212296962738037,
+      "epoch": 0.021505376344086023,
+      "grad_norm": 6.0625,
+      "learning_rate": 2e-05,
+      "loss": 1.175,
+      "mean_token_accuracy": 0.7625265866518021,
+      "num_tokens": 9188.0,
+      "step": 1
+    },
+    {
+      "entropy": 3.316903293132782,
+      "epoch": 0.043010752688172046,
+      "grad_norm": 5.71875,
+      "learning_rate": 1.6000000000000003e-05,
+      "loss": 1.0635,
+      "mean_token_accuracy": 0.7876479402184486,
+      "num_tokens": 18380.0,
+      "step": 2
+    },
+    {
+      "entropy": 3.3258651196956635,
+      "epoch": 0.06451612903225806,
+      "grad_norm": 5.3125,
+      "learning_rate": 1.2e-05,
+      "loss": 1.0537,
+      "mean_token_accuracy": 0.78006362169981,
+      "num_tokens": 27579.0,
+      "step": 3
+    },
+    {
+      "entropy": 3.377140551805496,
+      "epoch": 0.08602150537634409,
+      "grad_norm": 5.40625,
+      "learning_rate": 8.000000000000001e-06,
+      "loss": 0.9699,
+      "mean_token_accuracy": 0.7879332974553108,
+      "num_tokens": 36771.0,
+      "step": 4
+    },
+    {
+      "entropy": 3.3074653148651123,
+      "epoch": 0.10752688172043011,
+      "grad_norm": 5.25,
+      "learning_rate": 4.000000000000001e-06,
+      "loss": 1.0774,
+      "mean_token_accuracy": 0.7613095343112946,
+      "num_tokens": 45966.0,
+      "step": 5
+    },
+    {
+      "epoch": 0.10752688172043011,
+      "eval_entropy": 3.3181189049121946,
+      "eval_loss": 0.978860080242157,
+      "eval_mean_token_accuracy": 0.7858578049859335,
+      "eval_num_tokens": 45966.0,
+      "eval_runtime": 19.1411,
+      "eval_samples_per_second": 2.246,
+      "eval_steps_per_second": 2.246,
+      "step": 5
+    },
+    {
+      "epoch": 0.10752688172043011,
+      "step": 5,
+      "total_flos": 959938540609536.0,
+      "train_loss": 1.0678980231285096,
+      "train_runtime": 111.6537,
+      "train_samples_per_second": 0.358,
+      "train_steps_per_second": 0.045
+    }
+  ],
+  "trainable_parameters": 37152768,
+  "wall_clock_seconds": 112.07415962219238
+}

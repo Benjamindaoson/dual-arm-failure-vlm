@@ -1,0 +1,179 @@
+[2026-09-30T14:17:54+08:00] EXPLORATORY GSPO eval start adapter=artifacts/runs/gspo-exploratory-full-100-20260930T043207Z
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:05<00:05,  5.34s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:08<00:00,  4.30s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:08<00:00,  4.45s/it]
+The image processor of type `Qwen2VLImageProcessor` is now loaded as a fast processor by default, even if the model checkpoint was saved with a slow processor. This is a breaking change and may produce slightly different outputs. To continue using the slow processor, instantiate this class with `use_fast=False`. Note that this behavior will be extended to all models in a future release.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+[1/54] ep02-nominal-f0 3.32s
+[2/54] ep02-nominal-f165 2.20s
+[3/54] ep02-nominal-f330 2.13s
+[4/54] ep02-failure-f360 2.17s
+[5/54] ep02-failure-f510 2.16s
+[6/54] ep02-failure-f659 2.14s
+[7/54] ep02-recovery-f675 2.13s
+[8/54] ep02-recovery-f786 2.34s
+[9/54] ep02-recovery-f896 2.69s
+[10/54] ep08-nominal-f0 2.62s
+[11/54] ep08-nominal-f75 2.70s
+[12/54] ep08-nominal-f150 2.54s
+[13/54] ep08-failure-f180 2.50s
+[14/54] ep08-failure-f284 2.08s
+[15/54] ep08-failure-f389 2.06s
+[16/54] ep08-recovery-f405 2.08s
+[17/54] ep08-recovery-f650 2.06s
+[18/54] ep08-recovery-f896 2.06s
+[19/54] ep18-nominal-f0 2.06s
+[20/54] ep18-nominal-f60 2.05s
+[21/54] ep18-nominal-f120 2.05s
+[22/54] ep18-failure-f150 2.06s
+[23/54] ep18-failure-f284 2.05s
+[24/54] ep18-failure-f419 2.06s
+[25/54] ep18-recovery-f435 2.05s
+[26/54] ep18-recovery-f666 2.24s
+[27/54] ep18-recovery-f896 2.62s
+[28/54] ep20-nominal-f0 2.71s
+[29/54] ep20-nominal-f135 2.62s
+[30/54] ep20-nominal-f270 2.21s
+[31/54] ep20-failure-f300 2.04s
+[32/54] ep20-failure-f390 2.13s
+[33/54] ep20-failure-f479 2.11s
+[34/54] ep20-recovery-f495 2.00s
+[35/54] ep20-recovery-f696 2.06s
+[36/54] ep20-recovery-f896 2.06s
+[37/54] ep47-nominal-f0 2.06s
+[38/54] ep47-nominal-f180 2.05s
+[39/54] ep47-nominal-f360 2.06s
+[40/54] ep47-failure-f390 2.07s
+[41/54] ep47-failure-f420 2.16s
+[42/54] ep47-failure-f449 2.16s
+[43/54] ep47-recovery-f465 2.17s
+[44/54] ep47-recovery-f680 2.15s
+[45/54] ep47-recovery-f896 2.13s
+[46/54] ep54-nominal-f0 2.50s
+[47/54] ep54-nominal-f135 2.17s
+[48/54] ep54-nominal-f270 2.14s
+[49/54] ep54-failure-f300 2.12s
+[50/54] ep54-failure-f390 2.14s
+[51/54] ep54-failure-f479 2.36s
+[52/54] ep54-recovery-f495 2.67s
+[53/54] ep54-recovery-f696 2.63s
+[54/54] ep54-recovery-f896 2.22s
+{
+  "n": 54,
+  "json_valid_rate": 1.0,
+  "phase_macro_f1": 0.09650793650793651,
+  "state_macro_f1": 0.1619047619047619,
+  "failure_recall": 0.0,
+  "recovery_recall": 0.9444444444444444,
+  "pre_failure_false_positive_rate": 0.0,
+  "failure_mode_macro_f1": 0.10434782608695652,
+  "failure_mode_macro_f1_non_nominal": 0.10434782608695652,
+  "phase_per_class": {
+    "align (pick)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 12.0
+    },
+    "align (place)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 12.0
+    },
+    "engage (pick)": {
+      "precision": 0.5,
+      "recall": 0.07692307692307693,
+      "f1": 0.13333333333333336,
+      "support": 13.0
+    },
+    "engage (place)": {
+      "precision": 0.21153846153846154,
+      "recall": 1.0,
+      "f1": 0.34920634920634924,
+      "support": 11.0
+    },
+    "transport": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    }
+  },
+  "state_per_class": {
+    "failure": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 18.0
+    },
+    "nominal": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 18.0
+    },
+    "recovery": {
+      "precision": 0.3269230769230769,
+      "recall": 0.9444444444444444,
+      "f1": 0.48571428571428577,
+      "support": 18.0
+    }
+  },
+  "failure_mode_per_class": {
+    "excessive_force": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    },
+    "jamming": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    },
+    "misalignment": {
+      "precision": 0.35294117647058826,
+      "recall": 1.0,
+      "f1": 0.5217391304347826,
+      "support": 12.0
+    },
+    "retention_failure": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    },
+    "slip": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    }
+  },
+  "timing_slices": {
+    "failure": 0.0,
+    "nominal": 0.0,
+    "recovery": 0.9444444444444444
+  },
+  "gold_state_counts": {
+    "nominal": 18,
+    "failure": 18,
+    "recovery": 18
+  },
+  "episode_bootstrap": {
+    "unit": "episode",
+    "samples": 1000,
+    "seed": 42,
+    "state_macro_f1_95ci": [
+      0.15151515151515152,
+      0.16666666666666666
+    ],
+    "failure_recall_95ci": [
+      0.0,
+      0.0
+    ]
+  },
+  "mean_latency_seconds": 2.243481232319027
+}
+[2026-09-30T14:20:20+08:00] EXPLORATORY GSPO eval complete

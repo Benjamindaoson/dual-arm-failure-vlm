@@ -1,0 +1,179 @@
+[2026-09-30T09:49:20+08:00] SFT eval start adapter=artifacts/runs/sft-full-A2-20260930T001500Z
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.51s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:06<00:00,  3.38s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:06<00:00,  3.40s/it]
+The image processor of type `Qwen2VLImageProcessor` is now loaded as a fast processor by default, even if the model checkpoint was saved with a slow processor. This is a breaking change and may produce slightly different outputs. To continue using the slow processor, instantiate this class with `use_fast=False`. Note that this behavior will be extended to all models in a future release.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+[1/54] ep02-nominal-f0 2.30s
+[2/54] ep02-nominal-f165 2.04s
+[3/54] ep02-nominal-f330 1.84s
+[4/54] ep02-failure-f360 1.96s
+[5/54] ep02-failure-f510 1.98s
+[6/54] ep02-failure-f659 2.07s
+[7/54] ep02-recovery-f675 1.94s
+[8/54] ep02-recovery-f786 1.92s
+[9/54] ep02-recovery-f896 1.80s
+[10/54] ep08-nominal-f0 1.89s
+[11/54] ep08-nominal-f75 1.82s
+[12/54] ep08-nominal-f150 1.89s
+[13/54] ep08-failure-f180 1.84s
+[14/54] ep08-failure-f284 1.93s
+[15/54] ep08-failure-f389 1.96s
+[16/54] ep08-recovery-f405 1.89s
+[17/54] ep08-recovery-f650 1.96s
+[18/54] ep08-recovery-f896 1.79s
+[19/54] ep18-nominal-f0 1.84s
+[20/54] ep18-nominal-f60 1.83s
+[21/54] ep18-nominal-f120 1.83s
+[22/54] ep18-failure-f150 1.95s
+[23/54] ep18-failure-f284 2.44s
+[24/54] ep18-failure-f419 1.92s
+[25/54] ep18-recovery-f435 1.83s
+[26/54] ep18-recovery-f666 2.40s
+[27/54] ep18-recovery-f896 1.99s
+[28/54] ep20-nominal-f0 1.92s
+[29/54] ep20-nominal-f135 1.82s
+[30/54] ep20-nominal-f270 1.75s
+[31/54] ep20-failure-f300 1.90s
+[32/54] ep20-failure-f390 1.83s
+[33/54] ep20-failure-f479 1.83s
+[34/54] ep20-recovery-f495 1.77s
+[35/54] ep20-recovery-f696 1.82s
+[36/54] ep20-recovery-f896 1.88s
+[37/54] ep47-nominal-f0 1.83s
+[38/54] ep47-nominal-f180 2.15s
+[39/54] ep47-nominal-f360 2.35s
+[40/54] ep47-failure-f390 2.37s
+[41/54] ep47-failure-f420 2.39s
+[42/54] ep47-failure-f449 1.78s
+[43/54] ep47-recovery-f465 1.90s
+[44/54] ep47-recovery-f680 2.04s
+[45/54] ep47-recovery-f896 2.05s
+[46/54] ep54-nominal-f0 1.93s
+[47/54] ep54-nominal-f135 1.82s
+[48/54] ep54-nominal-f270 1.82s
+[49/54] ep54-failure-f300 1.93s
+[50/54] ep54-failure-f390 1.95s
+[51/54] ep54-failure-f479 1.86s
+[52/54] ep54-recovery-f495 2.04s
+[53/54] ep54-recovery-f696 1.95s
+[54/54] ep54-recovery-f896 1.94s
+{
+  "n": 54,
+  "json_valid_rate": 1.0,
+  "phase_macro_f1": 0.2938392238392238,
+  "state_macro_f1": 0.4012345679012346,
+  "failure_recall": 0.0,
+  "recovery_recall": 0.6111111111111112,
+  "pre_failure_false_positive_rate": 0.0,
+  "failure_mode_macro_f1": 0.08571428571428572,
+  "failure_mode_macro_f1_non_nominal": 0.08571428571428572,
+  "phase_per_class": {
+    "align (pick)": {
+      "precision": 0.24,
+      "recall": 0.5,
+      "f1": 0.32432432432432434,
+      "support": 12.0
+    },
+    "align (place)": {
+      "precision": 0.42857142857142855,
+      "recall": 0.5,
+      "f1": 0.4615384615384615,
+      "support": 12.0
+    },
+    "engage (pick)": {
+      "precision": 0.45454545454545453,
+      "recall": 0.38461538461538464,
+      "f1": 0.41666666666666663,
+      "support": 13.0
+    },
+    "engage (place)": {
+      "precision": 0.5,
+      "recall": 0.18181818181818182,
+      "f1": 0.26666666666666666,
+      "support": 11.0
+    },
+    "transport": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    }
+  },
+  "state_per_class": {
+    "failure": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 18.0
+    },
+    "nominal": {
+      "precision": 0.4444444444444444,
+      "recall": 0.8888888888888888,
+      "f1": 0.5925925925925926,
+      "support": 18.0
+    },
+    "recovery": {
+      "precision": 0.6111111111111112,
+      "recall": 0.6111111111111112,
+      "f1": 0.6111111111111112,
+      "support": 18.0
+    }
+  },
+  "failure_mode_per_class": {
+    "excessive_force": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    },
+    "jamming": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    },
+    "misalignment": {
+      "precision": 0.375,
+      "recall": 0.5,
+      "f1": 0.42857142857142855,
+      "support": 12.0
+    },
+    "retention_failure": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    },
+    "slip": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    }
+  },
+  "timing_slices": {
+    "failure": 0.0,
+    "nominal": 0.8888888888888888,
+    "recovery": 0.6111111111111112
+  },
+  "gold_state_counts": {
+    "nominal": 18,
+    "failure": 18,
+    "recovery": 18
+  },
+  "episode_bootstrap": {
+    "unit": "episode",
+    "samples": 1000,
+    "seed": 42,
+    "state_macro_f1_95ci": [
+      0.346711889956661,
+      0.47272727272727266
+    ],
+    "failure_recall_95ci": [
+      0.0,
+      0.0
+    ]
+  },
+  "mean_latency_seconds": 1.9532679501507018
+}
+[2026-09-30T09:51:28+08:00] SFT eval complete

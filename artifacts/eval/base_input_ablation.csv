@@ -1,0 +1,5 @@
+variant,n,state_macro_f1,failure_recall,recovery_recall,phase_macro_f1,failure_mode_macro_f1,json_valid_rate,pre_failure_false_positive_rate
+A0,54,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+A1,54,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+A2,54,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+A3,54,0.0,0.0,0.0,0.0,0.0,0.0,0.0

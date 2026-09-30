@@ -1,0 +1,26 @@
+{
+  "GRPO": {
+    "bytes": 74407296,
+    "remote_path": "/root/autodl-tmp/multimodal-chart-gspo-v2/artifacts/runs/grpo-full-100-20260930T023348Z/adapter_model.safetensors",
+    "run_id": "grpo-full-100-20260930T023348Z",
+    "sha256": "797731776fcd7942b8a3beab199bcd23a034a4c486424bf06801721871aa70ed"
+  },
+  "GSPO_exploratory": {
+    "bytes": 74407296,
+    "remote_path": "/root/autodl-tmp/multimodal-chart-gspo-v2/artifacts/runs/gspo-exploratory-full-100-20260930T043207Z/adapter_model.safetensors",
+    "run_id": "gspo-exploratory-full-100-20260930T043207Z",
+    "sha256": "21cf3f8390bb34fb122ff8a842fdf95e51ecce88bbd844a0b92810207cc8db0b"
+  },
+  "SFT": {
+    "bytes": 148712776,
+    "remote_path": "/root/autodl-tmp/multimodal-chart-gspo-v2/artifacts/runs/sft-full-A2-20260930T001500Z/adapter_model.safetensors",
+    "run_id": "sft-full-A2-20260930T001500Z",
+    "sha256": "71500a2097e9df0eb6fea2b2670f76d56a27e12666574b00e777856573441b32"
+  },
+  "SFT_smoke": {
+    "bytes": 74407296,
+    "remote_path": "/root/autodl-tmp/multimodal-chart-gspo-v2/artifacts/runs/sft-smoke-A2-20260930T000441Z/adapter_model.safetensors",
+    "run_id": "sft-smoke-A2-20260930T000441Z",
+    "sha256": "09137ce4793774e7812c3140b4d1c1c8de482f1b8c5c8bd4a94d194454d72da8"
+  }
+}

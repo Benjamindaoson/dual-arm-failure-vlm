@@ -1,0 +1,211 @@
+[2026-09-30T09:55:21+08:00] timing base start
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.83s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:07<00:00,  3.77s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:07<00:00,  3.78s/it]
+The image processor of type `Qwen2VLImageProcessor` is now loaded as a fast processor by default, even if the model checkpoint was saved with a slow processor. This is a breaking change and may produce slightly different outputs. To continue using the slow processor, instantiate this class with `use_fast=False`. Note that this behavior will be extended to all models in a future release.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+[1/84] ep02-failure_onset--2.0s 2.25s
+[2/84] ep02-failure_onset--1.0s 1.74s
+[3/84] ep02-failure_onset--0.5s 1.79s
+[4/84] ep02-failure_onset-+0.0s 1.88s
+[5/84] ep02-failure_onset-+0.5s 2.30s
+[6/84] ep02-failure_onset-+1.0s 2.25s
+[7/84] ep02-failure_onset-+2.0s 2.34s
+[8/84] ep02-recovery_onset--2.0s 1.69s
+[9/84] ep02-recovery_onset--1.0s 1.57s
+[10/84] ep02-recovery_onset--0.5s 1.60s
+[11/84] ep02-recovery_onset-+0.0s 1.60s
+[12/84] ep02-recovery_onset-+0.5s 1.66s
+[13/84] ep02-recovery_onset-+1.0s 1.58s
+[14/84] ep02-recovery_onset-+2.0s 1.63s
+[15/84] ep08-failure_onset--2.0s 1.59s
+[16/84] ep08-failure_onset--1.0s 1.56s
+[17/84] ep08-failure_onset--0.5s 1.60s
+[18/84] ep08-failure_onset-+0.0s 1.57s
+[19/84] ep08-failure_onset-+0.5s 1.63s
+[20/84] ep08-failure_onset-+1.0s 1.58s
+[21/84] ep08-failure_onset-+2.0s 1.54s
+[22/84] ep08-recovery_onset--2.0s 1.57s
+[23/84] ep08-recovery_onset--1.0s 1.62s
+[24/84] ep08-recovery_onset--0.5s 1.62s
+[25/84] ep08-recovery_onset-+0.0s 1.79s
+[26/84] ep08-recovery_onset-+0.5s 2.20s
+[27/84] ep08-recovery_onset-+1.0s 2.00s
+[28/84] ep08-recovery_onset-+2.0s 1.63s
+[29/84] ep18-failure_onset--2.0s 1.60s
+[30/84] ep18-failure_onset--1.0s 1.52s
+[31/84] ep18-failure_onset--0.5s 1.56s
+[32/84] ep18-failure_onset-+0.0s 1.60s
+[33/84] ep18-failure_onset-+0.5s 1.58s
+[34/84] ep18-failure_onset-+1.0s 1.59s
+[35/84] ep18-failure_onset-+2.0s 1.57s
+[36/84] ep18-recovery_onset--2.0s 1.57s
+[37/84] ep18-recovery_onset--1.0s 1.53s
+[38/84] ep18-recovery_onset--0.5s 1.49s
+[39/84] ep18-recovery_onset-+0.0s 2.06s
+[40/84] ep18-recovery_onset-+0.5s 2.00s
+[41/84] ep18-recovery_onset-+1.0s 1.68s
+[42/84] ep18-recovery_onset-+2.0s 1.61s
+[43/84] ep20-failure_onset--2.0s 1.59s
+[44/84] ep20-failure_onset--1.0s 1.70s
+[45/84] ep20-failure_onset--0.5s 2.15s
+[46/84] ep20-failure_onset-+0.0s 2.08s
+[47/84] ep20-failure_onset-+0.5s 1.68s
+[48/84] ep20-failure_onset-+1.0s 1.68s
+[49/84] ep20-failure_onset-+2.0s 1.62s
+[50/84] ep20-recovery_onset--2.0s 1.60s
+[51/84] ep20-recovery_onset--1.0s 1.60s
+[52/84] ep20-recovery_onset--0.5s 1.62s
+[53/84] ep20-recovery_onset-+0.0s 1.61s
+[54/84] ep20-recovery_onset-+0.5s 1.67s
+[55/84] ep20-recovery_onset-+1.0s 1.67s
+[56/84] ep20-recovery_onset-+2.0s 1.62s
+[57/84] ep47-failure_onset--2.0s 1.59s
+[58/84] ep47-failure_onset--1.0s 1.65s
+[59/84] ep47-failure_onset--0.5s 1.62s
+[60/84] ep47-failure_onset-+0.0s 1.58s
+[61/84] ep47-failure_onset-+0.5s 1.63s
+[62/84] ep47-failure_onset-+1.0s 1.65s
+[63/84] ep47-failure_onset-+2.0s 1.63s
+[64/84] ep47-recovery_onset--2.0s 1.65s
+[65/84] ep47-recovery_onset--1.0s 1.64s
+[66/84] ep47-recovery_onset--0.5s 1.62s
+[67/84] ep47-recovery_onset-+0.0s 1.66s
+[68/84] ep47-recovery_onset-+0.5s 1.76s
+[69/84] ep47-recovery_onset-+1.0s 1.70s
+[70/84] ep47-recovery_onset-+2.0s 1.80s
+[71/84] ep54-failure_onset--2.0s 1.68s
+[72/84] ep54-failure_onset--1.0s 1.61s
+[73/84] ep54-failure_onset--0.5s 1.63s
+[74/84] ep54-failure_onset-+0.0s 1.64s
+[75/84] ep54-failure_onset-+0.5s 1.62s
+[76/84] ep54-failure_onset-+1.0s 1.61s
+[77/84] ep54-failure_onset-+2.0s 1.66s
+[78/84] ep54-recovery_onset--2.0s 1.58s
+[79/84] ep54-recovery_onset--1.0s 1.61s
+[80/84] ep54-recovery_onset--0.5s 1.71s
+[81/84] ep54-recovery_onset-+0.0s 1.65s
+[82/84] ep54-recovery_onset-+0.5s 1.64s
+[83/84] ep54-recovery_onset-+1.0s 1.65s
+[84/84] ep54-recovery_onset-+2.0s 1.61s
+{
+  "n": 84,
+  "json_valid_rate": 0.0,
+  "phase_macro_f1": 0.0,
+  "state_macro_f1": 0.0,
+  "failure_recall": 0.0,
+  "recovery_recall": 0.0,
+  "pre_failure_false_positive_rate": 0.0,
+  "failure_mode_macro_f1": 0.0,
+  "failure_mode_macro_f1_non_nominal": 0.0,
+  "phase_per_class": {
+    "align (pick)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    },
+    "align (place)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 32.0
+    },
+    "engage (pick)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 27.0
+    },
+    "transport": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 19.0
+    }
+  },
+  "state_per_class": {
+    "failure": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 41.0
+    },
+    "nominal": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 18.0
+    },
+    "recovery": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 25.0
+    }
+  },
+  "failure_mode_per_class": {
+    "excessive_force": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 11.0
+    },
+    "jamming": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 11.0
+    },
+    "misalignment": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 22.0
+    },
+    "retention_failure": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 11.0
+    },
+    "slip": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 11.0
+    }
+  },
+  "timing_slices": {
+    "early_failure": 0.0,
+    "early_recovery": 0.0,
+    "late_failure": 0.0,
+    "pre_failure": 0.0,
+    "recovery_+0.0s": 0.0,
+    "recovery_+0.5s": 0.0,
+    "recovery_+1.0s": 0.0,
+    "recovery_+2.0s": 0.0,
+    "recovery_-0.5s": 0.0,
+    "recovery_-1.0s": 0.0,
+    "recovery_-2.0s": 0.0
+  },
+  "gold_state_counts": {
+    "nominal": 18,
+    "failure": 41,
+    "recovery": 25
+  },
+  "episode_bootstrap": {
+    "unit": "episode",
+    "samples": 1000,
+    "seed": 42,
+    "state_macro_f1_95ci": [
+      0.0,
+      0.0
+    ],
+    "failure_recall_95ci": [
+      0.0,
+      0.0
+    ]
+  },
+  "mean_latency_seconds": 1.6939172246715142
+}
+[2026-09-30T09:58:07+08:00] timing base complete

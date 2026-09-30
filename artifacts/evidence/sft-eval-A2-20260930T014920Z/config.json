@@ -1,0 +1,19 @@
+{
+  "adapter": "/root/autodl-tmp/multimodal-chart-gspo-v2/artifacts/runs/sft-full-A2-20260930T001500Z",
+  "cameras": [
+    "observation.images.cam_high",
+    "observation.images.cam_low"
+  ],
+  "dataset_revision": "0633573d0438be1185bddebdf1a2c8f5505f7b2a",
+  "dataset_root": "/root/autodl-tmp/prepared/A2",
+  "limit": null,
+  "load_in_4bit": true,
+  "max_new_tokens": 96,
+  "max_pixels": 100352,
+  "model": "/root/autodl-tmp/models/Qwen2.5-VL-3B-Instruct",
+  "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+  "num_frames": 4,
+  "seed": 42,
+  "split": "test",
+  "stage": "adapter_eval"
+}

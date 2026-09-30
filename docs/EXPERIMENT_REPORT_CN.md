@@ -1,186 +1,110 @@
-# REBOOT Precision-Assembly Recovery 实验报告
+# REBOOT 精密装配失败识别：真实 GPU 实验报告
 
-状态日期：2026-09-30（Asia/Shanghai）  
-项目身份：Independent Research Project  
-数据集：`REBOOT26/sample_recovery-demonstration`  
-数据 revision：`0633573d0438be1185bddebdf1a2c8f5505f7b2a`  
-模型：`Qwen/Qwen2.5-VL-3B-Instruct`  
-模型 revision：`66285546d2b821cf421d4f5eb2576359d3770cd3`
+状态：2026-09-30，已执行；项目身份：基于公开 REBOOT 数据的独立研究。数据 revision `0633573d0438be1185bddebdf1a2c8f5505f7b2a`，Qwen2.5-VL-3B-Instruct 模型 revision `66285546d2b821cf421d4f5eb2576359d3770cd3`，seed 42。全部完整评测使用冻结的 test episodes `02, 08, 18, 20, 47, 54`，每个输入版本均为 54 个窗口；split receipt SHA-256 为 `4301609f83c471cb00abdac1b61855449ceb1872f02189fe986a82f1945b774c`。
 
-本报告只把真实执行过且有收据的结果写成数字。完整数据、模型和真实视频解码链路已经验证；模型推理与训练因目标 SSH 容器没有 NVIDIA 设备而被硬件门禁阻止。所有模型指标均为 **N/A**，不是 0。
+主要结论：**没有一个模型识别出 held-out failure**。SFT 将严格 JSON 有效率从 0 提到 100%，State Macro-F1 达到 0.4012，但 Failure Recall 仍为 0/18。GRPO 和探索性 GSPO 都没有改善 Failure Recall，且总体 State Macro-F1 低于 SFT。该结果不支持把系统称为可靠的装配失败检测器。
 
-## 【GPU】
+## 【硬件】
 
-| 项目 | 实测 |
-|---|---|
-| AutoDL 登录资源 | 0.5 CPU core / 2 GB RAM |
-| NVIDIA 型号 | N/A |
-| VRAM | N/A |
-| `/dev/nvidia*` | 不存在 |
-| `nvidia-smi` | `/usr/bin/nvidia-smi` 为 0-byte stub；没有设备输出 |
-| Python | 3.10.8 |
-| PyTorch | 2.6.0+cu124 |
-| PyTorch CUDA runtime | 12.4 |
-| cuDNN | 90100 |
-| `torch.cuda.is_available()` | `False` |
-| BF16 support | N/A |
-| Transformers / TRL / PEFT | 4.57.6 / 0.29.1 / 0.21.1 |
-| Accelerate / bitsandbytes | 1.15.0 / 0.49.2 |
-| LeRobot / Datasets | 0.4.4 / 4.8.5 |
-| 最终状态 | `BLOCKED_NO_CUDA` |
+新 AutoDL 实例实测 NVIDIA GeForce RTX 4090 D，设备节点 `/dev/nvidia*` 存在，`torch.cuda.is_available() == True`，BF16 可用，显存 25,252,724,736 bytes（约 23.52 GiB）；CPU 16 cores、RAM 62 GB、Python 3.10.8、PyTorch 2.6.0+cu124。正式训练全程没有 OOM，也没有降像素、帧数、相机数或 RL generations。原先无 GPU 的容器探针作为历史记录保留在 [`gpu_environment_pre_gpu.json`](../artifacts/environment/gpu_environment_pre_gpu.json)；当前探针和运行环境见 [`hardware_probe.txt`](../artifacts/environment/hardware_probe.txt) 与 [`gpu_environment.json`](../artifacts/environment/gpu_environment.json)。
 
-这是不可由 Python 包修复的平台挂载问题：CUDA 版 PyTorch 已安装，但容器没有 GPU 设备节点。项目因此没有在 CPU 上伪跑 Qwen2.5-VL-3B 推理或训练。
+## 【真实数据】
 
-证据：`artifacts/environment/gpu_environment.json`、`artifacts/environment/hardware_probe.txt`。
+公开 sample 本地数据约 2.7 GB，模型快照约 7.1 GB；没有重复下载、重新审计或重新划分。全量审计覆盖 60 个 episode、53,886 条 frame rows、30 FPS、4 路 RGB、14-D state 和 14-D action。7 个异常 episode `00, 15, 16, 26, 34, 37, 38` 隔离后，有效 episode 53 个，按完整 episode 固定为 42 train / 5 val / 6 test。469 个因果窗口分为 372/43/54；时间定位集为 6 test episodes × 2 onsets × 7 offsets = 84 条。A0/A1/A2/A3 全部物化，图片缺失数为 0；A3 trace 字段缺失数为 0。物化回执见 [`artifacts/materialization`](../artifacts/materialization/A2/dataset_receipt.json)，审计与 split 见 [`DATA_RECEIPT.md`](../artifacts/data_audit/DATA_RECEIPT.md) 和 [`split_receipt.json`](../artifacts/splits/split_receipt.json)。
 
-## 【数据】
+## 【Base A0/A1/A2】
 
-完整 pilot 已下载到 `/root/autodl-tmp/reboot_sample`，磁盘占用约 2.7 GB；本地校验发现 60 个 parquet data files、18 个 video files，metadata 和完整 payload 均存在。模型快照已下载到 `/root/autodl-tmp/models/Qwen2.5-VL-3B-Instruct`，磁盘占用约 7.1 GB。
+模型采用 NF4 4-bit、BF16、确定性解码，`max_pixels=100352`、`max_new_tokens=96`。每组先跑 2 样本 smoke，再跑冻结测试集 54 样本。
 
-| 项目 | 真实统计 |
-|---|---:|
-| Episodes declared / observed | 60 / 60 |
-| Frame-table rows | 53,886 |
-| FPS | 30 |
-| RGB cameras | 4 |
-| Depth keys | 0 |
-| Robot state / action | 14-D / 14-D |
-| Valid / quarantined episodes | 53 / 7 |
-| Episode split | 42 train / 5 val / 6 test |
-| Causal windows | 469 |
-| Window split | 372 train / 43 val / 54 test |
-| Window states | 157 nominal / 153 failure / 159 recovery |
-| Timing samples | 84（6 test episodes × 2 onsets × 7 offsets） |
-| Split leakage | 未发现 |
+| 输入 | 图片/窗口 | State Macro-F1 | Failure Recall | Recovery Recall | Phase Macro-F1 | Failure-mode Macro-F1 | JSON Valid Rate | 完整评测墙钟 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| A0 单帧单相机 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 94.23 s |
+| A1 四时点单相机 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 106.27 s |
+| A2 四时点双相机 | 8 | 0 | 0 | 0 | 0 | 0 | 0 | 112.77 s |
 
-`duration_frames` 在该快照中是含终点的 frame index：终点 897 正常对应 0..897 共 898 行。episodes `00`、`15`、`26`、`34`、`37`、`38` 各多出一条越界 frame 898；episode `16` 和 `26` 的 `originating_phase` 越界；episode `37` 的 recovery 开始早于 failure。异常没有自动修复，而是按 episode 隔离。合并去重后共隔离 7 个 episode：`00, 15, 16, 26, 34, 37, 38`。
-
-53 个有效 episode 的 failure taxonomy：
-
-| Failure mode | Episodes |
-|---|---:|
-| misalignment | 22 |
-| slip | 8 |
-| premature_release | 6 |
-| excessive_force | 5 |
-| retention_failure | 3 |
-| sub_mm_misalignment | 3 |
-| jamming | 2 |
-| delayed_start | 1 |
-| freeze | 1 |
-| poor_engagement | 1 |
-| premature_grasp | 1 |
-
-真实 LeRobot 读取已通过：使用 PyAV 从 MP4 解码 `cam_high` 与 `cam_low`。A0 已完整物化 469 张图和 469 条 JSONL（372/43/54）；A2 smoke 生成 2 张 JPEG 和 1 条训练 JSONL。A1 在确认硬件阻断后停止于 24 张图并保留为 partial，A3 未物化；这些不能写成完整 A1–A3 数据结果。
-
-## 【Base】
-
-| Variant | Held-out 输入 | State Macro-F1 | Failure Recall | Recovery Recall | Phase Macro-F1 | Failure-mode Macro-F1 | JSON Valid Rate |
-|---|---|---:|---:|---:|---:|---:|---:|
-| A0 | single current frame + task | N/A | N/A | N/A | N/A | N/A | N/A |
-| A1 | 4 timestamps × 1 camera + task | N/A | N/A | N/A | N/A | N/A | N/A |
-| A2 | 4 timestamps × 2 cameras + task | N/A | N/A | N/A | N/A | N/A | N/A |
-
-状态：`BLOCKED_NO_CUDA`。没有生成 Base predictions，因此不存在可计算的 Base gate。
+三组 Base 输出大量带 Markdown 代码围栏的 JSON，未通过预先固定的严格解析器，因此正式任务分数为 0。不能把这些零分解释为视觉信息完全无用，也不能为了提高分数事后放宽解析协议。Base 消融结果与逐样本预测见 [`base_input_ablation.json`](../artifacts/eval/base_input_ablation.json) 和 [`artifacts/evidence`](../artifacts/evidence/base-full-A2-20260929T235818Z/predictions.jsonl)。因为三组严格指标同为零，A2 不是凭 Base 优势选出的；继续 A2 SFT 是为了测试多视角时序输入能否学到有效信号。
 
 ## 【SFT】
 
-预定且已通过配置/单元测试的训练契约是：Qwen2.5-VL-3B-Instruct、NF4 4-bit、LoRA rank 16、alpha 32、dropout 0.05、gradient checkpointing、batch size 1、gradient accumulation 8、seed 42、最多 2 epochs，并以 validation checkpoint selection 控制过拟合。
+A2 使用 NF4 4-bit QLoRA，LoRA rank 16、alpha 32、dropout 0.05、batch 1、gradient accumulation 8、seed 42。5-step smoke 的 loss 与 gradient 均有限，adapter 保存并重载成功。正式训练 2 epochs、94 steps，可训练参数 37,152,768；最佳 validation checkpoint 为 `checkpoint-94`。训练 loss 0.2689、validation loss 0.1974；完整 run 墙钟 2,142.50 s，框架记录的峰值分配显存 5,644,279,296 bytes。
 
-| 项目 | 结果 |
-|---|---|
-| 5-step smoke | N/A — BLOCKED_NO_CUDA |
-| 正式 2-epoch SFT | N/A — BLOCKED_NO_CUDA |
-| Adapter reload | N/A — 没有合法 SFT checkpoint |
-| Trainable parameters | N/A |
-| Peak VRAM | N/A |
-| Wall clock / examples per second | N/A |
-| Train / eval loss | N/A |
-| Held-out metrics | N/A |
-
-## 【Ablation】
-
-四个输入契约共享同一组 test episodes：`02, 08, 18, 20, 47, 54`，split manifest SHA-256 为 `4cd35a1f76effe516d07577f1a86134e41c16430b9b7cab6092ea2bd5b2ae029`。
-
-- A0：单帧、`cam_high`。
-- A1：4 个因果时间点、`cam_high`。
-- A2：4 个因果时间点、`cam_high + cam_low`，共 8 张图。
-- A3：A2 + 只使用当前窗口过去信息的 state/action Trace-Text。
-
-真实视频解码和 A0 完整物化、A2 smoke 链路已验证；A1 仅有 24 张 partial 图，A3 未物化。模型消融结果均为 **N/A — BLOCKED_NO_CUDA**。因此不能说 temporal、多相机或 trace 有增益。
+同一冻结测试集：State Macro-F1 **0.4012**（按 6 个 episode bootstrap 的 95% CI `[0.3467, 0.4727]`）；Failure Recall **0/18 = 0**（bootstrap CI `[0, 0]`）；Recovery Recall **11/18 = 0.6111**；Phase Macro-F1 **0.2938**；Failure-mode Macro-F1 **0.0857**；JSON Valid Rate **54/54 = 100%**。结果级全字段配对：Base 错而 SFT 对 7，Base 对而 SFT 错 0，双方均错 47。SFT 改善了结构化输出与部分状态判断，核心失败漏检仍未解决。证据见 [`base_vs_sft.json`](../artifacts/eval/base_vs_sft.json)。
 
 ## 【Failure Timing】
 
-已从真实 annotation 生成 84 条因果 timing samples，覆盖 failure onset 和 recovery onset 的 `-2.0, -1.0, -0.5, 0, +0.5, +1.0, +2.0` 秒。检测定义是首次连续 `K=2` 个窗口预测 failure。
+failure onset 和 recovery onset 各取 `-2, -1, -0.5, 0, +0.5, +1, +2` 秒的因果窗口；首次连续 K=2 个目标状态才算稳定检出。每个 onset 类型有 6 个 episode，onset 前共有 18 个窗口。
 
-| 指标 | Base | SFT |
-|---|---:|---:|
-| Mean failure detection delay | N/A | N/A |
-| Pre-failure false alarms | N/A | N/A |
-| Undetected episode rate | N/A | N/A |
+| 模型 | Failure K=2 检出 | Failure 检测延迟 | 提前 failure 误报 | Recovery K=2 检出 | 已检出 recovery 的平均延迟 | 提前 recovery 误报 |
+|---|---:|---:|---:|---:|---:|---:|
+| Base | 0/6 | N/A | 0/18 | 0/6 | N/A | 0/18 |
+| SFT | 0/6 | N/A | 0/18 | 0/6 | N/A | 1/18 |
+| GRPO | 0/6 | N/A | 0/18 | 3/6 | 0.5 s | 12/18 |
+| GSPO（探索性） | 0/6 | N/A | 0/18 | 1/6 | 0.5 s | 3/18 |
 
-原因：没有 GPU predictions；manifest 数量不是模型 timing 结果。
+所有模型的 failure 未检出率均为 6/6，故 Failure Detection Delay 不可计算，不能写成 0 秒。GRPO 的 recovery 检出增加伴随大量 onset 前误报；0.5 秒只针对已检出的 episode，不能外推至全部 6 个。逐 episode 结果见 [`failure_timing_base.json`](../artifacts/eval/failure_timing_base.json)、[`failure_timing_sft.json`](../artifacts/eval/failure_timing_sft.json)、[`failure_timing_grpo.json`](../artifacts/eval/failure_timing_grpo.json)、[`failure_timing_gspo.json`](../artifacts/eval/failure_timing_gspo.json)，恢复结果位于同目录的 `recovery_timing_*.json`。
+
+## 【Trace Ablation】
+
+对同一个 SFT adapter、同一 54 样本，比较 A2 Visual-only 与 A3 Visual + 14-D state/action 的因果 Trace-Text。A2 State Macro-F1 0.4012、Recovery Recall 0.6111；A3 分别为 **0.1667**、**0**。配对结果：Visual-only 对而 Trace 错 7，反向 1，双方均错 46。Base A3 的严格分数仍为 0。这只能说明本次 **未针对 Trace 再训练的文本附加方案**在该测试集退化，不能断言机器人状态/动作信息本身无价值。证据见 [`trace_ablation.json`](../artifacts/eval/trace_ablation.json)。
 
 ## 【RL Gate】
 
-状态：**未评估，不是“不通过”**。
-
-RL gate 需要先证明：SFT 相比 Base 有清晰 held-out 增益、SFT 仍存在 outcome-level headroom、reward 可由 annotation 自动验证。第三项已经在代码和测试中满足，前两项因 Base/SFT 均未执行而没有证据。因此 RL 没有被授权启动。
+Base → SFT 的 State Macro-F1 增益为 +0.4012，SFT 仍有 47/54 个结果级错误，结构化 verifier reward 可计算且单测通过。因此项目的已实现 gate 输出 [`RUN_RLVR`](../artifacts/decisions/rl_gate.json)。这个门控依据是 State Macro-F1，**Failure Recall 的增益为 0**；进入 GRPO 是一次有 headroom 的机制试验，不代表安全指标已改善。
 
 ## 【GRPO】
 
-N/A — 没有合法 SFT checkpoint，RL gate 未评估，且容器没有 CUDA。已验证的配置合同为 token-level importance sampling、`loss_type="grpo"`、短 completion、4 generations、5-step smoke 后最多 50-step pilot；这只是实现合同，不是训练结果。
+从同一 SFT adapter 出发，TRL 0.29.1，token-level importance sampling、`loss_type=grpo`、4 generations、96 completion tokens、seed 42。5-step smoke 完成后，单个 100-step 正式 run 在 25/50/75/100 步保存检查点；每个检查点训练日志均无 NaN/Inf，最终 adapter 可保存。完整 run 墙钟 **6,100.28 s**，纯训练 **5,783.85 s**，峰值分配显存 **8,707,639,808 bytes**。训练 reward、reward std、KL、梯度范数和 completion length 均留存于 [`train_log.json`](../artifacts/evidence/grpo-full-100-20260930T023348Z/train_log.json)。
+
+冻结测试集：State Macro-F1 **0.1667**、Failure Recall **0**、Recovery Recall **1.0000**、Phase Macro-F1 **0.0677**、Failure-mode Macro-F1 **0.1000**、JSON Valid Rate **100%**。相对 SFT 的配对结果为 SFT 对/GRPO 错 7，SFT 错/GRPO 对 4，双方均错 43。GRPO 学成了偏向 recovery 的预测，未改善 primary metric，State Macro-F1 下降 **0.2346**。训练 reward 的存在不等于 held-out 能力增益。
 
 ## 【GSPO】
 
-N/A — 同上。已验证的配置合同为 sequence-level importance sampling、`loss_type="grpo"`；验证器明确拒绝把 `dr_grpo` 叫作 GSPO。没有证据表明 GSPO 优于 GRPO。
+GRPO 未产生真实总体增益，故 GSPO **只作为探索性算法消融**；它不是第二个通过 GRPO 增益门槛的正式阶段。它从相同 SFT checkpoint、数据、seed、4 generations、100-step 更新预算出发，使用 sequence-level importance sampling 与 `loss_type=grpo`，没有把 `dr_grpo` 冒充 GSPO。5-step smoke 与 100-step run 均完成；25/50/75/100 检查点可恢复，101 条最终训练日志无 NaN/Inf。完整 run 墙钟 **6,234.36 s**，纯训练 **5,900.02 s**，峰值分配显存 **8,707,639,808 bytes**。
 
-## 【最重要发现】
+冻结测试集：State Macro-F1 **0.1619**、Failure Recall **0**、Recovery Recall **0.9444**、Phase Macro-F1 **0.0965**、Failure-mode Macro-F1 **0.1043**、JSON Valid Rate **100%**。与 GRPO 的结果级完全正确样本相同，均为 4/54；两种 RL 方法都未提升 failure 检出。证据见 [`grpo_vs_gspo_exploratory.json`](../artifacts/eval/grpo_vs_gspo_exploratory.json)。
 
-1. 完整 frame-table 审计改变了数据口径：可用 episode 从 metadata-only 的 57 降至 53；最终可信 split 是 42/5/6，不是旧的 45/5/7。
-2. `duration_frames` 是含终点索引；只有 6 条 frame 898 是真正的越界额外行。若把 897 误当 row count，会错误隔离全部 60 个 episode。
-3. 真实数据足以构成数百级时序 pilot：469 个因果窗口和 84 条 onset-relative timing samples，且没有 episode leakage。
-4. 数据、模型、依赖和真实视频解码均已准备好；唯一阻断 P0 模型闭环的是目标容器没有 NVIDIA 设备挂载。
-5. 目前没有任何模型效果证据，因而不能判断 temporal、多相机、trace、SFT、GRPO 或 GSPO 是否有价值。
+## 【最终模型比较】
 
-## 【失败实验】
+| 模型 | 性质 | State Macro-F1 | Failure Recall | Recovery Recall | Phase Macro-F1 | Failure-mode Macro-F1 | JSON Valid Rate |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Base A2 | baseline | 0 | 0 | 0 | 0 | 0 | 0 |
+| SFT A2 | 正式 | **0.4012** | **0** | 0.6111 | **0.2938** | 0.0857 | 1.0000 |
+| GRPO A2 | 正式 | 0.1667 | 0 | **1.0000** | 0.0677 | 0.1000 | 1.0000 |
+| GSPO A2 | 探索性 | 0.1619 | 0 | 0.9444 | 0.0965 | **0.1043** | 1.0000 |
 
-- GPU preflight 失败：登录横幅报告 `No devices were found`，没有 `/dev/nvidia*`，CUDA 版 PyTorch 仍返回 `False`。判定为不可在容器内修复的硬平台故障。
-- 首轮 frame audit 曾把 `duration_frames=897` 错当成 row count，导致 60/60 全部被隔离；检查 parquet 的 0..897 实际索引和 `meta/episodes.length=898` 后修正为含终点语义，并增加回归检查。该错误结果已被覆盖，不能引用。
-- LeRobot 0.4.4 不接受旧参数 `return_uint8`，且列选择位于内部 Hugging Face Dataset；物化器已按锁定版本修正。
-- 默认 TorchCodec 因 FFmpeg shared-library ABI 不匹配无法加载；切换到 LeRobot 支持的 PyAV backend 后真实首帧解码通过。
+若按 State Macro-F1 和 Phase Macro-F1 选，SFT 是本次最好的诊断 checkpoint；若按预设最优先的 Failure Recall，**不存在合格模型**。Recovery Recall 最高的 GRPO 同时造成 12/18 个 onset 前恢复误报，不能单看该数字选模型。机器可读总表见 [`final_model_comparison.json`](../artifacts/eval/final_model_comparison.json) 和 [`final_model_comparison.csv`](../artifacts/eval/final_model_comparison.csv)。
 
-## 【可用于简历的数字】
+统计口径：每个方法只用 6 个 held-out episode、54 个评测窗口；95% CI 为按 episode 重采样 1,000 次的描述性区间，未计算成对差异 p 值，也不作统计显著性声明。Failure-mode 各类别 test support 仅 6–12，macro-F1 对单例预测敏感。所有原始预测、配置、环境、stdout、耗时、显存和回执在 [`artifacts/evidence`](../artifacts/evidence/sft-eval-A2-20260930T014920Z/run_receipt.json)；远端原始 adapter 的大小、路径和 SHA-256 见 [`adapter_inventory.json`](../artifacts/eval/adapter_inventory.json)。
 
-- 60 个 observed episodes、53 个 valid、7 个 quarantined。
-- 53,886 条 frame rows、30 FPS、4 路 RGB、14-D state/action。
-- 42/5/6 episode-level train/val/test split，split leakage 为 false。
-- 469 个因果窗口：372 train、43 val、54 test。
-- 84 条 failure/recovery onset timing samples。
-- 完整验证 60 个 data files、18 个 video files、2.7 GB 数据和 7.1 GB 固定模型快照。
-- 本地与远端各通过 39 项单元测试（以最终验证记录为准）。
+## 【训练时间】与【峰值显存】
 
-## 【绝对不能对面试官说的数字】
+正式 run 墙钟：SFT 2,142.50 s（35 分 43 秒），GRPO 6,100.28 s（1 小时 41 分 40 秒），探索性 GSPO 6,234.36 s（1 小时 43 分 54 秒），合计 **14,477.15 s（4 小时 1 分 17 秒）**。三个 5-step smoke 另约 1,730.63 s（28 分 51 秒）。峰值框架已分配显存：SFT 5.64 GB、GRPO/GSPO 8.71 GB；`nvidia-smi` 观察到 RL 进程约 9.7 GiB，口径不同，不能混为一项。Base A2 评测 112.77 s；正式模型评测墙钟详见总表。
 
-- 任何 Base/SFT/GRPO/GSPO accuracy、F1、recall、提升比例或置信区间。
-- 任何模型 failure detection delay、false-alarm rate 或 trace gain。
-- 任何 GPU peak VRAM、训练时间、examples/sec、trainable parameter count 或 loss 曲线。
-- “4090 已跑完实验”或“4090 可用”；当前收据证明相反。
-- “GSPO 优于 GRPO”“SFT 提升 failure recall”或“temporal context 已证明有用”。
-- “证明跨 connector/mechanism 泛化”或“已在汽车制造产线验证”。
+## 【失败实验】与【最重要发现】
 
-## 【剩余风险】
+1. Base A0/A1/A2 均没有通过严格 JSON schema，三个输入版本的正式任务指标全为 0。不能声称 temporal 或双相机已优于单帧。
+2. SFT 的 JSON Valid Rate 100%、State Macro-F1 0.4012，但 Failure Recall 0/18；格式学习没有变成失败识别能力。
+3. 所有模型在 failure onset 的 K=2 检测为 0/6；GRPO 的 recovery 检出伴随 12/18 提前误报。
+4. 未再训练的 Trace-Text 将 State Macro-F1 从 0.4012 降到 0.1667。
+5. GRPO 与探索性 GSPO 的 held-out State Macro-F1 都低于 SFT，Failure Recall 均为 0；没有 RL 增益证据。
+6. 之前的无 CUDA 实例、frame 终点语义误判、TorchCodec ABI 与 LeRobot API 兼容问题均已保留在历史回执；本次 4090D run 没有 OOM、NaN 或 GPU 消失。
 
-- 目标容器必须重新挂载真实 RTX 4090；恢复标准是 `nvidia-smi` 可见设备、存在 `/dev/nvidia*`、PyTorch CUDA 为 true，三者同时满足。
-- pilot 只有一个 16 mm cylinder-install task；即使后续模型指标良好，也不能外推 full-suite 泛化。
-- 数据标签极不平衡，misalignment 占 53 个有效 episode 中的 22 个；failure-mode macro-F1 必须与 per-class support 一起解释。
-- 两个有效 episode 的 failure interval 为零长度，因此其 failure windows 不存在；这是 source semantics，不应伪造。
-- 物化图像、模型权重和 checkpoint 位于 `/root/autodl-tmp`，不进入 Git；远端数据盘仍是恢复实验的必要依赖。
+判断：保留 SFT 作为可复核的 pilot 基线，不把任何 checkpoint 用作安全关键失败报警。本轮不继续调 RL 超参数；下一轮研究需要更强的 failure 监督和更广的任务/episode 覆盖，这些尚未执行。
+
+## 【可以写简历的真实数字】与【不能写简历的数字】
+
+可以写：审计 60 个真实 episode / 53,886 条 frame rows，隔离 7 个异常 episode；冻结 42/5/6 episode split，469 个因果窗口与 84 条时间定位样本；在 RTX 4090 D 上完成 2-epoch QLoRA SFT、100-step GRPO 与探索性 GSPO 对照；54 样本 test 上 SFT State Macro-F1 0.4012、JSON Valid Rate 100%，但必须同句交代 **Failure Recall 0**。可写“发现 RL 与 Trace-Text 在该 pilot 上没有改善 primary metric”。
+
+不能写：“failure recall 提升”“已经可靠检测装配失败”“GSPO 优于 GRPO”“机器人恢复策略成功”“跨任务或汽车产线验证”。不能把本独立研究写作佐治亚理工官方合作，也不能把 REBOOT 公开数据写作企业内部数据。GRPO 的 Recovery Recall 1.0 必须带上 12/18 提前恢复误报，不能单独作为成功数字。
+
+## 【项目局限】
+
+数据仅覆盖一个 16 mm cylinder-install sample，测试只有 6 个 episode，不能证明跨任务泛化或生产可用性。Base 严格解析失败使输入消融的语义比较受限。A3 是在 A2 训练的 adapter 上直接加 Trace-Text，未验证专门训练 trace 的潜力。当前模型不输出机器人动作，也未上真实机器人闭环。远端实验 bundle 没有 `.git`，run receipt 的 `git_commit` 为 `null`；revision、split hash、配置与输出哈希均保留，最终代码提交发生在运行之后。模型权重和 checkpoint 留在 `/root/autodl-tmp`，不进入 Git。
+
+## 【复核与来源】
+
+远端与本地均通过 40 项单元测试和 `compileall`。主证据入口：[`final_model_comparison.json`](../artifacts/eval/final_model_comparison.json)、[`base_vs_sft.json`](../artifacts/eval/base_vs_sft.json)、[`trace_ablation.json`](../artifacts/eval/trace_ablation.json)、[`rl_gate.json`](../artifacts/decisions/rl_gate.json)。原始训练曲线、预测及 run receipt 在 `artifacts/evidence/<run-id>/`，正式权重和四个 RL 检查点保留在远端数据盘。
 
 ## 【Git】
 
-- 分支：`reboot-precision-recovery`
-- 实现与证据 commit：`81da1f1924128feba4d9d9b9758e01dccf6ab471`
-- 架构交付 commit：`4a9ee5c30561d8a2f2b0c1f1e8fb96611bf65e70`
-- Push：已完成；上述架构 commit 已通过 `git ls-remote` 读回，最终 status-only commit 由交付消息给出。
-- PR：[#1 Complete audited REBOOT precision-assembly recovery pipeline](https://github.com/Benjamindaoson/multimodal-chart-gspo/pull/1)，目标 `master`，保持未合并。
+交付分支为 `reboot-precision-recovery`，现有 [PR #1](https://github.com/Benjamindaoson/multimodal-chart-gspo/pull/1) 保持未合并；本报告和证据随该分支提交。运行时远端 bundle 没有 `.git`，因此 run receipt 中的 `git_commit=null` 是已知来源限制，不能用后提交的 commit 冒充训练当时的源码哈希。

@@ -16,6 +16,8 @@ The critic answers three grounded questions:
 
 The project uses public [REBOOT precision-assembly trajectories](https://huggingface.co/datasets/REBOOT26/sample_recovery-demonstration). It is an **independent research project**. It is not Chery internal work, does not use Chery data, and is not an official Georgia Tech research project.
 
+**Measured pilot outcome (2026-09-30, RTX 4090 D):** Qwen2.5-VL-3B QLoRA SFT reached State Macro-F1 **0.4012** and strict JSON validity **100%** on 54 windows from six frozen test episodes, but Failure Recall remained **0/18** and K=2 failure detection remained **0/6 episodes**. GRPO and exploratory GSPO did not improve failure recognition. See the [full experiment report](docs/EXPERIMENT_REPORT_CN.md) and [machine-readable comparison](artifacts/eval/final_model_comparison.json).
+
 ## Why this problem matters
 
 Precision assembly failures are temporal and contact-dependent. A single image may show the object near the target but not whether the robot drifted, slipped, stalled, or has already begun recovery. REBOOT contributes a shared five-phase task decomposition and failure/recovery annotations across manufacturing-relevant assembly mechanisms. The full benchmark reports 2,160 demonstrations across 18 install/remove tasks; this repository starts with the smaller 60-episode cylinder-install sample so every annotation and split can be audited before scale-up. See the [official REBOOT project page](https://nanayawoa.github.io/REBOOT/).
@@ -118,41 +120,23 @@ With TRL `>=0.29,<0.30`:
 - GRPO: `importance_sampling_level="token"`, `loss_type="grpo"`;
 - GSPO: `importance_sampling_level="sequence"`, `loss_type="grpo"`.
 
-The validator rejects `importance_sampling_level="sequence"` plus `loss_type="dr_grpo"` as “paper GSPO.” Default pilot rollouts use four generations, 96 completion tokens, and 50 update steps.
+The validator rejects `importance_sampling_level="sequence"` plus `loss_type="dr_grpo"` as “paper GSPO.” The completed comparison used four generations, 96 completion tokens, and 100 update steps for each RL algorithm.
 
-## What is actually executed
+## What was executed on GPU
 
-Executed on the AutoDL host in this repository state:
+The 4090 D host passed `nvidia-smi`, `/dev/nvidia*`, `torch.cuda.is_available()`, and BF16 checks. A0/A1/A2/A3 were fully materialized from the already downloaded public dataset. Base A0/A1/A2 each had a two-sample smoke and complete 54-window held-out evaluation. A2 then received a five-step QLoRA smoke, a 94-step/two-epoch SFT, adapter reload, and full evaluation. The same six test episodes were used for failure/recovery timing and the A2-versus-A3 Trace-Text ablation. GRPO completed five smoke updates and 100 full updates; GSPO completed the same budget as an **exploratory** comparison because GRPO had not improved the held-out primary task. Four RL checkpoints (25/50/75/100) and final adapters remain on the remote data disk. Local and remote suites each pass 40 tests.
 
-- full 2.7 GB dataset download and immutable revision receipt;
-- schema, annotation, frame-table, failure-mode, and phase audit over all 53,886 rows;
-- quarantine of seven inconsistent episodes, without automatic repair;
-- deterministic episode-level split and leakage receipt;
-- 469 causal pilot windows (372 train / 43 validation / 54 test);
-- 84-row causal failure/recovery-onset timing manifest over six test episodes;
-- full local-root verification on AutoDL (60 data files and 18 video files) and real RGB MP4 decode/materialization;
-- full 7.1 GB Qwen2.5-VL-3B snapshot acquisition at revision `66285546d2b821cf421d4f5eb2576359d3770cd3`;
-- Base/SFT/GRPO dry-run contracts and run receipts using synthetic test fixtures;
-- unit tests, Python compilation, OpenSpec validation, and bundle dry-run.
+The three Base variants all scored zero under the fixed strict JSON parser because their outputs were often code-fenced or used invalid phase labels. SFT improved State Macro-F1 to 0.4012 but still missed all 18 failure windows. GRPO and exploratory GSPO scored 0.1667 and 0.1619 State Macro-F1 respectively; both also had Failure Recall 0. Their higher recovery recall came with timing false alarms. See [the result table](artifacts/eval/final_model_comparison.csv), [paired Base/SFT errors](artifacts/eval/base_vs_sft.json), and [per-run evidence](artifacts/evidence/sft-eval-A2-20260930T014920Z/run_receipt.json).
 
-## What is implemented but not yet executed
-
-- Qwen2.5-VL-3B Base inference;
-- A0–A3 measured comparison;
-- SFT-Language and SFT-VisionLanguage GPU training;
-- GRPO and GSPO training;
-- measured failure-detection delay;
-- full-suite cross-task holdout.
-
-The fresh AutoDL hardware receipt states `BLOCKED_NO_CUDA`: the login reports no device, `/dev/nvidia*` is absent, the installed `nvidia-smi` is a zero-byte stub, and CUDA-enabled PyTorch reports `torch.cuda.is_available() == False`. Model metrics are therefore `N/A`, not zero.
+Not executed: vision-language LoRA target ablation, a trace-trained adapter, or a full-suite cross-task holdout. These are not implied by the completed A2 pilot.
 
 ## Pilot result vs cross-task result
 
 ### Pilot result
 
-- Data/schema audit: executed.
-- Split/window preparation: A0 fully materialized from real video; A2 real-decode smoke verified. A1/A3 bulk materialization stopped after the no-CUDA platform block.
-- Model quality metrics: **N/A — the supplied SSH endpoint did not expose a GPU to the container, so CPU inference/training was intentionally not substituted.**
+- Data/schema audit, frozen split, A0–A3 materialization, Base/SFT/RL evaluations, timing, and trace ablation: executed with receipts.
+- Best State Macro-F1: **SFT A2, 0.4012**; strict JSON validity **1.0**; Failure Recall **0**. No model met the failure-recognition objective.
+- K=2 failure detection: **0/6** episodes for Base, SFT, GRPO, and exploratory GSPO; failure delay is **N/A** because there were no stable detections.
 
 ### Cross-task result
 
@@ -199,7 +183,7 @@ Build or re-check manifests:
 Use [`docs/AUTODL_RUNBOOK.md`](docs/AUTODL_RUNBOOK.md). The short form for Base A2 is:
 
 ```bash
-python scripts/eval_base.py \
+.venv/bin/python scripts/eval_base.py \
   --model-root /root/autodl-tmp/models/Qwen2.5-VL-3B-Instruct \
   --model-revision 66285546d2b821cf421d4f5eb2576359d3770cd3 \
   --dataset-root /root/autodl-tmp/prepared/A2 \
@@ -222,20 +206,24 @@ scripts/                    audit, preparation, Base/SFT/RLVR, timing, packaging
 configs/                    pilot, evidence gates, GRPO and GSPO contracts
 artifacts/data_audit/       pinned public metadata and generated audit receipts
 artifacts/splits/           deterministic episode manifests
-artifacts/eval/             prepared or executed evaluation artifacts with status
+artifacts/eval/             executed comparisons, timing, and error cases
+artifacts/evidence/         compact per-run predictions, logs, configs, and receipts
+artifacts/materialization/  A0–A3 and timing materialization receipts
 docs/architecture/          source-evidenced runtime architecture
 docs/AUTODL_RUNBOOK.md      offline and GPU execution commands
 upgraded_implementation/    legacy MathVista/chart provenance
 ```
 
+The architecture diagram is a pre-GPU orientation snapshot. Its hardware-status note is historical; use the current experiment report and run receipts for measured results.
+
 ## Known limitations
 
-- The AutoDL container reached through the supplied SSH endpoint reported 0.5 CPU core, 2 GB RAM, a zero-byte `nvidia-smi` stub, and no `/dev/nvidia*` device on 2026-09-30; model-quality execution remains blocked until the requested 4090 is actually attached to that container.
+- An earlier AutoDL container lacked CUDA; its probe is retained as historical evidence. The later RTX 4090 D host executed the reported GPU runs.
 - The sample is one 16 mm cylinder-install task. It cannot establish cross-mechanism generalization.
 - The pinned sample exposes four RGB streams but no depth feature, even though the full REBOOT project describes RGB-D collection.
 - Two episodes have zero-duration failure intervals (`induced == recovery_started`); they produce nominal/recovery anchors but no failure anchor.
 - Inclusive annotation terminals imply 53,880 rows, while the frame tables contain 53,886; the six extra frame-898 rows are quarantined and remain unexplained upstream.
-- `SFT-VisionLanguage`, GRPO, and GSPO are implementation-ready but not memory-validated on a 24 GB GPU.
+- `SFT-VisionLanguage` and a trace-trained adapter were not run; GRPO and exploratory GSPO were memory-validated on the RTX 4090 D but did not improve failure recognition.
 - Trace-Text is a deliberately simple first ablation; no numeric projector result exists.
 
 ## Legacy provenance
