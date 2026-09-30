@@ -1,0 +1,154 @@
+{
+  "dataset_repo": "REBOOT26/sample_recovery-demonstration",
+  "dataset_revision": "0633573d0438be1185bddebdf1a2c8f5505f7b2a",
+  "distributions": {
+    "test": {
+      "episodes": 6,
+      "failure_modes": {
+        "excessive_force": 1,
+        "jamming": 1,
+        "misalignment": 2,
+        "retention_failure": 1,
+        "slip": 1
+      },
+      "originating_phases": {
+        "Align (pick)": 1,
+        "Align (place)": 1,
+        "Engage (pick)": 2,
+        "Engage (place)": 2
+      },
+      "state_windows": {
+        "failure": 18,
+        "nominal": 18,
+        "recovery": 18
+      }
+    },
+    "train": {
+      "episodes": 42,
+      "failure_modes": {
+        "excessive_force": 3,
+        "freeze": 1,
+        "jamming": 1,
+        "misalignment": 18,
+        "poor_engagement": 1,
+        "premature_grasp": 1,
+        "premature_release": 6,
+        "retention_failure": 2,
+        "slip": 6,
+        "sub_mm_misalignment": 3
+      },
+      "originating_phases": {
+        "Align (pick)": 8,
+        "Align (place)": 10,
+        "Engage (pick)": 10,
+        "Engage (place)": 10,
+        "Transport": 4
+      },
+      "state_windows": {
+        "failure": 120,
+        "nominal": 126,
+        "recovery": 126
+      }
+    },
+    "val": {
+      "episodes": 5,
+      "failure_modes": {
+        "delayed_start": 1,
+        "excessive_force": 1,
+        "misalignment": 2,
+        "slip": 1
+      },
+      "originating_phases": {
+        "Align (pick)": 3,
+        "Engage (pick)": 1,
+        "Engage (place)": 1
+      },
+      "state_windows": {
+        "failure": 15,
+        "nominal": 13,
+        "recovery": 15
+      }
+    }
+  },
+  "episodes": {
+    "test": [
+      "02",
+      "08",
+      "18",
+      "20",
+      "47",
+      "54"
+    ],
+    "train": [
+      "01",
+      "03",
+      "04",
+      "05",
+      "06",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "19",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25",
+      "27",
+      "28",
+      "29",
+      "30",
+      "31",
+      "32",
+      "33",
+      "35",
+      "36",
+      "39",
+      "40",
+      "42",
+      "43",
+      "44",
+      "45",
+      "46",
+      "48",
+      "49",
+      "51",
+      "52",
+      "53",
+      "55",
+      "56",
+      "57",
+      "58",
+      "59"
+    ],
+    "val": [
+      "07",
+      "09",
+      "17",
+      "41",
+      "50"
+    ]
+  },
+  "leakage_detected": false,
+  "manifest_sha256": "0f207d931d8e3348ff2b2e84f10c7e22f94a03479559bdb5b1683bc8f5ac1498",
+  "quarantined_episode_ids": [
+    "00",
+    "15",
+    "16",
+    "26",
+    "34",
+    "37",
+    "38"
+  ],
+  "ratios": {
+    "test": 0.09999999999999995,
+    "train": 0.8,
+    "val": 0.1
+  },
+  "seed": 42,
+  "source_annotation_sha256": "1d61ff591ff9f52628c49e71a0435ab83a62c87a4d607ae91a50478dbaf5813b",
+  "split_manifest_sha256": "4cd35a1f76effe516d07577f1a86134e41c16430b9b7cab6092ea2bd5b2ae029",
+  "unit": "episode"
+}

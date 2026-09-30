@@ -1,0 +1,18 @@
+{
+  "all_annotations": {
+    "Align (pick)": 14,
+    "Align (place)": 14,
+    "Engage (pick)": 13,
+    "Engage (place)": 13,
+    "Transport": 4,
+    "__invalid_0__": 1,
+    "__invalid_21__": 1
+  },
+  "valid_episodes": {
+    "Align (pick)": 12,
+    "Align (place)": 11,
+    "Engage (pick)": 13,
+    "Engage (place)": 13,
+    "Transport": 4
+  }
+}

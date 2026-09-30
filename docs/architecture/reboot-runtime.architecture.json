@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "REBOOT Precision Assembly Recovery Runtime",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/Benjamindaoson/multimodal-chart-gspo",
+      "revision": "81da1f1924128feba4d9d9b9758e01dccf6ab471"
+    },
+    "viewBox": [1180, 430],
+    "views": [
+      {
+        "id": "evidence-path",
+        "label": "Evidence path",
+        "focus": ["reboot-source", "data-audit", "episode-split", "vlm-preparation", "base-eval", "evidence-eval", "stage-gates", "run-receipts"],
+        "note": "Trace immutable public metadata through episode-safe evaluation and machine-readable receipts."
+      },
+      {
+        "id": "gated-training",
+        "label": "Gated training",
+        "focus": ["qwen-model", "base-eval", "stage-gates", "sft", "rlvr", "run-receipts"],
+        "note": "SFT and RLVR remain closed until held-out metrics authorize the next stage."
+      },
+      {
+        "id": "legacy-boundary",
+        "label": "Legacy provenance",
+        "focus": ["legacy-chart"],
+        "note": "MathVista/chart code stays available for provenance but is outside the REBOOT runtime."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "reboot-source",
+      "type": "external",
+      "label": "REBOOT source",
+      "sublabel": "HF revision or local snapshot",
+      "pos": [40, 50],
+      "size": [160, 72],
+      "sources": [{"path": "scripts/fetch_reboot_pilot.py", "line": 8, "label": "endpoint resolver"}]
+    },
+    {
+      "id": "data-audit",
+      "type": "security",
+      "label": "Schema + annotation audit",
+      "sublabel": "Quarantine, hashes, receipt",
+      "pos": [280, 50],
+      "size": [170, 72],
+      "sources": [
+        {"path": "src/reboot_recovery/audit.py", "line": 16, "label": "frame-table audit"},
+        {"path": "src/reboot_recovery/audit.py", "line": 162, "label": "schema audit"}
+      ]
+    },
+    {
+      "id": "episode-split",
+      "type": "backend",
+      "label": "Episode split",
+      "sublabel": "80/10/10 · seed 42",
+      "pos": [520, 50],
+      "size": [150, 72],
+      "sources": [{"path": "src/reboot_recovery/splits.py", "line": 16, "label": "split receipt"}]
+    },
+    {
+      "id": "vlm-preparation",
+      "type": "backend",
+      "label": "A0–A3 preparation",
+      "sublabel": "Temporal RGB + Trace-Text",
+      "pos": [740, 50],
+      "size": [170, 72],
+      "sources": [{"path": "scripts/prepare_reboot_vlm_dataset.py", "line": 64, "label": "materializer"}]
+    },
+    {
+      "id": "qwen-model",
+      "type": "external",
+      "label": "Qwen2.5-VL-3B",
+      "sublabel": "Pinned local snapshot · 7.1 GB",
+      "pos": [940, 50],
+      "size": [160, 72],
+      "sources": [{"path": "scripts/eval_base.py", "line": 22, "label": "model input"}]
+    },
+    {
+      "id": "base-eval",
+      "type": "backend",
+      "label": "Base evaluator",
+      "sublabel": "Predictions retained row by row",
+      "pos": [940, 190],
+      "size": [165, 72],
+      "sources": [{"path": "scripts/eval_base.py", "line": 53, "label": "held-out run"}]
+    },
+    {
+      "id": "evidence-eval",
+      "type": "database",
+      "label": "Metrics + timing",
+      "sublabel": "F1 · recall · CI · delay",
+      "pos": [720, 190],
+      "size": [160, 72],
+      "sources": [
+        {"path": "src/reboot_recovery/metrics.py", "line": 82, "label": "unified metrics"},
+        {"path": "src/reboot_recovery/timing.py", "line": 17, "label": "failure delay"}
+      ]
+    },
+    {
+      "id": "stage-gates",
+      "type": "security",
+      "label": "Evidence gates",
+      "sublabel": "Base → SFT → RLVR",
+      "pos": [500, 190],
+      "size": [145, 72],
+      "sources": [{"path": "src/reboot_recovery/gates.py", "line": 6, "label": "stage decision"}]
+    },
+    {
+      "id": "sft",
+      "type": "backend",
+      "label": "QLoRA SFT",
+      "sublabel": "Language / VisionLanguage",
+      "pos": [500, 330],
+      "size": [165, 72],
+      "sources": [{"path": "scripts/train_sft.py", "line": 58, "label": "gated SFT"}]
+    },
+    {
+      "id": "rlvr",
+      "type": "backend",
+      "label": "GRPO / GSPO",
+      "sublabel": "Token vs sequence IS",
+      "pos": [280, 330],
+      "size": [160, 72],
+      "sources": [{"path": "scripts/train_rlvr.py", "line": 68, "label": "gated RLVR"}]
+    },
+    {
+      "id": "run-receipts",
+      "type": "database",
+      "label": "Run receipts",
+      "sublabel": "Config · env · hashes · logs",
+      "pos": [940, 330],
+      "size": [145, 72],
+      "sources": [{"path": "src/reboot_recovery/evidence.py", "line": 88, "label": "run evidence"}]
+    },
+    {
+      "id": "legacy-chart",
+      "type": "messagebus",
+      "label": "Legacy MathVista/GSPO",
+      "sublabel": "Provenance only",
+      "pos": [40, 330],
+      "size": [170, 72],
+      "sources": [{"path": "upgraded_implementation/src/multimodal_chart_gspo/cli.py", "line": 1, "label": "legacy entry"}]
+    }
+  ],
+  "boundaries": [
+    {"kind": "security-group", "label": "Pinned public input", "wraps": ["reboot-source"], "pad": 18},
+    {"kind": "security-group", "label": "Pinned model snapshot", "wraps": ["qwen-model"], "pad": 18},
+    {"kind": "region", "label": "CPU-verifiable evidence path", "wraps": ["data-audit", "episode-split", "vlm-preparation", "evidence-eval", "stage-gates"], "pad": 20},
+    {"kind": "region", "label": "Legacy provenance boundary", "wraps": ["legacy-chart"], "pad": 16}
+  ],
+  "connections": [
+    {"id": "source-to-audit", "from": "reboot-source", "to": "data-audit", "variant": "emphasis"},
+    {"id": "audit-to-split", "from": "data-audit", "to": "episode-split"},
+    {"id": "split-to-prep", "from": "episode-split", "to": "vlm-preparation"},
+    {"id": "prep-to-base", "from": "vlm-preparation", "to": "base-eval"},
+    {"id": "model-to-base", "from": "qwen-model", "to": "base-eval", "fromSide": "bottom", "toSide": "top", "variant": "dashed"},
+    {"id": "base-to-evidence", "from": "base-eval", "to": "evidence-eval"},
+    {"id": "evidence-to-gates", "from": "evidence-eval", "to": "stage-gates", "variant": "emphasis"},
+    {"id": "gates-to-sft", "from": "stage-gates", "to": "sft", "fromSide": "bottom", "toSide": "top", "variant": "dashed"},
+    {"id": "sft-to-rlvr", "from": "sft", "to": "rlvr", "variant": "dashed"},
+    {"id": "base-to-receipts", "from": "base-eval", "to": "run-receipts", "fromSide": "bottom", "toSide": "top", "variant": "dashed"}
+  ],
+  "cards": [
+    {"dot": "emerald", "title": "Executed and verified", "items": ["Full 53,886-row audit; 53 valid / 7 quarantined", "42/5/6 split; 469 windows; real A0 materialization"]},
+    {"dot": "amber", "title": "Evidence-gated", "items": ["No SFT before Base headroom", "No GRPO/GSPO before SFT establishes a learning signal"]},
+    {"dot": "rose", "title": "Trust boundaries", "items": ["Public REBOOT is not company-internal data", "GPU path blocked: no device node; model metrics are N/A"]}
+  ]
+}

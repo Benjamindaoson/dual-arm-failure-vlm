@@ -1,0 +1,12 @@
+=== nvidia-smi ===
+nvidia_smi_rc=0
+=== binary ===
+-rwxr-xr-x 1 root root 0 Sep 29 19:31 /usr/bin/nvidia-smi
+=== device nodes ===
+ls: cannot access '/dev/nvidia*': No such file or directory
+=== torch probe ===
+torch: 2.6.0+cu124
+cuda: False
+gpu: None
+vram_gb: None
+bf16: None
