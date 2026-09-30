@@ -1,0 +1,15 @@
+{
+  "best_model_checkpoint": "artifacts/v2/runs/c1-sft-smoke/checkpoint-5",
+  "final_log": {
+    "epoch": 0.10752688172043011,
+    "step": 5,
+    "total_flos": 870117897891840.0,
+    "train_loss": 1.1021624326705932,
+    "train_runtime": 114.2475,
+    "train_samples_per_second": 0.35,
+    "train_steps_per_second": 0.044
+  },
+  "global_step": 5,
+  "trainable_parameters": 37152768,
+  "wall_clock_seconds": 114.63799075223505
+}

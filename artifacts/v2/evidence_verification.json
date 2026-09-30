@@ -1,0 +1,137 @@
+{
+  "verified_run_count": 10,
+  "runs": [
+    {
+      "run_id": "c0-base-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "db5faf1802459189c83750f2487eed726bb62695"
+    },
+    {
+      "run_id": "c0-sft",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "3cd123dfe58eccdbe7a24c51ca5ed6031227af1e992aebf0ae0cfced6975dc77"
+      },
+      "git_commit": "db5faf1802459189c83750f2487eed726bb62695"
+    },
+    {
+      "run_id": "c0-sft-smoke",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "707d19a6c98a7f652d6961bf27473813c11b59cf0051b79a9bdb2c3639457b7c"
+      },
+      "git_commit": "db5faf1802459189c83750f2487eed726bb62695"
+    },
+    {
+      "run_id": "c0-sft-v1-diagnostic",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "786857277d7a39dccdbaacfce85d589474575f0f"
+    },
+    {
+      "run_id": "c0-sft-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "786857277d7a39dccdbaacfce85d589474575f0f"
+    },
+    {
+      "run_id": "c1-base-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "786857277d7a39dccdbaacfce85d589474575f0f"
+    },
+    {
+      "run_id": "c1-sft",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "74bdc9ebcdbfca6d5d6463bb7e3d39dc606f2786982bcb0309b2e547fe24c485"
+      },
+      "git_commit": "786857277d7a39dccdbaacfce85d589474575f0f"
+    },
+    {
+      "run_id": "c1-sft-smoke",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "1a9d18a1b9463cb1885d1a9b288577549ccd1f922f05b7ec7f7d710b033a40b2"
+      },
+      "git_commit": "786857277d7a39dccdbaacfce85d589474575f0f"
+    },
+    {
+      "run_id": "c1-sft-v1-diagnostic",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "1970ed52f2bc09b917da71823b6ea97ca8a67f1f"
+    },
+    {
+      "run_id": "c1-sft-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "1970ed52f2bc09b917da71823b6ea97ca8a67f1f"
+    }
+  ]
+}

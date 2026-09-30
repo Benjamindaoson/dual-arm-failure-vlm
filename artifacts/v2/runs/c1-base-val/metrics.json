@@ -1,0 +1,146 @@
+{
+  "balanced_accuracy": 0.0,
+  "episode_bootstrap": {
+    "failure_recall_95ci": [
+      0.0,
+      0.0
+    ],
+    "samples": 1000,
+    "seed": 42,
+    "state_macro_f1_95ci": [
+      0.0,
+      0.0
+    ],
+    "unit": "episode"
+  },
+  "failure_correct": 0,
+  "failure_f1": 0.0,
+  "failure_precision": 0.0,
+  "failure_recall": 0.0,
+  "failure_support": 15,
+  "gold_state_counts": {
+    "failure": 15,
+    "nominal": 13,
+    "recovery": 15
+  },
+  "json_valid_rate": 0.0,
+  "mean_latency_seconds": 0.7252021333592575,
+  "n": 43,
+  "nominal_recall": 0.0,
+  "outer_fence_removed_count": 30,
+  "pre_failure_false_positive_rate": 0.0,
+  "predicted_state_counts": {
+    "__invalid__": 43
+  },
+  "predicted_state_distribution": {
+    "collapse_ratio": null,
+    "counts": {
+      "failure": 0,
+      "nominal": 0,
+      "recovery": 0
+    },
+    "invalid_count": 43,
+    "prediction_entropy_nats": 0,
+    "probabilities": {
+      "failure": 0.0,
+      "nominal": 0.0,
+      "recovery": 0.0
+    },
+    "valid_count": 0
+  },
+  "recovery_recall": 0.0,
+  "semantic_diagnostic": {
+    "balanced_accuracy": 0.24444444444444444,
+    "episode_bootstrap": {
+      "failure_recall_95ci": [
+        0.5333333333333333,
+        0.9333333333333333
+      ],
+      "samples": 1000,
+      "seed": 42,
+      "state_macro_f1_95ci": [
+        0.11347517730496454,
+        0.2170542635658915
+      ],
+      "unit": "episode"
+    },
+    "failure_correct": 11,
+    "failure_f1": 0.4888888888888889,
+    "failure_precision": 0.36666666666666664,
+    "failure_recall": 0.7333333333333333,
+    "failure_support": 15,
+    "gold_state_counts": {
+      "failure": 15,
+      "nominal": 13,
+      "recovery": 15
+    },
+    "json_valid_rate": 0.6976744186046512,
+    "n": 43,
+    "nominal_recall": 0.0,
+    "pre_failure_false_positive_rate": 0.6923076923076923,
+    "predicted_state_counts": {
+      "__invalid__": 13,
+      "failure": 30
+    },
+    "predicted_state_distribution": {
+      "collapse_ratio": 1.0,
+      "counts": {
+        "failure": 30,
+        "nominal": 0,
+        "recovery": 0
+      },
+      "invalid_count": 13,
+      "prediction_entropy_nats": -0.0,
+      "probabilities": {
+        "failure": 1.0,
+        "nominal": 0.0,
+        "recovery": 0.0
+      },
+      "valid_count": 30
+    },
+    "recovery_recall": 0.0,
+    "state_macro_f1": 0.16296296296296295,
+    "state_per_class": {
+      "failure": {
+        "f1": 0.4888888888888889,
+        "precision": 0.36666666666666664,
+        "recall": 0.7333333333333333,
+        "support": 15.0
+      },
+      "nominal": {
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 13.0
+      },
+      "recovery": {
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 15.0
+      }
+    }
+  },
+  "state_macro_f1": 0.0,
+  "state_per_class": {
+    "failure": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 15.0
+    },
+    "nominal": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 13.0
+    },
+    "recovery": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 15.0
+    }
+  },
+  "task_schema": "state-only"
+}
