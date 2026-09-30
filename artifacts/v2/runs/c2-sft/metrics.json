@@ -1,0 +1,15 @@
+{
+  "best_model_checkpoint": "artifacts/v2/runs/c2-sft/checkpoint-94",
+  "final_log": {
+    "epoch": 2.0,
+    "step": 94,
+    "total_flos": 1.6185007363719168e+16,
+    "train_loss": 0.2047463834602782,
+    "train_runtime": 1732.3089,
+    "train_samples_per_second": 0.429,
+    "train_steps_per_second": 0.054
+  },
+  "global_step": 94,
+  "trainable_parameters": 37152768,
+  "wall_clock_seconds": 1732.670145276934
+}

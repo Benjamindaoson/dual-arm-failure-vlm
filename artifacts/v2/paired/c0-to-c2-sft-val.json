@@ -1,0 +1,41 @@
+{
+  "bootstrap_samples": 1000,
+  "class_support": {
+    "failure": 15,
+    "nominal": 13,
+    "recovery": 15
+  },
+  "episode_support": 5,
+  "first": {
+    "failure_recall": 0.8,
+    "state_macro_f1": 0.31478045763760054
+  },
+  "protocol": "semantic",
+  "sample_support": 43,
+  "second": {
+    "failure_recall": 1.0,
+    "state_macro_f1": 0.29979035639413
+  },
+  "second_minus_first": {
+    "failure_recall": {
+      "ci95": [
+        0.0,
+        0.4666666666666667
+      ],
+      "point": 0.19999999999999996
+    },
+    "state_macro_f1": {
+      "ci95": [
+        -0.15461463487779278,
+        0.14229524042436736
+      ],
+      "point": -0.014990101243470555
+    }
+  },
+  "seed": 42,
+  "source_sha256": {
+    "first": "4517c5c9467f78ee70f56bf496eedda49b62267de04459c6b4e14338ccfa40e0",
+    "second": "88a842ebff2670b0f6010552c1ae835a83650437918f9c7cbecec680f888f4ae"
+  },
+  "task_schema": "state-only"
+}
