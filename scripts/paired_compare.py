@@ -10,7 +10,8 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from reboot_recovery.evidence import file_sha256, write_json
-from reboot_recovery.metrics import evaluate_predictions, evaluate_state_predictions
+from reboot_recovery.metrics import evaluate_predictions, evaluate_state_predictions, parse_state_prediction
+from reboot_recovery.rewards import parse_structured_prediction
 from reboot_recovery.semantic_parser import normalize_semantic_output
 
 
@@ -48,6 +49,20 @@ def compare(first: list[dict], second: list[dict], *, task_schema: str,
 
     keys = sorted(a)
     base, candidate = score(a, keys), score(b, keys)
+    parser = parse_state_prediction if task_schema == "state-only" else parse_structured_prediction
+    outcomes = {state: {name: 0 for name in ("both_correct", "rescued", "regressed", "both_wrong")}
+                for state in ("nominal", "failure", "recovery")}
+    for key in keys:
+        gold = str(a[key]["reference"]["execution_state"])
+        first_text, second_text = (str(a[key].get("output", "")), str(b[key].get("output", "")))
+        if semantic:
+            first_text, second_text = normalize_semantic_output(first_text), normalize_semantic_output(second_text)
+        first_state = (parser(first_text) or {}).get("state")
+        second_state = (parser(second_text) or {}).get("state")
+        label = ("both_correct" if first_state == second_state == gold else
+                 "rescued" if first_state != gold and second_state == gold else
+                 "regressed" if first_state == gold and second_state != gold else "both_wrong")
+        outcomes[gold][label] += 1
     endpoints = ("failure_recall", "state_macro_f1")
     differences = {name: [] for name in endpoints}
     rng = random.Random(seed)
@@ -63,6 +78,7 @@ def compare(first: list[dict], second: list[dict], *, task_schema: str,
         "class_support": base["gold_state_counts"], "bootstrap_samples": samples, "seed": seed,
         "first": {name: base[name] for name in endpoints},
         "second": {name: candidate[name] for name in endpoints},
+        "paired_state_outcomes": outcomes,
         "second_minus_first": {name: {"point": candidate[name] - base[name],
                                       "ci95": [_percentile(differences[name], 0.025),
                                                _percentile(differences[name], 0.975)]}

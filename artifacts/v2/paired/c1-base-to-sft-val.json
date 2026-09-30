@@ -10,6 +10,26 @@
     "failure_recall": 0.7333333333333333,
     "state_macro_f1": 0.16296296296296295
   },
+  "paired_state_outcomes": {
+    "failure": {
+      "both_correct": 5,
+      "both_wrong": 2,
+      "regressed": 6,
+      "rescued": 2
+    },
+    "nominal": {
+      "both_correct": 0,
+      "both_wrong": 6,
+      "regressed": 0,
+      "rescued": 7
+    },
+    "recovery": {
+      "both_correct": 0,
+      "both_wrong": 10,
+      "regressed": 0,
+      "rescued": 5
+    }
+  },
   "protocol": "semantic",
   "sample_support": 43,
   "second": {
