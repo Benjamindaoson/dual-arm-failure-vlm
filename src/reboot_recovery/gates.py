@@ -21,9 +21,9 @@ def decide_v2_rl_gate(
     compliance = float(sft.get("strict_json_valid_rate", sft.get("json_valid_rate", 0.0)))
     if state_gain < 0 or false_alarm_gain > 0 or compliance < 0.95:
         decision = "REVISIT_REPRESENTATION_OR_SUPERVISION"
-    elif sft_correct == sft_support and float(sft["state_macro_f1"]) >= 0.95:
-        decision = "SFT_SUFFICIENT"
-    elif sft_correct == 0 or sft_correct < base_correct:
+    elif sft_correct == sft_support:
+        decision = "NO_OUTCOME_HEADROOM"
+    elif sft_correct <= base_correct:
         decision = "REVISIT_REPRESENTATION_OR_SUPERVISION"
     elif not verifier_validated:
         decision = "VERIFY_REWARD_FIRST"

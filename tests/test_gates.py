@@ -27,6 +27,14 @@ class GateTests(unittest.TestCase):
         self.assertEqual("RUN_RLVR", decide(base, sft, verifier_validated=True)["decision"])
         self.assertEqual(
             "REVISIT_REPRESENTATION_OR_SUPERVISION",
+            decide(base, {**sft, "failure_correct": 6}, verifier_validated=True)["decision"],
+        )
+        self.assertEqual(
+            "NO_OUTCOME_HEADROOM",
+            decide(base, {**sft, "failure_correct": 18}, verifier_validated=True)["decision"],
+        )
+        self.assertEqual(
+            "REVISIT_REPRESENTATION_OR_SUPERVISION",
             decide({**base, "pre_failure_false_positive_rate": 0.0},
                    {**sft, "pre_failure_false_positive_rate": 0.5}, verifier_validated=True)["decision"],
         )
