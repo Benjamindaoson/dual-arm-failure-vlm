@@ -21,4 +21,4 @@
 
 ## Sample size, risks, and execution
 
-The V1 372/43/54 windows are diagnostic only for V2 method selection. The final test must be a new official task/episodes, or a newly frozen within-task split excluding the old six diagnostic episodes, with all final models retrained. Episode bootstrap intervals are descriptive for this small study. Risks include visual non-identifiability, class collapse, reward shortcuts, and cross-task availability; all negative results are retained.
+The V1 372/43/54 windows are diagnostic only for V2 method selection. The final test must be a new official task/episodes, or a newly frozen within-task split drawn only from original development-train episodes, excluding the old validation and six diagnostic-test episodes, with all final models retrained. This Tier B fallback remains method-development exposed and is not independent replication. Episode bootstrap intervals are descriptive for this small study. Risks include visual non-identifiability, class collapse, reward shortcuts, and cross-task availability; all negative results are retained.

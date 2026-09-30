@@ -5,7 +5,7 @@ V1 strict scoring conflated interface compliance with task semantics: all 54 Bas
 ## What Changes
 
 - Freeze strict protocol and mechanically normalized semantic metrics as separate, never interchangeable readouts.
-- Treat the six V1 test episodes as `V1_DIAGNOSTIC_SET`; run V2 screening on train/dev, then freeze a genuinely new final evaluation after methods are fixed.
+- Treat the six V1 test episodes as `V1_DIAGNOSTIC_SET`; run V2 screening on train/dev, then freeze a new episode-disjoint final refit split after methods are fixed. If an official new task is unavailable, the Tier B pool comes only from original development-train episodes and is internal evidence, not independent replication.
 - Run state-only Base/SFT, camera-count-matched wrist views, dense causal supervision, and trained trace comparison.
 - Train both A2 and A3 full-schema SFT under the same V2 recipe for a fair trace comparison.
 - Gate matched additive/state-gated GRPO on non-regressing validation failure recall, strict compliance, remaining errors, and verifier checks; preserve V1 RL evidence unchanged.
