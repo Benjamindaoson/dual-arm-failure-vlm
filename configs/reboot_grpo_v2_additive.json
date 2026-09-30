@@ -1,0 +1,16 @@
+{
+  "algorithm": "grpo",
+  "importance_sampling_level": "token",
+  "loss_type": "grpo",
+  "num_generations": 4,
+  "max_completion_length": 96,
+  "max_steps": 100,
+  "learning_rate": 0.000005,
+  "per_device_train_batch_size": 1,
+  "gradient_accumulation_steps": 8,
+  "beta": 0.01,
+  "reward_scheme": "additive_v1",
+  "class_weighting": "none",
+  "reward_weights": [0.25, 0.35, 0.40],
+  "trl_contract": ">=0.29,<0.30"
+}

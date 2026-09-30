@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 import sys
 import unittest
@@ -9,6 +10,16 @@ from reboot_recovery.config import validate_rl_config
 
 
 class ConfigValidationTests(unittest.TestCase):
+    def test_controlled_v2_grpo_configs_match_except_reward(self):
+        root = Path(__file__).resolve().parents[1]
+        additive = validate_rl_config(json.loads((root / "configs/reboot_grpo_v2_additive.json").read_text()))
+        gated = validate_rl_config(json.loads((root / "configs/reboot_grpo_v2.json").read_text()))
+        shared = ("algorithm", "importance_sampling_level", "loss_type", "num_generations",
+                  "max_completion_length", "max_steps", "learning_rate",
+                  "per_device_train_batch_size", "gradient_accumulation_steps", "beta", "trl_contract")
+        self.assertEqual({key: additive[key] for key in shared}, {key: gated[key] for key in shared})
+        self.assertEqual("none", additive["class_weighting"])
+
     def test_v2_state_gated_reward_uses_one_grpo_reward_function(self):
         base = {"algorithm": "grpo", "importance_sampling_level": "token", "loss_type": "grpo",
                 "num_generations": 4, "max_completion_length": 96,

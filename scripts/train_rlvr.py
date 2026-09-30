@@ -89,7 +89,8 @@ def main(argv: list[str] | None = None) -> int:
     missing = [str(args.dataset_root / image) for row in rows for image in row.get("images", []) if not (args.dataset_root / image).is_file()]
     if missing:
         raise SystemExit(f"missing prepared images; first={missing[:3]}")
-    class_weights = _class_weights(rows) if config["reward_scheme"] == "additive_v1" else {}
+    class_weights = (_class_weights(rows) if config["reward_scheme"] == "additive_v1"
+                     and config.get("class_weighting", "inverse_sqrt") == "inverse_sqrt" else {})
     phase_labels = {str(row["reference"]["phase_name"]).casefold() for row in rows}
     failure_mode_labels = {
         str(row["reference"]["failure_mode"]).casefold()

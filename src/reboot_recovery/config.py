@@ -28,6 +28,8 @@ def validate_rl_config(config: Mapping[str, Any]) -> dict[str, Any]:
     reward_scheme = str(value.get("reward_scheme", "additive_v1"))
     if reward_scheme not in {"additive_v1", "state_gated_v2"}:
         raise ValueError("unknown reward_scheme")
+    if value.get("class_weighting", "inverse_sqrt") not in {"none", "inverse_sqrt"}:
+        raise ValueError("class_weighting must be none or inverse_sqrt")
     if reward_scheme == "state_gated_v2":
         if value.get("reward_weights") != [1.0]:
             raise ValueError("state_gated_v2 requires reward_weights=[1.0]")

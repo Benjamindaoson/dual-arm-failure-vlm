@@ -1,0 +1,20 @@
+{
+  "audit_time_utc": "2026-09-30T15:17:15Z",
+  "source": "Official Hugging Face dataset API and published REBOOT project page",
+  "source_urls": [
+    "https://nanayawoa.github.io/REBOOT/",
+    "https://huggingface.co/datasets/REBOOT26/usbc_recovery_install",
+    "https://huggingface.co/datasets/REBOOT26/rj45_recovery_install",
+    "https://huggingface.co/datasets/REBOOT26/m12_recovery_install"
+  ],
+  "tasks": {
+    "usbc_recovery_install": {"revision": "0ef0b37f0601fbafcc3bab07195a1fb5e756c6b4", "repository_used_storage_bytes": 42070529186, "episodes_from_info_json": 33, "episode_metadata_parquet_readable": false},
+    "rj45_recovery_install": {"revision": "f6acd5b69394ffd4d2d8bd30079306c9e2061bbe", "repository_used_storage_bytes": 37829497297, "episodes_from_metadata": 60, "metadata_has_phase_or_onset_labels": false},
+    "m12_recovery_install": {"revision": "a9f0675c7d53e61081f537c09ab65d3e2cb0f19b", "repository_used_storage_bytes": 35371734634, "label_metadata_checked": false}
+  },
+  "remote_disk_available_gib_approx": 23,
+  "remote_huggingface_connection": "connect_timeout",
+  "outcome": "TIER_A_NOT_READY_FOR_LABEL_GROUNDED_EVALUATION",
+  "next_per_protocol": "Use Tier B new episode-disjoint single-task frozen evaluation after method commit; do not call cross-task replication complete.",
+  "caution": "Repository used-storage sizes are API metadata; only the USB-C and RJ45 episode metadata files were inspected. Do not treat them as exact transfer sizes."
+}
