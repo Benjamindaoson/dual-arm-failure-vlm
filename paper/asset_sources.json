@@ -1,12 +1,19 @@
 {
   "generator": "scripts/generate_paper_assets.py",
   "source_sha256": {
-    "artifacts\\v2\\v1_reanalysis\\strict_vs_semantic.json": "b2f977ac3d7a025e67475b7ed62ae63994b46515f41f08aef966c60266dda077",
-    "artifacts\\v2\\v1_reanalysis\\predicted_state_distribution.json": "77d2de53cc2ce04d132e5f349a956660ae9ac341fee455e785cc3621683ba296"
+    "artifacts/v2/v1_reanalysis/strict_vs_semantic.json": "b2f977ac3d7a025e67475b7ed62ae63994b46515f41f08aef966c60266dda077",
+    "artifacts/v2/v1_reanalysis/predicted_state_distribution.json": "77d2de53cc2ce04d132e5f349a956660ae9ac341fee455e785cc3621683ba296",
+    "artifacts/v2/runs/c0-base-val/metrics.json": "829bf1d722f2ace8eb9b3a2d37940de10e5a5efcee6a701e80bf5fa413b54bb6",
+    "artifacts/v2/runs/c0-sft-val/metrics.json": "7592612cb8421343ee4478f2dc84fbc41def3f87741d00a9841864d58880a6e6",
+    "artifacts/v2/runs/c1-base-val/metrics.json": "a769c4b15db3ca97d4f8dba8b10a7d6c37f68eafd93fc748fdfa9014dab8a40d",
+    "artifacts/v2/runs/c1-sft-val/metrics.json": "8ee7054367604cabf2a2dddce1fdc86be313a439b9837a05ebff6ecebb008580",
+    "artifacts/v2/runs/c2-base-val/metrics.json": "6ce65c153682af0299173d22d2de7cd68154493258b48ca41b162ee31d790015",
+    "artifacts/v2/runs/c2-sft-val/metrics.json": "06fc1a6e18d328fa3cb5a22d29107223f59d3c2b90593a26635958bf3ffc2b42"
   },
   "generated_files": [
     "figures/state_distribution.tex",
     "figures/v1_progression.tex",
+    "tables/camera_screen.tex",
     "tables/v1.tex"
   ]
 }

@@ -57,17 +57,39 @@ def render_v1_assets(reanalysis: dict, distributions: dict) -> dict[str, str]:
             "figures/state_distribution.tex": fig2}
 
 
+def render_camera_table(metrics: dict[str, dict[str, dict]]) -> str:
+    if set(metrics) != {"C0", "C1", "C2"}:
+        raise ValueError("all three camera screens are required")
+    rows = []
+    for camera in ("C0", "C1", "C2"):
+        base = metrics[camera]["base"]
+        sft = metrics[camera]["sft"]
+        rows.append(f"{camera} & {_pct(base['failure_recall'])} & {_pct(sft['failure_recall'])} & {_pct(sft['failure_precision'])} & {_pct(sft['state_macro_f1'])} & {_pct(sft['recovery_recall'])} " + r"\\")
+    return "\n".join([
+        "% Generated from V2 validation metrics, not final-test results.",
+        r"\begin{tabular}{lrrrrr}", r"\toprule",
+        "View & Base F-rec & SFT F-rec & SFT F-prec & SFT State F1 & SFT R-rec " + r"\\",
+        r"\midrule", *rows, r"\bottomrule", r"\end{tabular}",
+    ]) + "\n"
+
+
 def main() -> int:
     source = ROOT / "artifacts/v2/v1_reanalysis"
     paths = [source / "strict_vs_semantic.json", source / "predicted_state_distribution.json"]
     reanalysis, distributions = [json.loads(path.read_text(encoding="utf-8")) for path in paths]
     assets = render_v1_assets(reanalysis, distributions)
+    camera_paths = {camera: {stage: ROOT / f"artifacts/v2/runs/{camera.lower()}-{stage}-val/metrics.json"
+                             for stage in ("base", "sft")} for camera in ("C0", "C1", "C2")}
+    camera_metrics = {camera: {stage: json.loads(path.read_text(encoding="utf-8"))["semantic_diagnostic"]
+                               for stage, path in stages.items()} for camera, stages in camera_paths.items()}
+    assets["tables/camera_screen.tex"] = render_camera_table(camera_metrics)
+    paths.extend(path for stages in camera_paths.values() for path in stages.values())
     for name, body in assets.items():
         destination = ROOT / "paper" / name
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(body, encoding="utf-8")
     receipt = {"generator": "scripts/generate_paper_assets.py",
-               "source_sha256": {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in paths},
+               "source_sha256": {path.relative_to(ROOT).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest() for path in paths},
                "generated_files": sorted(assets)}
     (ROOT / "paper/asset_sources.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     return 0
