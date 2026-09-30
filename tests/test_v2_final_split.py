@@ -9,12 +9,14 @@ from freeze_v2_final_split import V1_DIAGNOSTIC_SET, assign_fallback
 class V2FinalSplitTests(unittest.TestCase):
     def test_fallback_is_deterministic_and_excludes_v1_diagnostic(self):
         usable = {f"{index:02d}" for index in range(60)}
-        first = assign_fallback(usable, seed=2026)
-        self.assertEqual(first, assign_fallback(set(reversed(sorted(usable))), seed=2026))
+        development = {key: ("test" if key in V1_DIAGNOSTIC_SET else "val" if key in {"01", "03", "04", "05", "06"} else "train") for key in usable}
+        first = assign_fallback(usable, development, seed=2026)
+        self.assertEqual(first, assign_fallback(set(reversed(sorted(usable))) | {"60"}, development, seed=2026))
         self.assertFalse(V1_DIAGNOSTIC_SET & set(first))
+        self.assertFalse({"01", "03", "04", "05", "06"} & set(first))
         self.assertEqual(6, sum(split == "test" for split in first.values()))
         self.assertEqual(5, sum(split == "val" for split in first.values()))
-        self.assertEqual(len(usable) - 6, len(first))
+        self.assertEqual(len(usable) - 11, len(first))
 
 
 if __name__ == "__main__":

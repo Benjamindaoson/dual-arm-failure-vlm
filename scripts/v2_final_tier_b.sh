@@ -24,7 +24,7 @@ run() {
 
 test ! -e "$SPLIT"
 method_commit=$(git rev-parse HEAD)
-"$PY" scripts/freeze_v2_final_split.py --phase-json artifacts/data_audit/source/meta/phase.json --dataset-revision "$DATA_REV" --method-commit "$method_commit" --seed 20260930 --output "$SPLIT"
+"$PY" scripts/freeze_v2_final_split.py --phase-json artifacts/data_audit/source/meta/phase.json --development-split artifacts/splits/split_manifest.json --method-selection artifacts/v2/method_selection.json --dataset-revision "$DATA_REV" --method-commit "$method_commit" --seed 20260930 --output "$SPLIT"
 "$PY" scripts/build_reboot_manifest.py --phase-json artifacts/data_audit/source/meta/phase.json --split-manifest "$SPLIT" --frames 4 --span-seconds 2 --output artifacts/v2/manifests/final_sparse.jsonl --audit artifacts/v2/manifests/final_sparse_audit.json >outputs/v2/logs/final-manifest.log
 
 camera=$("$PY" -c 'import json; print(json.load(open("artifacts/v2/method_selection.json"))["camera"])')
