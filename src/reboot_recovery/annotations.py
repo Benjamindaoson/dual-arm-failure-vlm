@@ -253,6 +253,30 @@ def state_anchor_frames(ep: EpisodeAnnotation, *, min_gap_frames: int = 15) -> d
     }
 
 
+def dense_anchor_frames(ep: EpisodeAnnotation) -> list[tuple[str, int]]:
+    """Deterministic dense supervision with extra causal boundary anchors."""
+    failure = ep.failure
+    anchors: dict[int, str] = {}
+
+    def evenly_spaced(kind: str, start: int, end: int, count: int) -> None:
+        if end < start:
+            return
+        for index in range(count):
+            frame = round(start + index * (end - start) / (count - 1))
+            anchors[frame] = kind
+
+    evenly_spaced("nominal", 0, failure.induced_at_frame - 1, 6)
+    evenly_spaced("failure", failure.induced_at_frame, failure.recovery_started_at_frame - 1, 8)
+    evenly_spaced("recovery", failure.recovery_started_at_frame, ep.duration_frames - 1, 6)
+    for event, onset in (("failure_onset", failure.induced_at_frame),
+                         ("recovery_onset", failure.recovery_started_at_frame)):
+        for offset in (-1.0, -0.5, 0.0, 0.25, 0.5, 1.0):
+            frame = onset + round(offset * ep.fps)
+            if 0 <= frame < ep.duration_frames:
+                anchors[frame] = f"{event}_{offset:+g}s"
+    return [(anchors[frame], frame) for frame in sorted(anchors)]
+
+
 def split_episode_ids(
     episodes: Iterable[EpisodeAnnotation],
     seed: int = 42,
@@ -281,8 +305,9 @@ def build_training_windows(
     span_seconds: float = 2.0,
     min_gap_frames: int = 15,
     assignments: dict[str, str] | None = None,
+    dense: bool = False,
 ) -> tuple[list[TrainingWindow], dict[str, list[str]]]:
-    """Build dense, causal, episode-disjoint nominal/failure/recovery windows.
+    """Build sparse or dense causal, episode-disjoint state windows.
 
     Annotation-inconsistent episodes are excluded rather than silently repaired.
     """
@@ -297,7 +322,7 @@ def build_training_windows(
 
     for ep in usable:
         f = ep.failure
-        anchors = [
+        anchors = dense_anchor_frames(ep) if dense else [
             (state, frame)
             for state, frames in state_anchor_frames(ep, min_gap_frames=min_gap_frames).items()
             for frame in frames

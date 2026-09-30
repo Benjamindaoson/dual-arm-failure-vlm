@@ -84,6 +84,7 @@ def main(argv: list[str] | None = None) -> int:
         "epochs": args.epochs, "learning_rate": args.learning_rate, "batch_size": args.batch_size,
         "max_steps": args.max_steps,
         "gradient_accumulation_steps": args.grad_accum, "quantization": "4-bit NF4",
+        "max_pixels": args.max_pixels,
         "lora": {"rank": args.lora_r, "alpha": args.lora_alpha, "dropout": args.lora_dropout, "target_modules": target_modules},
         "gradient_checkpointing": True, "completion_only_loss": True, "seed": args.seed,
         "resume_from_checkpoint": str(checkpoint) if checkpoint else None,

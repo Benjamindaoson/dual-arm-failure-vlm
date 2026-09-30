@@ -20,6 +20,7 @@ def main() -> int:
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--frames", type=int, default=4)
     parser.add_argument("--span-seconds", type=float, default=2.0)
+    parser.add_argument("--dense", action="store_true", help="Use six/eight/six state anchors plus onset-adjacent windows")
     parser.add_argument("--split-manifest", type=Path, default=ROOT / "artifacts" / "splits" / "split_manifest.json")
     args = parser.parse_args()
 
@@ -28,6 +29,7 @@ def main() -> int:
     windows, audit = build_training_windows(
         annotations, seed=args.seed, n_frames=args.frames, span_seconds=args.span_seconds,
         assignments=split_manifest["episode_to_split"],
+        dense=args.dense,
     )
     for episode in annotations.episodes:
         if episode.episode_index not in split_manifest["episode_to_split"] and not audit.get(episode.episode_index):

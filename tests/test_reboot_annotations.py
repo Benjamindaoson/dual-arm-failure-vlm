@@ -94,5 +94,17 @@ class RebootAnnotationTests(unittest.TestCase):
         self.assertEqual(12, frames[-1])
         self.assertTrue(all(0 <= frame <= 12 for frame in frames))
 
+    def test_dense_windows_are_causal_and_boundary_anchored(self):
+        anns = self._load()
+        windows, _ = build_training_windows(anns, n_frames=4, dense=True)
+        self.assertGreater(len(windows), 18)
+        self.assertTrue(all(max(row.sampled_frames) <= row.anchor_frame for row in windows))
+        self.assertTrue(all(len(row.sampled_frames) == 4 for row in windows))
+        per_episode = [row for row in windows if row.episode_index == "00"]
+        self.assertEqual(len(per_episode), len({row.anchor_frame for row in per_episode}))
+        self.assertTrue(any(row.anchor_kind == "failure_onset_-0.5s" for row in per_episode))
+        self.assertTrue(any(row.anchor_kind == "recovery_onset_+0.5s" for row in per_episode))
+        self.assertTrue(all(row.execution_state == anns.episodes[0].state_at(row.anchor_frame) for row in per_episode))
+
 if __name__ == "__main__":
     unittest.main()

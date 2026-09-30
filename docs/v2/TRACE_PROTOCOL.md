@@ -1,0 +1,7 @@
+# V2 matched trace protocol
+
+The A2/A3 comparison trains separate adapters from the same Qwen2.5-VL-3B base revision and uses the same episode split, camera pair, four causal timestamps over two seconds, optimizer, LoRA configuration, epoch budget, seed, and evaluation prompts. A2 has images only. A3 is trained **and** evaluated with those images plus deterministic Trace-Text; inference-time trace added to an A2-trained adapter is a distribution shift, not the matched ablation.
+
+At each selected timestamp `t_i <= anchor_frame`, load the 14-D `observation.state` and 14-D `action` from the same row as the image. Reject missing, varying-dimension, or future vectors. The exact text is `steps=N; state_dim=14; action_dim=14; state_delta=[s_last-s_first rounded to four decimals]; latest_action=[a_last rounded to four decimals]`, using fixed coordinate order from the pinned LeRobot dataset. It contains no state or action after the anchor frame. The current representation deliberately omits the full trajectory and physical-unit interpretation; it tests whether a compact matched trace improves classification, not whether it captures contact force or controls the robot.
+
+`src/reboot_recovery/ablations.py` defines the text function and `scripts/prepare_reboot_vlm_dataset.py` materializes it. A2 and A3 must have identical sample IDs and references. The V1 A2-trained/A3-tested result remains a historical distribution-shift diagnostic and is not reused as a fair trace-training result.
