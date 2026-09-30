@@ -36,6 +36,17 @@ class TimingMetricTests(unittest.TestCase):
         result = evaluate_failure_timing(rows, consecutive=2)
         self.assertEqual(1, result["undetected_episodes"])
 
+    def test_recovery_onset_uses_recovery_as_target_state(self):
+        rows = [
+            {"episode_index": "00", "relative_seconds": -0.5, "gold_state": "failure", "predicted_state": "recovery"},
+            {"episode_index": "00", "relative_seconds": 0.0, "gold_state": "recovery", "predicted_state": "recovery"},
+            {"episode_index": "00", "relative_seconds": 0.5, "gold_state": "recovery", "predicted_state": "recovery"},
+        ]
+        result = evaluate_failure_timing(rows, consecutive=2, target_state="recovery")
+        self.assertEqual("recovery", result["target_state"])
+        self.assertEqual(0.5, result["episodes"]["00"]["detection_delay_seconds"])
+        self.assertEqual(1, result["episodes"]["00"]["false_alarms_before_onset"])
+
 
 if __name__ == "__main__":
     unittest.main()

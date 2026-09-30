@@ -1,0 +1,37 @@
+{
+  "algorithm": "grpo",
+  "base_model": "/root/autodl-tmp/models/Qwen2.5-VL-3B-Instruct",
+  "beta": 0.01,
+  "dataset_revision": "0633573d0438be1185bddebdf1a2c8f5505f7b2a",
+  "dataset_root": "/root/autodl-tmp/prepared/A2",
+  "failure_mode_class_weights": {
+    "excessive_force": 1.3256578290130752,
+    "freeze": 2.2961067133021014,
+    "jamming": 2.2961067133021014,
+    "misalignment": 0.5488744867646872,
+    "poor_engagement": 2.2961067133021014,
+    "premature_grasp": 2.2961067133021014,
+    "premature_release": 0.9790631922098685,
+    "retention_failure": 1.6235926273038719,
+    "slip": 0.9373816404281821,
+    "sub_mm_misalignment": 1.3256578290130752
+  },
+  "gradient_accumulation_steps": 8,
+  "importance_sampling_level": "token",
+  "learning_rate": 5e-06,
+  "loss_type": "grpo",
+  "max_completion_length": 96,
+  "max_steps": 5,
+  "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+  "num_generations": 4,
+  "per_device_train_batch_size": 1,
+  "reward_weights": [
+    0.25,
+    0.35,
+    0.4
+  ],
+  "seed": 42,
+  "sft_checkpoint": "/root/autodl-tmp/multimodal-chart-gspo-v2/artifacts/runs/sft-full-A2-20260930T001500Z",
+  "stage": "rlvr",
+  "trl_contract": ">=0.29,<0.30"
+}

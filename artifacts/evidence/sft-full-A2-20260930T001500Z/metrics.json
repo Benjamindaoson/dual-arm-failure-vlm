@@ -1,0 +1,15 @@
+{
+  "best_model_checkpoint": "artifacts/runs/sft-full-A2-20260930T001500Z/checkpoint-94",
+  "final_log": {
+    "epoch": 2.0,
+    "step": 94,
+    "total_flos": 1.785156558974976e+16,
+    "train_loss": 0.2688824732569938,
+    "train_runtime": 1758.8669,
+    "train_samples_per_second": 0.423,
+    "train_steps_per_second": 0.053
+  },
+  "global_step": 94,
+  "trainable_parameters": 37152768,
+  "wall_clock_seconds": 1759.2657189359888
+}

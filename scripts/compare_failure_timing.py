@@ -26,12 +26,18 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit("Base and SFT timing episodes differ")
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("w", newline="", encoding="utf-8") as handle:
-        fields = ["model", "episode_index", "detection_delay_seconds", "false_alarms_before_failure", "windows"]
+        fields = ["model", "episode_index", "detection_delay_seconds", "false_alarms_before_onset", "windows"]
         writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
         for model, run in runs.items():
             for episode_id, values in sorted(run["episodes"].items()):
-                writer.writerow({"model": model, "episode_index": episode_id, **values})
+                writer.writerow({
+                    "model": model,
+                    "episode_index": episode_id,
+                    "detection_delay_seconds": values["detection_delay_seconds"],
+                    "false_alarms_before_onset": values["false_alarms_before_onset"],
+                    "windows": values["windows"],
+                })
     return 0
 
 

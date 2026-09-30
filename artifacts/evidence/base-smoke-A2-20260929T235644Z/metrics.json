@@ -1,0 +1,48 @@
+{
+  "episode_bootstrap": {
+    "failure_recall_95ci": [
+      0.0,
+      0.0
+    ],
+    "samples": 1000,
+    "seed": 42,
+    "state_macro_f1_95ci": [
+      0.0,
+      0.0
+    ],
+    "unit": "episode"
+  },
+  "failure_mode_macro_f1": 0.0,
+  "failure_mode_macro_f1_non_nominal": 0.0,
+  "failure_mode_per_class": {},
+  "failure_recall": 0.0,
+  "gold_state_counts": {
+    "nominal": 2
+  },
+  "json_valid_rate": 0.0,
+  "mean_latency_seconds": 1.770733863580972,
+  "n": 2,
+  "phase_macro_f1": 0.0,
+  "phase_per_class": {
+    "align (pick)": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 2.0
+    }
+  },
+  "pre_failure_false_positive_rate": 0.0,
+  "recovery_recall": 0.0,
+  "state_macro_f1": 0.0,
+  "state_per_class": {
+    "nominal": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 2.0
+    }
+  },
+  "timing_slices": {
+    "nominal": 0.0
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "final_log": {
+    "epoch": 0.026881720430107527,
+    "step": 5,
+    "total_flos": 0.0,
+    "train_loss": 8.657574653625488e-06,
+    "train_runtime": 278.8262,
+    "train_samples_per_second": 0.143,
+    "train_steps_per_second": 0.018
+  },
+  "global_step": 5,
+  "trainable_parameters": 37152768,
+  "wall_clock_seconds": 279.3822916802019
+}

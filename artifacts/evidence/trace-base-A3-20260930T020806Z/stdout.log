@@ -1,0 +1,179 @@
+[2026-09-30T10:08:06+08:00] trace base start
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.17s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:06<00:00,  3.30s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:06<00:00,  3.28s/it]
+The image processor of type `Qwen2VLImageProcessor` is now loaded as a fast processor by default, even if the model checkpoint was saved with a slow processor. This is a breaking change and may produce slightly different outputs. To continue using the slow processor, instantiate this class with `use_fast=False`. Note that this behavior will be extended to all models in a future release.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+[1/54] ep02-nominal-f0 2.04s
+[2/54] ep02-nominal-f165 1.64s
+[3/54] ep02-nominal-f330 1.53s
+[4/54] ep02-failure-f360 1.56s
+[5/54] ep02-failure-f510 1.58s
+[6/54] ep02-failure-f659 1.57s
+[7/54] ep02-recovery-f675 1.58s
+[8/54] ep02-recovery-f786 1.59s
+[9/54] ep02-recovery-f896 1.52s
+[10/54] ep08-nominal-f0 1.53s
+[11/54] ep08-nominal-f75 1.63s
+[12/54] ep08-nominal-f150 1.65s
+[13/54] ep08-failure-f180 1.65s
+[14/54] ep08-failure-f284 1.71s
+[15/54] ep08-failure-f389 1.61s
+[16/54] ep08-recovery-f405 1.56s
+[17/54] ep08-recovery-f650 1.60s
+[18/54] ep08-recovery-f896 1.57s
+[19/54] ep18-nominal-f0 1.57s
+[20/54] ep18-nominal-f60 1.58s
+[21/54] ep18-nominal-f120 1.55s
+[22/54] ep18-failure-f150 1.54s
+[23/54] ep18-failure-f284 1.52s
+[24/54] ep18-failure-f419 1.57s
+[25/54] ep18-recovery-f435 1.58s
+[26/54] ep18-recovery-f666 1.63s
+[27/54] ep18-recovery-f896 1.57s
+[28/54] ep20-nominal-f0 1.60s
+[29/54] ep20-nominal-f135 1.55s
+[30/54] ep20-nominal-f270 1.62s
+[31/54] ep20-failure-f300 1.61s
+[32/54] ep20-failure-f390 1.59s
+[33/54] ep20-failure-f479 1.61s
+[34/54] ep20-recovery-f495 1.62s
+[35/54] ep20-recovery-f696 1.55s
+[36/54] ep20-recovery-f896 1.65s
+[37/54] ep47-nominal-f0 1.67s
+[38/54] ep47-nominal-f180 2.23s
+[39/54] ep47-nominal-f360 2.19s
+[40/54] ep47-failure-f390 1.58s
+[41/54] ep47-failure-f420 1.58s
+[42/54] ep47-failure-f449 1.51s
+[43/54] ep47-recovery-f465 1.62s
+[44/54] ep47-recovery-f680 1.57s
+[45/54] ep47-recovery-f896 1.58s
+[46/54] ep54-nominal-f0 1.59s
+[47/54] ep54-nominal-f135 1.59s
+[48/54] ep54-nominal-f270 1.58s
+[49/54] ep54-failure-f300 1.51s
+[50/54] ep54-failure-f390 1.57s
+[51/54] ep54-failure-f479 2.12s
+[52/54] ep54-recovery-f495 2.22s
+[53/54] ep54-recovery-f696 2.16s
+[54/54] ep54-recovery-f896 1.80s
+{
+  "n": 54,
+  "json_valid_rate": 0.0,
+  "phase_macro_f1": 0.0,
+  "state_macro_f1": 0.0,
+  "failure_recall": 0.0,
+  "recovery_recall": 0.0,
+  "pre_failure_false_positive_rate": 0.0,
+  "failure_mode_macro_f1": 0.0,
+  "failure_mode_macro_f1_non_nominal": 0.0,
+  "phase_per_class": {
+    "align (pick)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 12.0
+    },
+    "align (place)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 12.0
+    },
+    "engage (pick)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 13.0
+    },
+    "engage (place)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 11.0
+    },
+    "transport": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    }
+  },
+  "state_per_class": {
+    "failure": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 18.0
+    },
+    "nominal": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 18.0
+    },
+    "recovery": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 18.0
+    }
+  },
+  "failure_mode_per_class": {
+    "excessive_force": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    },
+    "jamming": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    },
+    "misalignment": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 12.0
+    },
+    "retention_failure": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    },
+    "slip": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    }
+  },
+  "timing_slices": {
+    "failure": 0.0,
+    "nominal": 0.0,
+    "recovery": 0.0
+  },
+  "gold_state_counts": {
+    "nominal": 18,
+    "failure": 18,
+    "recovery": 18
+  },
+  "episode_bootstrap": {
+    "unit": "episode",
+    "samples": 1000,
+    "seed": 42,
+    "state_macro_f1_95ci": [
+      0.0,
+      0.0
+    ],
+    "failure_recall_95ci": [
+      0.0,
+      0.0
+    ]
+  },
+  "mean_latency_seconds": 1.6539022937865444
+}
+[2026-09-30T10:09:56+08:00] trace base complete

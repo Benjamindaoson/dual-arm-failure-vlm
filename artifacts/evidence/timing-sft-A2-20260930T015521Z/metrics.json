@@ -1,0 +1,121 @@
+{
+  "episode_bootstrap": {
+    "failure_recall_95ci": [
+      0.0,
+      0.0
+    ],
+    "samples": 1000,
+    "seed": 42,
+    "state_macro_f1_95ci": [
+      0.11764705882352942,
+      0.1263157894736842
+    ],
+    "unit": "episode"
+  },
+  "failure_mode_macro_f1": 0.016,
+  "failure_mode_macro_f1_non_nominal": 0.016,
+  "failure_mode_per_class": {
+    "excessive_force": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 11.0
+    },
+    "jamming": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 11.0
+    },
+    "misalignment": {
+      "f1": 0.08,
+      "precision": 0.3333333333333333,
+      "recall": 0.045454545454545456,
+      "support": 22.0
+    },
+    "retention_failure": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 11.0
+    },
+    "slip": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 11.0
+    }
+  },
+  "failure_recall": 0.0,
+  "gold_state_counts": {
+    "failure": 41,
+    "nominal": 18,
+    "recovery": 25
+  },
+  "json_valid_rate": 1.0,
+  "mean_latency_seconds": 1.9815574982203543,
+  "n": 84,
+  "phase_macro_f1": 0.19779237365444263,
+  "phase_per_class": {
+    "align (pick)": {
+      "f1": 0.14814814814814814,
+      "precision": 0.09523809523809523,
+      "recall": 0.3333333333333333,
+      "support": 6.0
+    },
+    "align (place)": {
+      "f1": 0.11428571428571428,
+      "precision": 0.6666666666666666,
+      "recall": 0.0625,
+      "support": 32.0
+    },
+    "engage (pick)": {
+      "f1": 0.5287356321839081,
+      "precision": 0.38333333333333336,
+      "recall": 0.8518518518518519,
+      "support": 27.0
+    },
+    "transport": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 19.0
+    }
+  },
+  "pre_failure_false_positive_rate": 0.0,
+  "recovery_recall": 0.0,
+  "state_macro_f1": 0.1212121212121212,
+  "state_per_class": {
+    "failure": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 41.0
+    },
+    "nominal": {
+      "f1": 0.3636363636363636,
+      "precision": 0.2222222222222222,
+      "recall": 1.0,
+      "support": 18.0
+    },
+    "recovery": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 25.0
+    }
+  },
+  "timing_slices": {
+    "early_failure": 0.0,
+    "early_recovery": 0.0,
+    "late_failure": 0.0,
+    "pre_failure": 1.0,
+    "recovery_+0.0s": 0.0,
+    "recovery_+0.5s": 0.0,
+    "recovery_+1.0s": 0.0,
+    "recovery_+2.0s": 0.0,
+    "recovery_-0.5s": 0.0,
+    "recovery_-1.0s": 0.0,
+    "recovery_-2.0s": 0.0
+  }
+}

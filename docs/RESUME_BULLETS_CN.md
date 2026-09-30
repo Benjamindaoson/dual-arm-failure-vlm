@@ -1,21 +1,19 @@
-# 简历表述（证据限定版）
+# 简历项目表述（真实运行版）
 
-## 推荐主版本
+**双臂机器人精密装配失败识别与多模态大模型后训练**｜独立研究项目，基于公开 REBOOT 数据
 
-- 独立研究项目：围绕公开 REBOOT 双臂机器人精密装配轨迹，设计 failure-aware 多模态执行 Critic，将多视角时序视觉与机器人 state/action trace 映射为阶段、执行状态和失败模式的严格 JSON 诊断。
-- 建立数据优先的证据链：固定公开数据 revision，审计 60 个 recovery episodes、53,886 条 frame rows、4 路 RGB 与 14-D state/action；识别并隔离 7 个异常 episode，生成 episode-level 42/5/6 train/val/test 划分和 SHA-256 收据。
-- 实现 Base → QLoRA SFT → RLVR 的自动 evidence gate，并区分 TRL 中 token-level GRPO 与 sequence-level GSPO；格式正确仅作为 validity gate，不作为正奖励。
-- 实现 469 个因果时序窗口（372/43/54）与 84 条 onset-relative timing 样本，覆盖 A0–A3 输入消融、per-episode bootstrap CI 与 failure detection delay 协议。
-- 完成 AutoDL 离线运行链路：真实下载并验证 2.7 GB 数据与 7.1 GB 模型快照，成功解码/物化公开 RGB 视频；目标 SSH 容器未暴露 CUDA，因此所有模型效果、显存与训练耗时均明确报告为 N/A。
+面向装配对位偏差、滑移和卡滞等异常，构建基于历史多视角画面与机器人状态的执行状态判断和时间定位评测；研究对象是失败感知，不是机器人动作控制。
 
-## 更短版本
+- 审计 60 个真实操作 episode、53,886 条 frame rows，隔离 7 个标注或边界异常 episode；冻结 42/5/6 个 episode 的训练、验证、测试划分，构建 469 个因果观测窗口和 84 条失败/恢复时点样本，避免同一轨迹跨集合泄漏。
+- 在 RTX 4090 D 上完成 Qwen2.5-VL-3B 的 NF4 QLoRA 2-epoch SFT，并按统一 54 样本冻结测试集评估 Base、SFT、100-step GRPO 和探索性 GSPO；统一数据、seed、4 generations 与结果级 verifier，保存逐样本预测、配置、日志和运行回执。
+- SFT 将严格 JSON 有效率从 0 提到 100%，State Macro-F1 达到 0.4012；同时测得 Failure Recall 为 0/18、Failure K=2 稳定检出为 0/6。进一步发现 GRPO、GSPO 和未经专门训练的 Trace-Text 均未改善失败检出，据此保留负结果并限定项目能力边界。
 
-- 基于公开 REBOOT 精密装配轨迹构建 failure-aware VLM post-training 管线，审计 60 条真实轨迹并隔离 7 条异常，生成 469 个 episode 防泄漏时序窗口及 Base/SFT/RLVR 证据门控；GPU 结果因容器未挂载 CUDA而未执行、未写入简历数字。
+技术栈：Python、PyTorch、Transformers、TRL、PEFT、Qwen2.5-VL、NF4 QLoRA、GRPO、GSPO、LeRobot、PyAV。
 
-## 绝对不要写
+## 一行短版
 
-- “提升 failure recall X%”或“GSPO 优于 GRPO”：尚无 GPU prediction receipt。
-- “使用奇瑞内部机器人数据/在奇瑞落地”：数据是公开 REBOOT。
-- “Georgia Tech 官方研究”：这是 independent research project。
-- “支持 RGB-D Pilot”：当前固定 sample schema 只有 4 路 RGB，没有 depth 字段。
-- “证明跨 connector 泛化”：full-suite holdout 尚未执行。
+基于 REBOOT 公开机器人轨迹完成 60 episode / 53,886 帧审计与防泄漏评测，在 4090 D 上对比 Qwen2.5-VL 的 SFT、GRPO 和探索性 GSPO；SFT State Macro-F1 为 0.4012，但 Failure Recall 仍为 0，明确记录失败识别尚未解决。
+
+## 表述边界
+
+本项目不是佐治亚理工或企业官方合作，不含企业内部数据；没有真实机器人闭环控制、跨任务泛化或生产部署结果。不能写“Failure Recall 提升”“GSPO 优于 GRPO”或把 Recovery Recall 1.0 脱离 12/18 次提前恢复误报单独展示。全部数字对应 [`实验报告`](EXPERIMENT_REPORT_CN.md) 和 [`最终比较表`](../artifacts/eval/final_model_comparison.json)。

@@ -1,47 +1,41 @@
-# 面试叙事
+# 面试叙事：从真实数据到负结果
 
 ## 30 秒版本
 
-我做的是一个公开真实机器人数据上的 failure-aware 多模态后训练项目。核心不是控制机器人，也不是做检测，而是让 VLM 根据多视角时序视觉和 robot trace 判断装配阶段、nominal/failure/recovery 状态以及 failure mode。我固定 REBOOT 数据 revision，对 53,886 条 frame rows 做全量审计，隔离 7 个异常 episode，再做 episode-level 42/5/6 划分，避免 frame leakage。模型路线是 Base → QLoRA SFT → RLVR，但每一阶段都由 held-out evidence gate 决定；目标 SSH 容器未挂载 CUDA，所以我只报告已验证的数据和运行链路，模型指标是 N/A。
+我用公开 REBOOT 双臂装配轨迹研究机器人能否及时识别失败。先审计 60 个 episode、53,886 条帧记录，隔离 7 个异常 episode，再以完整轨迹固定 42/5/6 的训练、验证、测试划分。我在 RTX 4090 D 上运行了 Qwen2.5-VL-3B 的 Base、QLoRA SFT、GRPO 和探索性 GSPO。SFT 的严格 JSON 有效率达到 100%、State Macro-F1 达到 0.4012，但 Failure Recall 仍是 0/18，时间定位中 6/6 个失败 episode 也都未稳定检出。这个项目的关键结论是：格式学习和更高训练 reward 没有解决真实失败感知。
 
 ## 2 分钟版本
 
-这个项目来自一个实际问题：精密装配里，局部动作看起来都合理，但轻微 misalignment、slip、jamming 或 premature release 会让长任务失败。单帧很难判断“这是尚未对齐、已经失败，还是正在恢复”，所以我把任务定义为 Failure-Aware Execution Critic，而不是一开始就做 end-to-end action control。
+精密装配的异常常发生在成功率数字看不到的时刻：对位略偏、夹持滑移或插入卡滞。我把任务收窄为执行状态 Critic：只看当前和历史画面，加可选的机器人 state/action trace，输出当前阶段、nominal/failure/recovery 状态和 failure mode，不训练动作策略。
 
-我先处理数据真实性。对 REBOOT sample 固定 revision，读取真实 `info.json`、`phase.json` 和全部 parquet frame tables。审计确认有 60 个 episode、53,886 条 frame rows、30 FPS、4 路 RGB、14-D state 和 14-D action。`duration_frames=897` 在该快照中表示含终点索引，正常应有 898 行；有 6 个 episode 额外包含越界 frame 898，另有 originating phase 越界和 recovery 早于 failure 的注释问题。我的处理不是修数据，而是 quarantine 并保留原因、原始哈希和 split receipt。最终 53 个可用 episode 固定成 42/5/6，所有 469 个 window 都继承 episode split。
+首先解决数据可信性。REBOOT sample 有 60 个真实 episode、53,886 条 frame rows、4 路 RGB、14 维 state 和 14 维 action。审计发现越界帧、非法 originating phase 和 recovery 早于 failure 等问题，隔离 7 个 episode，不擅自修标签。剩下 53 个 episode 按完整轨迹固定为 42/5/6，生成 469 个因果窗口；另取 failure/recovery onset 前后七个时间点形成 84 条样本。6 个 test episode 在所有实验中相同。
 
-模型输出是严格 JSON：phase、state、failure_mode。评测主指标是 failure recall，同时报告 state macro-F1、recovery recall、phase/failure-mode F1、JSON valid rate、per-class 指标和 per-episode bootstrap CI。我还设计了 A0 单帧、A1 单相机时序、A2 双相机时序、A3 双相机加 Trace-Text 四组消融，并以 failure onset 为零点计算连续 K 个窗口正确后的 detection delay 和提前误报。
+在 4090 D 上，Base 的 A0 单帧、A1 单相机时序、A2 双相机时序各跑完 54 条测试，但都输出带代码围栏的 JSON，按预先固定的严格 schema 计分为零。我继续用 A2 做两轮 QLoRA SFT：JSON 有效率升到 100%，State Macro-F1 0.4012，Recovery Recall 0.6111，但最重要的 Failure Recall 仍是 0/18。结果级配对中 Base 错而 SFT 对 7 条，说明模型确实学到一部分状态和格式，仍没有学会识别失败。
 
-训练不是默认答案。Base 达到 failure recall 0.90 且 state macro-F1 0.85 就停止；否则才做 QLoRA SFT。SFT 如果没有干净增益，结论是回到数据或任务，而不是硬上 RL。只有 SFT 有增益但仍有 outcome error，才比较 GRPO 与 sequence-level GSPO。格式只是 validity gate，reward 来自 phase/state/failure correctness。我下载并验证了完整 2.7 GB 数据、7.1 GB 模型快照，真实解码了视频并验证物化链路；但 fresh SSH 登录、设备节点和 PyTorch 三重证据都表明目标容器没有 GPU。为避免 CPU 假跑，我没有写任何模型性能数字，所有 Base/SFT/RL 指标均为 N/A。
+我们又用连续两次预测的 K=2 定义检查“何时发现失败”。Base、SFT、GRPO、GSPO 都是 0/6 个失败 episode 稳定检出，因此 Failure Detection Delay 是 N/A。Trace-Text 在同一 SFT adapter 上由 0.4012 降到 0.1667。证据门控允许尝试 GRPO，因为 SFT 对整体状态有增益且存在大量错误；100-step GRPO 的 State Macro-F1 降到 0.1667，Failure Recall 仍为 0。GSPO 随后只做探索性对照，得到 0.1619 与 0。结论是当前最好的状态诊断 checkpoint 是 SFT，但没有模型满足失败识别目标，不能上线作安全判断。
 
-## 5 分钟版本
+## 5 分钟追问路径
 
-### 1. 问题定义
+### 为什么先做数据审计？
 
-传统成功率把长任务压缩成一个 bit，看不到机器人在哪个阶段开始偏离。REBOOT 把装配统一成 Align(pick)、Engage(pick)、Transport、Align(place)、Engage(place) 五个阶段，并提供失败注入点、恢复开始点和 failure mode。这使“执行 Critic”成为可验证任务：输入历史，输出当前 phase、state 与 failure mode。
+同一 episode 的相邻帧高度相关，随机按帧切分会制造泄漏。更基础的是标签本身存在边界异常；如果不隔离，时点监督甚至可能要求模型预测“恢复早于失败”。我保留原始 revision、异常原因和 split hash。`duration_frames` 在该快照是含终点 frame index，正常 0..897 对应 898 行；只有 6 个 episode 多出越界 frame 898。这一点曾导致早期审计口径错误，后来用 parquet 索引与元数据交叉验证修正。
 
-我刻意没有直接预测 action。原因是当前 sample 只有 60 条 recovery trajectories，先验证感知和状态解释是否成立，比让 3B VLM 直接控制接触丰富的机器人更稳妥。未来 recovery policy 可以消费这个结构化状态，但本阶段不凭空造 recovery action label。
+### 为什么 Base 的零分不能简单说明视觉模型完全不会？
 
-### 2. 数据证据
+严格解析器要求直接返回恰好三个字段的 JSON；Base 常加 Markdown 代码围栏，还输出不在 taxonomy 内的阶段文本，所以正式任务分数为零。我们没有事后放宽解析器。这个零分混合了格式遵循与语义判断问题，因此 A0/A1/A2 的相对语义能力不能从三组零分推断。
 
-项目最重要的工作不是模型参数，而是先证明数据契约。固定 Hugging Face revision 后，我同时检查 frame-table schema 与 phase annotations：camera key、RGB/depth、state/action shape、episode index 类型、phase boundary、originating phase、failure/recovery timing、description、重复和缺失字段。
+### SFT 到底改善了什么？
 
-审计发现 sample schema 没有 depth，尽管 full REBOOT 项目描述为 RGB-D；还发现 episode index 在 frame table 是 int64，在 annotation 是补零字符串。更关键的是两个 originating phase 越界、一个 recovery 时间早于 failure。它们进入 quarantine，不参加训练。所有统计、SHA 和异常原因写成 machine-readable JSON 与 Markdown receipt。
+同一 54 样本上，JSON 有效率 0→1.0、State Macro-F1 0→0.4012、Recovery Recall 0→0.6111；但 18 个 failure 窗口一个也未识别。按 episode bootstrap 的 State Macro-F1 95% CI 为 `[0.3467, 0.4727]`，只有 6 个 test episode，因此不做显著性或外推声明。SFT 改善的是结构化输出及部分 nominal/recovery 判断，核心 failure 任务未解决。
 
-### 3. 评测设计
+### RL 为什么跑，结果怎样？
 
-剩余 episode 先按 seed 42 做 80/10/10 episode split。然后每个 window 只属于一个 episode。A0–A3 必须共享同一组 test episode，否则消融差异可能只是数据差异。
+项目的 gate 在 SFT 的 State Macro-F1 增益、结果级错误余量和 verifier 可计算性三个条件上放行 GRPO。reward 的 JSON 解析只作有效性门，不给格式正奖励；phase、state 和适用 failure mode 才给分。GRPO 用 token-level importance sampling，100 步训练稳定，但 held-out State Macro-F1 0.1667、Failure Recall 0，模型偏向预测 recovery。GRPO 没有产生继续正式 GSPO 的收益证据；为了比较两种采样粒度，GSPO 明确标记为探索性，使用同一 SFT 起点、数据、seed、generations 和更新预算，结果仍未改善 failure。训练 reward 不能代替冻结测试集指标。
 
-除了常规 F1，我把 failure recall 放在第一位，因为漏检 failure 比格式错误更接近工业风险。failure timing 使用相对 onset 的七个时间点，输入窗口因果采样，不偷看未来帧；首次连续两个窗口预测 failure 的时刻作为 delay，同时统计 onset 前 false alarm。
+### 时间定位和 trace 给了什么额外信息？
 
-### 4. 后训练与 reward
+K=2 时间定位揭示 6/6 个失败 episode 对所有模型都未检出；没有检出就没有可定义的平均 failure delay。GRPO 虽对 3/6 个 recovery episode 在 onset 后 0.5 秒稳定检出，却在 18 个 onset 前窗口中误报 12 次。Trace-Text 是把 14-D state/action 压缩成因果文字附加到已在 A2 上训练的 SFT adapter，结果变差；这只能否定该零样本附加方式，不能否定状态信息本身。
 
-Base 模型是 Qwen2.5-VL-3B-Instruct，理由是 24 GB GPU 可承载多图和 4-bit 推理。SFT 用 NF4 QLoRA，比较 language-only 与 vision-language 两个适配范围，问题不是“视觉一定要微调”，而是瓶颈究竟在视觉表征还是状态解释。
+### 可以怎样概括项目价值？
 
-RLVR reward 先解析严格 JSON；解析失败直接为零，但解析成功本身不加分。reward 由 phase、state、failure-mode correctness 构成；nominal 必须输出 none；failure mode 使用逆平方根权重缓解不平衡。GRPO 和 GSPO 使用相同 SFT checkpoint、数据和 reward，只改变 importance sampling 粒度。GSPO 配置是 sequence-level IS 加 `loss_type=grpo`；`sequence + dr_grpo` 会被配置验证器拒绝，避免错误命名。
-
-### 5. 当前结论与下一步
-
-当前可以确认的是数据与工程层：revision、60/53/7 episode、42/5/6 split、469 个 pilot windows、84 条 timing 样本、完整数据与模型快照、真实视频解码、39 项本地和远端测试。不能确认的是 Base/SFT/RL 指标，因为目标 AutoDL SSH 容器没有 `/dev/nvidia*` 且 PyTorch CUDA 不可用。
-
-恢复条件很明确：让同一 SSH 端点真正挂载 4090 后，直接复用已验证的本地数据、模型和物化样本，跑 Base A0–A2；由 Base gate 决定是否 SFT，再由 SFT gate 决定是否 RLVR。这样面试时可以严格区分“实现了什么”“执行了什么”“证据支持什么”，而不是把计划包装成结果。
+我把数据审计、因果时序、冻结评测、后训练和门控串成可复核闭环，并记录一个有用的负结果：小样本公开装配数据上，VLM 可以学会输出协议，却仍漏掉全部 held-out failure。项目没有真实机器人动作控制或跨任务泛化结果，也不属于佐治亚理工或企业官方项目。详细数字见 [`实验报告`](EXPERIMENT_REPORT_CN.md)。

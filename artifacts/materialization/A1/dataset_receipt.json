@@ -1,0 +1,6 @@
+{
+  "ablation": "A1",
+  "manifest": "/root/autodl-tmp/multimodal-chart-gspo-v2/artifacts/manifests/reboot_windows.jsonl",
+  "split_receipt": "/root/autodl-tmp/multimodal-chart-gspo-v2/artifacts/splits/split_receipt.json",
+  "split_receipt_sha256": "4301609f83c471cb00abdac1b61855449ceb1872f02189fe986a82f1945b774c"
+}

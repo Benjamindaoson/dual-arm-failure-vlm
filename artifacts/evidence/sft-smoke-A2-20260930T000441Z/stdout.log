@@ -1,0 +1,60 @@
+[2026-09-30T08:04:41+08:00] SFT smoke start
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.48s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:07<00:00,  3.90s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:07<00:00,  3.84s/it]
+The image processor of type `Qwen2VLImageProcessor` is now loaded as a fast processor by default, even if the model checkpoint was saved with a slow processor. This is a breaking change and may produce slightly different outputs. To continue using the slow processor, instantiate this class with `use_fast=False`. Note that this behavior will be extended to all models in a future release.
+The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'bos_token_id': None, 'pad_token_id': 151643}.
+  0%|          | 0/5 [00:00<?, ?it/s] 20%|██        | 1/5 [00:14<00:59, 14.97s/it]                                              20%|██        | 1/5 [00:14<00:59, 14.97s/it] 40%|████      | 2/5 [00:33<00:51, 17.09s/it]                                              40%|████      | 2/5 [00:33<00:51, 17.09s/it] 60%|██████    | 3/5 [00:52<00:35, 17.85s/it]                                              60%|██████    | 3/5 [00:52<00:35, 17.85s/it] 80%|████████  | 4/5 [01:11<00:18, 18.38s/it]                                              80%|████████  | 4/5 [01:11<00:18, 18.38s/it]100%|██████████| 5/5 [01:30<00:00, 18.68s/it]                                             100%|██████████| 5/5 [01:30<00:00, 18.68s/it]{'loss': 1.175, 'grad_norm': 6.0625, 'learning_rate': 2e-05, 'entropy': 3.3212296962738037, 'num_tokens': 9188.0, 'mean_token_accuracy': 0.7625265866518021, 'epoch': 0.02}
+{'loss': 1.0635, 'grad_norm': 5.71875, 'learning_rate': 1.6000000000000003e-05, 'entropy': 3.316903293132782, 'num_tokens': 18380.0, 'mean_token_accuracy': 0.7876479402184486, 'epoch': 0.04}
+{'loss': 1.0537, 'grad_norm': 5.3125, 'learning_rate': 1.2e-05, 'entropy': 3.3258651196956635, 'num_tokens': 27579.0, 'mean_token_accuracy': 0.78006362169981, 'epoch': 0.06}
+{'loss': 0.9699, 'grad_norm': 5.40625, 'learning_rate': 8.000000000000001e-06, 'entropy': 3.377140551805496, 'num_tokens': 36771.0, 'mean_token_accuracy': 0.7879332974553108, 'epoch': 0.09}
+{'loss': 1.0774, 'grad_norm': 5.25, 'learning_rate': 4.000000000000001e-06, 'entropy': 3.3074653148651123, 'num_tokens': 45966.0, 'mean_token_accuracy': 0.7613095343112946, 'epoch': 0.11}
+
+  0%|          | 0/43 [00:00<?, ?it/s][A
+  5%|▍         | 2/43 [00:00<00:11,  3.54it/s][A
+  7%|▋         | 3/43 [00:01<00:15,  2.50it/s][A
+  9%|▉         | 4/43 [00:01<00:18,  2.16it/s][A
+ 12%|█▏        | 5/43 [00:02<00:18,  2.01it/s][A
+ 14%|█▍        | 6/43 [00:02<00:17,  2.12it/s][A
+ 16%|█▋        | 7/43 [00:03<00:16,  2.22it/s][A
+ 19%|█▊        | 8/43 [00:03<00:15,  2.27it/s][A
+ 21%|██        | 9/43 [00:03<00:14,  2.31it/s][A
+ 23%|██▎       | 10/43 [00:04<00:14,  2.31it/s][A
+ 26%|██▌       | 11/43 [00:04<00:13,  2.31it/s][A
+ 28%|██▊       | 12/43 [00:05<00:13,  2.28it/s][A
+ 30%|███       | 13/43 [00:05<00:13,  2.26it/s][A
+ 33%|███▎      | 14/43 [00:06<00:12,  2.24it/s][A
+ 35%|███▍      | 15/43 [00:06<00:12,  2.26it/s][A
+ 37%|███▋      | 16/43 [00:07<00:11,  2.28it/s][A
+ 40%|███▉      | 17/43 [00:07<00:11,  2.30it/s][A
+ 42%|████▏     | 18/43 [00:07<00:10,  2.31it/s][A
+ 44%|████▍     | 19/43 [00:08<00:10,  2.32it/s][A
+ 47%|████▋     | 20/43 [00:08<00:09,  2.34it/s][A
+ 49%|████▉     | 21/43 [00:09<00:09,  2.34it/s][A
+ 51%|█████     | 22/43 [00:09<00:08,  2.34it/s][A
+ 53%|█████▎    | 23/43 [00:09<00:08,  2.34it/s][A
+ 56%|█████▌    | 24/43 [00:10<00:08,  2.35it/s][A
+ 58%|█████▊    | 25/43 [00:10<00:07,  2.35it/s][A
+ 60%|██████    | 26/43 [00:11<00:07,  2.34it/s][A
+ 63%|██████▎   | 27/43 [00:11<00:06,  2.33it/s][A
+ 65%|██████▌   | 28/43 [00:12<00:06,  2.34it/s][A
+ 67%|██████▋   | 29/43 [00:12<00:05,  2.34it/s][A
+ 70%|██████▉   | 30/43 [00:12<00:05,  2.34it/s][A
+ 72%|███████▏  | 31/43 [00:13<00:05,  2.34it/s][A
+ 74%|███████▍  | 32/43 [00:13<00:04,  2.34it/s][A
+ 77%|███████▋  | 33/43 [00:14<00:04,  2.34it/s][A
+ 79%|███████▉  | 34/43 [00:14<00:03,  2.37it/s][A
+ 81%|████████▏ | 35/43 [00:15<00:03,  2.39it/s][A
+ 84%|████████▎ | 36/43 [00:15<00:02,  2.40it/s][A
+ 86%|████████▌ | 37/43 [00:15<00:02,  2.41it/s][A
+ 88%|████████▊ | 38/43 [00:16<00:02,  2.38it/s][A
+ 91%|█████████ | 39/43 [00:16<00:01,  2.37it/s][A
+ 93%|█████████▎| 40/43 [00:17<00:01,  2.37it/s][A
+ 95%|█████████▌| 41/43 [00:17<00:00,  2.37it/s][A
+ 98%|█████████▊| 42/43 [00:18<00:00,  2.36it/s][A
+100%|██████████| 43/43 [00:18<00:00,  2.54it/s][A                                             
+                                               [A100%|██████████| 5/5 [01:49<00:00, 18.68s/it]
+100%|██████████| 43/43 [00:18<00:00,  2.54it/s][A
+                                               [A                                             100%|██████████| 5/5 [01:51<00:00, 18.68s/it]100%|██████████| 5/5 [01:51<00:00, 22.33s/it]
+{'eval_loss': 0.978860080242157, 'eval_runtime': 19.1411, 'eval_samples_per_second': 2.246, 'eval_steps_per_second': 2.246, 'eval_entropy': 3.3181189049121946, 'eval_num_tokens': 45966.0, 'eval_mean_token_accuracy': 0.7858578049859335, 'epoch': 0.11}
+{'train_runtime': 111.6537, 'train_samples_per_second': 0.358, 'train_steps_per_second': 0.045, 'train_loss': 1.0678980231285096, 'epoch': 0.11}
+[2026-09-30T08:13:13+08:00] SFT smoke complete

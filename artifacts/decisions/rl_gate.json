@@ -1,0 +1,17 @@
+{
+  "decision": "RUN_RLVR",
+  "base_failure_recall": 0.0,
+  "base_state_macro_f1": 0.0,
+  "sft_failure_recall": 0.0,
+  "sft_state_macro_f1": 0.4012345679012346,
+  "gains": {
+    "failure_recall": 0.0,
+    "state_macro_f1": 0.4012345679012346
+  },
+  "thresholds": {
+    "failure_recall": 0.9,
+    "state_macro_f1": 0.85,
+    "min_failure_gain": 0.03,
+    "min_state_gain": 0.03
+  }
+}
