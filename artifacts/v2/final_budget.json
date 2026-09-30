@@ -1,0 +1,6 @@
+{
+  "train_update_budget": 69,
+  "rule": "floor(2*sparse_train_rows/gradient_accumulation_8), shared across selected input and full-schema control",
+  "method": "sparse-visual",
+  "camera": "C2"
+}

@@ -1,0 +1,86 @@
+{
+  "dataset": "REBOOT26/sample_recovery-demonstrations",
+  "task_id": "16mm-cylinder-install",
+  "episodes_total": 60,
+  "episodes_excluded": 18,
+  "windows_total": 372,
+  "split_counts": {
+    "train": 276,
+    "test": 54,
+    "val": 42
+  },
+  "state_counts": {
+    "nominal": 126,
+    "failure": 120,
+    "recovery": 126
+  },
+  "failure_mode_counts": {
+    "none": 126,
+    "misalignment": 105,
+    "slip": 36,
+    "premature_release": 33,
+    "poor_engagement": 6,
+    "jamming": 6,
+    "premature_grasp": 6,
+    "excessive_force": 18,
+    "retention_failure": 12,
+    "freeze": 6,
+    "sub_mm_misalignment": 18
+  },
+  "annotation_warnings": {
+    "00": [
+      "excluded_by_split_receipt"
+    ],
+    "02": [
+      "excluded_by_split_receipt"
+    ],
+    "07": [
+      "excluded_by_split_receipt"
+    ],
+    "08": [
+      "excluded_by_split_receipt"
+    ],
+    "09": [
+      "excluded_by_split_receipt"
+    ],
+    "15": [
+      "excluded_by_split_receipt"
+    ],
+    "16": [
+      "originating_phase_out_of_range"
+    ],
+    "17": [
+      "excluded_by_split_receipt"
+    ],
+    "18": [
+      "excluded_by_split_receipt"
+    ],
+    "20": [
+      "excluded_by_split_receipt"
+    ],
+    "26": [
+      "originating_phase_out_of_range"
+    ],
+    "34": [
+      "excluded_by_split_receipt"
+    ],
+    "37": [
+      "recovery_before_failure"
+    ],
+    "38": [
+      "excluded_by_split_receipt"
+    ],
+    "41": [
+      "excluded_by_split_receipt"
+    ],
+    "47": [
+      "excluded_by_split_receipt"
+    ],
+    "50": [
+      "excluded_by_split_receipt"
+    ],
+    "54": [
+      "excluded_by_split_receipt"
+    ]
+  }
+}
