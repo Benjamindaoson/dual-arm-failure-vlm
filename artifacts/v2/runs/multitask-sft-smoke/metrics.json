@@ -1,0 +1,15 @@
+{
+  "best_model_checkpoint": null,
+  "final_log": {
+    "epoch": 0.10752688172043011,
+    "step": 5,
+    "total_flos": 959938540609536.0,
+    "train_loss": 1.1392787218093872,
+    "train_runtime": 104.7851,
+    "train_samples_per_second": 0.382,
+    "train_steps_per_second": 0.048
+  },
+  "global_step": 5,
+  "trainable_parameters": 37152768,
+  "wall_clock_seconds": 105.1380461724475
+}

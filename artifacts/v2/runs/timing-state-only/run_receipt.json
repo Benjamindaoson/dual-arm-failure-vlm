@@ -1,0 +1,28 @@
+{
+  "bitsandbytes": "0.49.2",
+  "config_sha256": "d58b288c526e54c188337561801d4876d0e15f3f198cb749a51e148ba35bf9df",
+  "cuda": "12.4",
+  "dataset_revision": "0633573d0438be1185bddebdf1a2c8f5505f7b2a",
+  "end_time": "2026-09-30T19:54:12.260150+00:00",
+  "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b",
+  "gpu": "NVIDIA GeForce RTX 4090 D",
+  "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+  "output_sha256": {
+    "memory.json": "f53614e20c8c1b1e673d4a623c99e4bf553066f1932682e0691b2e8d55e02722",
+    "metrics.json": "bbeea535d3fc3433929d68e5cadf21c8a63e39a4930ecf09b0f9b6a485bff77b",
+    "predictions.jsonl": "77b06b65650de01b6314b00e7107a35bfb2086ec515468bbc1cf437f8caada88",
+    "timing.json": "0c9e298eedd6fb9739165b184408b5f52968877bb328fc432be2e4248732e6f3"
+  },
+  "peft": "0.21.1",
+  "run_id": "timing-state-only",
+  "seed": 42,
+  "start_time": "2026-09-30T19:52:56.276000+00:00",
+  "status": "COMPLETED",
+  "torch": "2.6.0",
+  "trainable_parameters": null,
+  "transformers": "4.57.6",
+  "trl": "0.29.1",
+  "vram_peak_bytes": 3753902080,
+  "vram_total_bytes": 25252724736,
+  "wall_clock_seconds": 75.98415
+}

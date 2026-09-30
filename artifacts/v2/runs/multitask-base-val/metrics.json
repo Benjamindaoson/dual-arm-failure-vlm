@@ -1,0 +1,237 @@
+{
+  "balanced_accuracy": 0.0,
+  "episode_bootstrap": {
+    "failure_recall_95ci": [
+      0.0,
+      0.0
+    ],
+    "samples": 1000,
+    "seed": 42,
+    "state_macro_f1_95ci": [
+      0.0,
+      0.0
+    ],
+    "unit": "episode"
+  },
+  "failure_correct": 0,
+  "failure_f1": 0.0,
+  "failure_mode_macro_f1": 0.0,
+  "failure_mode_macro_f1_non_nominal": 0.0,
+  "failure_mode_per_class": {
+    "delayed_start": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 6.0
+    },
+    "excessive_force": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 6.0
+    },
+    "misalignment": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 12.0
+    },
+    "slip": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 6.0
+    }
+  },
+  "failure_precision": 0.0,
+  "failure_recall": 0.0,
+  "failure_support": 15,
+  "gold_state_counts": {
+    "failure": 15,
+    "nominal": 13,
+    "recovery": 15
+  },
+  "json_valid_rate": 0.0,
+  "mean_latency_seconds": 1.5716842684548262,
+  "n": 43,
+  "outer_fence_removed_count": 43,
+  "phase_macro_f1": 0.0,
+  "phase_per_class": {
+    "align (pick)": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 14.0
+    },
+    "align (place)": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 6.0
+    },
+    "engage (pick)": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 14.0
+    },
+    "engage (place)": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 8.0
+    },
+    "transport": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 1.0
+    }
+  },
+  "pre_failure_false_positive_rate": 0.0,
+  "recovery_recall": 0.0,
+  "semantic_diagnostic": {
+    "balanced_accuracy": 0.3333333333333333,
+    "episode_bootstrap": {
+      "failure_recall_95ci": [
+        0.0,
+        0.0
+      ],
+      "samples": 1000,
+      "seed": 42,
+      "state_macro_f1_95ci": [
+        0.125,
+        0.16666666666666666
+      ],
+      "unit": "episode"
+    },
+    "failure_correct": 0,
+    "failure_f1": 0.0,
+    "failure_mode_macro_f1": 0.0,
+    "failure_mode_macro_f1_non_nominal": 0.0,
+    "failure_mode_per_class": {
+      "delayed_start": {
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 6.0
+      },
+      "excessive_force": {
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 6.0
+      },
+      "misalignment": {
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 12.0
+      },
+      "slip": {
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 6.0
+      }
+    },
+    "failure_precision": 0.0,
+    "failure_recall": 0.0,
+    "failure_support": 15,
+    "gold_state_counts": {
+      "failure": 15,
+      "nominal": 13,
+      "recovery": 15
+    },
+    "json_valid_rate": 1.0,
+    "n": 43,
+    "phase_macro_f1": 0.09824561403508772,
+    "phase_per_class": {
+      "align (pick)": {
+        "f1": 0.49122807017543857,
+        "precision": 0.32558139534883723,
+        "recall": 1.0,
+        "support": 14.0
+      },
+      "align (place)": {
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 6.0
+      },
+      "engage (pick)": {
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 14.0
+      },
+      "engage (place)": {
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 8.0
+      },
+      "transport": {
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 1.0
+      }
+    },
+    "pre_failure_false_positive_rate": 0.0,
+    "recovery_recall": 0.0,
+    "state_macro_f1": 0.15476190476190474,
+    "state_per_class": {
+      "failure": {
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 15.0
+      },
+      "nominal": {
+        "f1": 0.46428571428571425,
+        "precision": 0.3023255813953488,
+        "recall": 1.0,
+        "support": 13.0
+      },
+      "recovery": {
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 15.0
+      }
+    },
+    "timing_slices": {
+      "failure": 0.0,
+      "nominal": 1.0,
+      "recovery": 0.0
+    }
+  },
+  "state_macro_f1": 0.0,
+  "state_per_class": {
+    "failure": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 15.0
+    },
+    "nominal": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 13.0
+    },
+    "recovery": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "support": 15.0
+    }
+  },
+  "task_schema": "full",
+  "timing_slices": {
+    "failure": 0.0,
+    "nominal": 0.0,
+    "recovery": 0.0
+  }
+}

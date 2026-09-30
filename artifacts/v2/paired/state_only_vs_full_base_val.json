@@ -1,0 +1,63 @@
+{
+  "bootstrap_samples": 1000,
+  "class_support": {
+    "failure": 15,
+    "nominal": 13,
+    "recovery": 15
+  },
+  "episode_support": 5,
+  "first": {
+    "failure_recall": 1.0,
+    "state_macro_f1": 0.17543859649122806
+  },
+  "first_schema": "state-only",
+  "paired_state_outcomes": {
+    "failure": {
+      "both_correct": 0,
+      "both_wrong": 0,
+      "regressed": 15,
+      "rescued": 0
+    },
+    "nominal": {
+      "both_correct": 0,
+      "both_wrong": 0,
+      "regressed": 0,
+      "rescued": 13
+    },
+    "recovery": {
+      "both_correct": 0,
+      "both_wrong": 15,
+      "regressed": 0,
+      "rescued": 0
+    }
+  },
+  "protocol": "semantic_state_projection",
+  "sample_support": 43,
+  "second": {
+    "failure_recall": 0.0,
+    "state_macro_f1": 0.15476190476190474
+  },
+  "second_minus_first": {
+    "failure_recall": {
+      "ci95": [
+        -1.0,
+        -1.0
+      ],
+      "point": -1.0
+    },
+    "state_macro_f1": {
+      "ci95": [
+        -0.06367924528301885,
+        0.0
+      ],
+      "point": -0.02067669172932332
+    }
+  },
+  "second_schema": "full",
+  "seed": 42,
+  "source_sha256": {
+    "first": "6018148bce7be1632ffbee85e676e7d65fd40b7c55ec2437283955439f60fd26",
+    "second": "6a91283f2edff41003c9aadf1ca9b87940e356327426d545b879c24dd48ed0c1"
+  },
+  "task_schema": "state-only"
+}

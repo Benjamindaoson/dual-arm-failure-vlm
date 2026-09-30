@@ -1,0 +1,63 @@
+{
+  "bootstrap_samples": 1000,
+  "class_support": {
+    "failure": 15,
+    "nominal": 13,
+    "recovery": 15
+  },
+  "episode_support": 5,
+  "first": {
+    "failure_recall": 1.0,
+    "state_macro_f1": 0.29979035639413
+  },
+  "first_schema": "state-only",
+  "paired_state_outcomes": {
+    "failure": {
+      "both_correct": 0,
+      "both_wrong": 0,
+      "regressed": 15,
+      "rescued": 0
+    },
+    "nominal": {
+      "both_correct": 3,
+      "both_wrong": 1,
+      "regressed": 0,
+      "rescued": 9
+    },
+    "recovery": {
+      "both_correct": 0,
+      "both_wrong": 12,
+      "regressed": 0,
+      "rescued": 3
+    }
+  },
+  "protocol": "semantic_state_projection",
+  "sample_support": 43,
+  "second": {
+    "failure_recall": 0.0,
+    "state_macro_f1": 0.25523809523809526
+  },
+  "second_minus_first": {
+    "failure_recall": {
+      "ci95": [
+        -1.0,
+        -1.0
+      ],
+      "point": -1.0
+    },
+    "state_macro_f1": {
+      "ci95": [
+        -0.17241062004984528,
+        0.07095238095238099
+      ],
+      "point": -0.04455226115603472
+    }
+  },
+  "second_schema": "full",
+  "seed": 42,
+  "source_sha256": {
+    "first": "88a842ebff2670b0f6010552c1ae835a83650437918f9c7cbecec680f888f4ae",
+    "second": "651bdcc705ef2b29f35f1942a6cb06b01df0975d77eca700248fb7ee5c98bfce"
+  },
+  "task_schema": "state-only"
+}

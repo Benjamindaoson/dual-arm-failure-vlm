@@ -1,0 +1,233 @@
+[1/84] ep02-failure_onset--2.0s 1.08s
+[2/84] ep02-failure_onset--1.0s 0.68s
+[3/84] ep02-failure_onset--0.5s 0.68s
+[4/84] ep02-failure_onset-+0.0s 0.74s
+[5/84] ep02-failure_onset-+0.5s 0.74s
+[6/84] ep02-failure_onset-+1.0s 0.66s
+[7/84] ep02-failure_onset-+2.0s 0.66s
+[8/84] ep02-recovery_onset--2.0s 0.66s
+[9/84] ep02-recovery_onset--1.0s 0.66s
+[10/84] ep02-recovery_onset--0.5s 0.66s
+[11/84] ep02-recovery_onset-+0.0s 0.66s
+[12/84] ep02-recovery_onset-+0.5s 0.66s
+[13/84] ep02-recovery_onset-+1.0s 0.66s
+[14/84] ep02-recovery_onset-+2.0s 0.66s
+[15/84] ep08-failure_onset--2.0s 0.74s
+[16/84] ep08-failure_onset--1.0s 0.74s
+[17/84] ep08-failure_onset--0.5s 0.66s
+[18/84] ep08-failure_onset-+0.0s 0.67s
+[19/84] ep08-failure_onset-+0.5s 0.66s
+[20/84] ep08-failure_onset-+1.0s 0.66s
+[21/84] ep08-failure_onset-+2.0s 0.69s
+[22/84] ep08-recovery_onset--2.0s 0.65s
+[23/84] ep08-recovery_onset--1.0s 0.73s
+[24/84] ep08-recovery_onset--0.5s 0.68s
+[25/84] ep08-recovery_onset-+0.0s 0.66s
+[26/84] ep08-recovery_onset-+0.5s 0.66s
+[27/84] ep08-recovery_onset-+1.0s 0.65s
+[28/84] ep08-recovery_onset-+2.0s 0.66s
+[29/84] ep18-failure_onset--2.0s 0.66s
+[30/84] ep18-failure_onset--1.0s 0.65s
+[31/84] ep18-failure_onset--0.5s 0.66s
+[32/84] ep18-failure_onset-+0.0s 0.66s
+[33/84] ep18-failure_onset-+0.5s 0.66s
+[34/84] ep18-failure_onset-+1.0s 0.73s
+[35/84] ep18-failure_onset-+2.0s 0.66s
+[36/84] ep18-recovery_onset--2.0s 0.65s
+[37/84] ep18-recovery_onset--1.0s 0.66s
+[38/84] ep18-recovery_onset--0.5s 0.74s
+[39/84] ep18-recovery_onset-+0.0s 0.66s
+[40/84] ep18-recovery_onset-+0.5s 0.66s
+[41/84] ep18-recovery_onset-+1.0s 0.66s
+[42/84] ep18-recovery_onset-+2.0s 0.67s
+[43/84] ep20-failure_onset--2.0s 0.66s
+[44/84] ep20-failure_onset--1.0s 0.66s
+[45/84] ep20-failure_onset--0.5s 0.67s
+[46/84] ep20-failure_onset-+0.0s 0.74s
+[47/84] ep20-failure_onset-+0.5s 0.66s
+[48/84] ep20-failure_onset-+1.0s 0.68s
+[49/84] ep20-failure_onset-+2.0s 0.67s
+[50/84] ep20-recovery_onset--2.0s 0.67s
+[51/84] ep20-recovery_onset--1.0s 0.66s
+[52/84] ep20-recovery_onset--0.5s 0.74s
+[53/84] ep20-recovery_onset-+0.0s 0.66s
+[54/84] ep20-recovery_onset-+0.5s 0.74s
+[55/84] ep20-recovery_onset-+1.0s 0.66s
+[56/84] ep20-recovery_onset-+2.0s 0.66s
+[57/84] ep47-failure_onset--2.0s 0.66s
+[58/84] ep47-failure_onset--1.0s 0.66s
+[59/84] ep47-failure_onset--0.5s 0.66s
+[60/84] ep47-failure_onset-+0.0s 0.66s
+[61/84] ep47-failure_onset-+0.5s 0.66s
+[62/84] ep47-failure_onset-+1.0s 0.73s
+[63/84] ep47-failure_onset-+2.0s 0.66s
+[64/84] ep47-recovery_onset--2.0s 0.66s
+[65/84] ep47-recovery_onset--1.0s 0.73s
+[66/84] ep47-recovery_onset--0.5s 0.66s
+[67/84] ep47-recovery_onset-+0.0s 0.66s
+[68/84] ep47-recovery_onset-+0.5s 0.66s
+[69/84] ep47-recovery_onset-+1.0s 0.66s
+[70/84] ep47-recovery_onset-+2.0s 0.66s
+[71/84] ep54-failure_onset--2.0s 0.65s
+[72/84] ep54-failure_onset--1.0s 0.67s
+[73/84] ep54-failure_onset--0.5s 0.66s
+[74/84] ep54-failure_onset-+0.0s 0.70s
+[75/84] ep54-failure_onset-+0.5s 0.65s
+[76/84] ep54-failure_onset-+1.0s 0.65s
+[77/84] ep54-failure_onset-+2.0s 0.65s
+[78/84] ep54-recovery_onset--2.0s 0.66s
+[79/84] ep54-recovery_onset--1.0s 0.66s
+[80/84] ep54-recovery_onset--0.5s 0.66s
+[81/84] ep54-recovery_onset-+0.0s 0.66s
+[82/84] ep54-recovery_onset-+0.5s 0.66s
+[83/84] ep54-recovery_onset-+1.0s 0.66s
+[84/84] ep54-recovery_onset-+2.0s 0.65s
+{
+  "n": 84,
+  "json_valid_rate": 1.0,
+  "state_macro_f1": 0.236409608091024,
+  "failure_recall": 0.7804878048780488,
+  "failure_precision": 0.4444444444444444,
+  "failure_f1": 0.5663716814159292,
+  "balanced_accuracy": 0.2971996386630533,
+  "failure_correct": 32,
+  "failure_support": 41,
+  "nominal_recall": 0.1111111111111111,
+  "recovery_recall": 0.0,
+  "pre_failure_false_positive_rate": 0.8888888888888888,
+  "state_per_class": {
+    "failure": {
+      "precision": 0.4444444444444444,
+      "recall": 0.7804878048780488,
+      "f1": 0.5663716814159292,
+      "support": 41.0
+    },
+    "nominal": {
+      "precision": 0.2,
+      "recall": 0.1111111111111111,
+      "f1": 0.14285714285714285,
+      "support": 18.0
+    },
+    "recovery": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 25.0
+    }
+  },
+  "gold_state_counts": {
+    "nominal": 18,
+    "failure": 41,
+    "recovery": 25
+  },
+  "predicted_state_counts": {
+    "failure": 72,
+    "nominal": 10,
+    "recovery": 2
+  },
+  "predicted_state_distribution": {
+    "counts": {
+      "nominal": 10,
+      "failure": 72,
+      "recovery": 2
+    },
+    "probabilities": {
+      "nominal": 0.11904761904761904,
+      "failure": 0.8571428571428571,
+      "recovery": 0.023809523809523808
+    },
+    "valid_count": 84,
+    "invalid_count": 0,
+    "collapse_ratio": 0.8571428571428571,
+    "prediction_entropy_nats": 0.4744822052693097
+  },
+  "episode_bootstrap": {
+    "unit": "episode",
+    "samples": 1000,
+    "seed": 42,
+    "state_macro_f1_95ci": [
+      0.16969696969696968,
+      0.3275334809659391
+    ],
+    "failure_recall_95ci": [
+      0.7,
+      0.8809523809523809
+    ]
+  },
+  "semantic_diagnostic": {
+    "n": 84,
+    "json_valid_rate": 1.0,
+    "state_macro_f1": 0.236409608091024,
+    "failure_recall": 0.7804878048780488,
+    "failure_precision": 0.4444444444444444,
+    "failure_f1": 0.5663716814159292,
+    "balanced_accuracy": 0.2971996386630533,
+    "failure_correct": 32,
+    "failure_support": 41,
+    "nominal_recall": 0.1111111111111111,
+    "recovery_recall": 0.0,
+    "pre_failure_false_positive_rate": 0.8888888888888888,
+    "state_per_class": {
+      "failure": {
+        "precision": 0.4444444444444444,
+        "recall": 0.7804878048780488,
+        "f1": 0.5663716814159292,
+        "support": 41.0
+      },
+      "nominal": {
+        "precision": 0.2,
+        "recall": 0.1111111111111111,
+        "f1": 0.14285714285714285,
+        "support": 18.0
+      },
+      "recovery": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 25.0
+      }
+    },
+    "gold_state_counts": {
+      "nominal": 18,
+      "failure": 41,
+      "recovery": 25
+    },
+    "predicted_state_counts": {
+      "failure": 72,
+      "nominal": 10,
+      "recovery": 2
+    },
+    "predicted_state_distribution": {
+      "counts": {
+        "nominal": 10,
+        "failure": 72,
+        "recovery": 2
+      },
+      "probabilities": {
+        "nominal": 0.11904761904761904,
+        "failure": 0.8571428571428571,
+        "recovery": 0.023809523809523808
+      },
+      "valid_count": 84,
+      "invalid_count": 0,
+      "collapse_ratio": 0.8571428571428571,
+      "prediction_entropy_nats": 0.4744822052693097
+    },
+    "episode_bootstrap": {
+      "unit": "episode",
+      "samples": 1000,
+      "seed": 42,
+      "state_macro_f1_95ci": [
+        0.16969696969696968,
+        0.3275334809659391
+      ],
+      "failure_recall_95ci": [
+        0.7,
+        0.8809523809523809
+      ]
+    }
+  },
+  "outer_fence_removed_count": 0,
+  "task_schema": "state-only",
+  "mean_latency_seconds": 0.6774097798126084
+}

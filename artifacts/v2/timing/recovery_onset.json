@@ -1,0 +1,56 @@
+{
+  "consecutive_windows_required": 2,
+  "detected_episodes": 0,
+  "episode_count": 6,
+  "episodes": {
+    "02": {
+      "detection_delay_seconds": null,
+      "false_alarms_before_onset": 0,
+      "pre_onset_false_alarm_rate": 0.0,
+      "pre_onset_windows": 3,
+      "windows": 7
+    },
+    "08": {
+      "detection_delay_seconds": null,
+      "false_alarms_before_onset": 0,
+      "pre_onset_false_alarm_rate": 0.0,
+      "pre_onset_windows": 3,
+      "windows": 7
+    },
+    "18": {
+      "detection_delay_seconds": null,
+      "false_alarms_before_onset": 0,
+      "pre_onset_false_alarm_rate": 0.0,
+      "pre_onset_windows": 3,
+      "windows": 7
+    },
+    "20": {
+      "detection_delay_seconds": null,
+      "false_alarms_before_onset": 0,
+      "pre_onset_false_alarm_rate": 0.0,
+      "pre_onset_windows": 3,
+      "windows": 7
+    },
+    "47": {
+      "detection_delay_seconds": null,
+      "false_alarms_before_onset": 1,
+      "pre_onset_false_alarm_rate": 0.3333333333333333,
+      "pre_onset_windows": 3,
+      "windows": 7
+    },
+    "54": {
+      "detection_delay_seconds": null,
+      "false_alarms_before_onset": 0,
+      "pre_onset_false_alarm_rate": 0.0,
+      "pre_onset_windows": 3,
+      "windows": 7
+    }
+  },
+  "false_alarms_before_onset": 1,
+  "mean_detection_delay_seconds": null,
+  "median_detection_delay_seconds": null,
+  "pre_onset_false_alarm_rate": 0.05555555555555555,
+  "pre_onset_windows": 18,
+  "target_state": "recovery",
+  "undetected_episodes": 6
+}
