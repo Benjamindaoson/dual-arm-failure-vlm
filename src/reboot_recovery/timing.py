@@ -33,6 +33,7 @@ def evaluate_failure_timing(
             and str(item["predicted_state"]).casefold() == target_state
             for item in ordered
         )
+        pre_onset_windows = sum(float(item["relative_seconds"]) < 0 for item in ordered)
         post = [item for item in ordered if float(item["relative_seconds"]) >= 0]
         delay: float | None = None
         for index in range(consecutive - 1, len(post)):
@@ -48,6 +49,8 @@ def evaluate_failure_timing(
         episode = {
             "detection_delay_seconds": delay,
             "false_alarms_before_onset": int(false_alarms),
+            "pre_onset_windows": pre_onset_windows,
+            "pre_onset_false_alarm_rate": false_alarms / pre_onset_windows if pre_onset_windows else None,
             "windows": len(ordered),
         }
         if target_state == "failure":
@@ -62,8 +65,13 @@ def evaluate_failure_timing(
         "mean_detection_delay_seconds": mean(detected_delays) if detected_delays else None,
         "median_detection_delay_seconds": median(detected_delays) if detected_delays else None,
         "false_alarms_before_onset": sum(item["false_alarms_before_onset"] for item in episodes.values()),
+        "pre_onset_windows": sum(item["pre_onset_windows"] for item in episodes.values()),
         "episodes": episodes,
     }
     if target_state == "failure":
         result["false_alarms_before_failure"] = result["false_alarms_before_onset"]
+    result["pre_onset_false_alarm_rate"] = (
+        result["false_alarms_before_onset"] / result["pre_onset_windows"]
+        if result["pre_onset_windows"] else None
+    )
     return result

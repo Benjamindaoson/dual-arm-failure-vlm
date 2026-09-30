@@ -19,6 +19,7 @@ class TimingMetricTests(unittest.TestCase):
         result = evaluate_failure_timing(rows, consecutive=2)
         self.assertEqual(1.0, result["episodes"]["00"]["detection_delay_seconds"])
         self.assertEqual(1, result["episodes"]["00"]["false_alarms_before_failure"])
+        self.assertEqual(1.0, result["pre_onset_false_alarm_rate"])
 
     def test_undetected_episode_is_explicit(self):
         result = evaluate_failure_timing([
@@ -26,6 +27,7 @@ class TimingMetricTests(unittest.TestCase):
         ], consecutive=1)
         self.assertIsNone(result["episodes"]["00"]["detection_delay_seconds"])
         self.assertEqual(1, result["undetected_episodes"])
+        self.assertIsNone(result["pre_onset_false_alarm_rate"])
 
     def test_failure_predictions_during_recovery_do_not_count_as_detection(self):
         rows = [

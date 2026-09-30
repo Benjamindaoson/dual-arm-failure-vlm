@@ -13,7 +13,7 @@ def to_state_only_record(row: dict[str, Any]) -> dict[str, Any]:
     trace_line = f"Robot trace summary:\n{trace}\n" if trace else ""
     prompt = (
         "You are a robot execution critic for precision assembly. "
-        "Use only the ordered visual observations and task instruction to identify the current execution state.\n"
+        "Use only the ordered observations and task instruction to identify the current execution state.\n"
         f"Task: {reference['task_description']}\n"
         f"{trace_line}"
         "Return JSON only with exactly one key: state. "

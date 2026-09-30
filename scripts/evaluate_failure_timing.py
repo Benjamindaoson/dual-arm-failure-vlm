@@ -10,7 +10,9 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
+from reboot_recovery.metrics import parse_state_prediction
 from reboot_recovery.rewards import parse_structured_prediction
+from reboot_recovery.semantic_parser import normalize_semantic_output
 from reboot_recovery.timing import evaluate_failure_timing
 
 
@@ -19,6 +21,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--predictions", type=Path, required=True)
     parser.add_argument("--consecutive", type=int, default=2)
     parser.add_argument("--event-kind", default="failure_onset")
+    parser.add_argument("--task-schema", choices=["full", "state-only"], default="full")
+    parser.add_argument("--semantic-diagnostic", action="store_true")
     parser.add_argument("--output-json", type=Path, default=ROOT / "artifacts" / "eval" / "failure_timing.json")
     parser.add_argument("--output-csv", type=Path, default=ROOT / "artifacts" / "eval" / "failure_timing.csv")
     args = parser.parse_args(argv)
@@ -28,7 +32,11 @@ def main(argv: list[str] | None = None) -> int:
         reference = prediction["reference"]
         if reference.get("event_kind", "failure_onset") != args.event_kind:
             continue
-        parsed = parse_structured_prediction(str(prediction.get("output", "")))
+        output = str(prediction.get("output", ""))
+        if args.semantic_diagnostic:
+            output = normalize_semantic_output(output)
+        parsed = (parse_state_prediction(output) if args.task_schema == "state-only"
+                  else parse_structured_prediction(output))
         rows.append({
             "episode_index": reference["episode_index"],
             "relative_seconds": reference["relative_seconds"],
@@ -40,13 +48,15 @@ def main(argv: list[str] | None = None) -> int:
     args.output_json.parent.mkdir(parents=True, exist_ok=True)
     args.output_json.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     with args.output_csv.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["episode_index", "detection_delay_seconds", "false_alarms_before_onset", "windows"])
+        writer = csv.DictWriter(handle, fieldnames=["episode_index", "detection_delay_seconds", "false_alarms_before_onset", "pre_onset_windows", "pre_onset_false_alarm_rate", "windows"])
         writer.writeheader()
         for episode, values in result["episodes"].items():
             writer.writerow({
                 "episode_index": episode,
                 "detection_delay_seconds": values["detection_delay_seconds"],
                 "false_alarms_before_onset": values["false_alarms_before_onset"],
+                "pre_onset_windows": values["pre_onset_windows"],
+                "pre_onset_false_alarm_rate": values["pre_onset_false_alarm_rate"],
                 "windows": values["windows"],
             })
     print(json.dumps({key: value for key, value in result.items() if key != "episodes"}, indent=2))
