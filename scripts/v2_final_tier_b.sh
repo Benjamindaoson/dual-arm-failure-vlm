@@ -79,3 +79,11 @@ if [[ "$allow_multitask" == 1 ]]; then
   run final-base-full-test "$PY" scripts/eval_base.py --model-root "$MODEL" --model-revision "$REV" --dataset-root "$eval_data" --dataset-revision "$DATA_REV" --task-schema full --semantic-diagnostic --split test --num-frames 4 --cameras "${cameras[@]}" --load-in-4bit --output-dir "$RUNS/final-base-full-test"
   run final-sft-full-seed42-test "$PY" scripts/eval_base.py --model-root "$MODEL" --model-revision "$REV" --adapter "$RUNS/final-sft-full-seed42" --dataset-root "$eval_data" --dataset-revision "$DATA_REV" --task-schema full --semantic-diagnostic --split test --num-frames 4 --cameras "${cameras[@]}" --load-in-4bit --output-dir "$RUNS/final-sft-full-seed42-test"
 fi
+
+mkdir -p artifacts/v2/paired
+for seed in 42 43 44; do
+  "$PY" scripts/paired_compare.py --first "$RUNS/final-base-state/predictions.jsonl" --second "$RUNS/final-sft-state-seed$seed-test/predictions.jsonl" --task-schema state-only --output "artifacts/v2/paired/final-base-to-state-seed$seed.json" >"outputs/v2/logs/final-paired-state-seed$seed.log"
+done
+if [[ "$allow_multitask" == 1 ]]; then
+  "$PY" scripts/paired_compare.py --first "$RUNS/final-base-full-test/predictions.jsonl" --second "$RUNS/final-sft-full-seed42-test/predictions.jsonl" --task-schema full --output artifacts/v2/paired/final-base-to-full-seed42.json >outputs/v2/logs/final-paired-full.log
+fi
