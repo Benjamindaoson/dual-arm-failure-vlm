@@ -1,8 +1,31 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+import json
+from typing import Any
 
 from .annotations import TrainingWindow
+
+
+def to_state_only_record(row: dict[str, Any]) -> dict[str, Any]:
+    reference = row["reference"]
+    trace = row.get("trace_summary")
+    trace_line = f"Robot trace summary:\n{trace}\n" if trace else ""
+    prompt = (
+        "You are a robot execution critic for precision assembly. "
+        "Use only the ordered visual observations and task instruction to identify the current execution state.\n"
+        f"Task: {reference['task_description']}\n"
+        f"{trace_line}"
+        "Return JSON only with exactly one key: state. "
+        "state must be one of: nominal, failure, recovery."
+    )
+    return {
+        **row,
+        "prompt": [{"role": "user", "content": [{"type": "image"} for _ in row["images"]] + [{"type": "text", "text": prompt}]}],
+        "completion": [{"role": "assistant", "content": [{"type": "text", "text": json.dumps(
+            {"state": reference["execution_state"]}, separators=(",", ":")
+        )}]}],
+    }
 
 
 def build_prompt(

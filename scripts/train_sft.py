@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from reboot_recovery.checkpoints import resolve_checkpoint
 from reboot_recovery.evidence import finalize_run, write_json, write_run_start
+from reboot_recovery.prompts import to_state_only_record
 
 
 LANGUAGE_TARGETS = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
@@ -33,6 +34,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--model-revision", default=None)
     parser.add_argument("--dataset-revision", default=None)
     parser.add_argument("--variant", choices=["SFT-Language", "SFT-VisionLanguage"], default="SFT-Language")
+    parser.add_argument("--task-schema", choices=["full", "state-only"], default="full")
     parser.add_argument("--output-dir", type=Path, default=None)
     parser.add_argument("--epochs", type=float, default=2.0)
     parser.add_argument("--learning-rate", type=float, default=2e-5)
@@ -63,6 +65,9 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit(f"prepared splits not found: {train_path}, {eval_path}")
     train_rows, eval_rows = _read_jsonl(train_path), _read_jsonl(eval_path)
     _validate_rows(args.dataset_root, train_rows + eval_rows)
+    if args.task_schema == "state-only":
+        train_rows = [to_state_only_record(row) for row in train_rows]
+        eval_rows = [to_state_only_record(row) for row in eval_rows]
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     output_dir = args.output_dir or ROOT / "artifacts" / "runs" / f"sft-{args.variant.lower()}-{stamp}"
     checkpoint = resolve_checkpoint(output_dir, args.resume_from_checkpoint)
@@ -73,6 +78,7 @@ def main(argv: list[str] | None = None) -> int:
     target_modules: str | list[str] = LANGUAGE_TARGETS if args.variant == "SFT-Language" else "all-linear"
     config = {
         "stage": "sft", "variant": args.variant, "model": model_source,
+        "task_schema": args.task_schema, "dataset_root": str(args.dataset_root.resolve()),
         "model_revision": args.model_revision, "dataset_revision": args.dataset_revision,
         "train_split": args.train_split, "eval_split": args.eval_split,
         "epochs": args.epochs, "learning_rate": args.learning_rate, "batch_size": args.batch_size,

@@ -5,9 +5,28 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from reboot_recovery.rewards import score_prediction
+from reboot_recovery import rewards
+
+score_prediction = rewards.score_prediction
 
 class RebootRewardTests(unittest.TestCase):
+    def test_state_gated_reward_denies_mode_credit_when_state_is_wrong(self):
+        scorer = getattr(rewards, "score_state_gated_prediction", None)
+        self.assertIsNotNone(scorer)
+        ref = {"phase_name": "Transport", "execution_state": "failure", "failure_mode": "misalignment"}
+        wrong_state = '{"phase":"Transport","state":"recovery","failure_mode":"misalignment"}'
+        right_state = '{"phase":"Transport","state":"failure","failure_mode":"misalignment"}'
+        self.assertEqual(0.0, scorer(ref, wrong_state))
+        self.assertEqual(1.0, scorer(ref, right_state))
+        self.assertEqual(0.0, scorer(ref, "not-json"))
+
+    def test_state_gated_nominal_row_can_reach_full_reward_without_mode_shortcut(self):
+        scorer = getattr(rewards, "score_state_gated_prediction", None)
+        self.assertIsNotNone(scorer)
+        ref = {"phase_name": "Align (pick)", "execution_state": "nominal", "failure_mode": "none"}
+        output = '{"phase":"Align (pick)","state":"nominal","failure_mode":"none"}'
+        self.assertEqual(1.0, scorer(ref, output))
+
     def test_invalid_json_gets_zero(self):
         ref = {"phase_name": "Transport", "execution_state": "failure", "failure_mode": "slip"}
         self.assertEqual(0.0, score_prediction(ref, "Transport / failure / slip").total)

@@ -12,7 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from reboot_recovery.evidence import finalize_run, write_run_start, write_json
-from reboot_recovery.metrics import evaluate_predictions
+from reboot_recovery.metrics import diagnose_predictions, evaluate_predictions, evaluate_state_predictions, normalize_semantic_output
+from reboot_recovery.prompts import to_state_only_record
 
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -27,6 +28,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--model-revision", default=None)
     parser.add_argument("--dataset-root", type=Path, required=True)
     parser.add_argument("--dataset-revision", default=None)
+    parser.add_argument("--task-schema", choices=["full", "state-only"], default="full")
+    parser.add_argument("--semantic-diagnostic", action="store_true")
     parser.add_argument("--split", choices=["train", "val", "test"], default="test")
     parser.add_argument("--num-frames", type=int, default=4)
     parser.add_argument("--cameras", nargs="+", default=["observation.images.cam_high", "observation.images.cam_low"])
@@ -65,6 +68,8 @@ def main(argv: list[str] | None = None) -> int:
     missing = [str(args.dataset_root / relative) for row in rows for relative in row["images"] if not (args.dataset_root / relative).is_file()]
     if missing:
         raise SystemExit(f"missing {len(missing)} prepared images; first={missing[:3]}")
+    if args.task_schema == "state-only":
+        rows = [to_state_only_record(row) for row in rows]
 
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     output_dir = args.output_dir or ROOT / "artifacts" / "runs" / f"base-{args.split}-{stamp}"
@@ -79,6 +84,8 @@ def main(argv: list[str] | None = None) -> int:
         "model_revision": args.model_revision,
         "dataset_root": str(args.dataset_root.resolve()),
         "dataset_revision": args.dataset_revision,
+        "task_schema": args.task_schema,
+        "semantic_diagnostic": args.semantic_diagnostic or args.task_schema == "state-only",
         "split": args.split,
         "num_frames": args.num_frames,
         "cameras": args.cameras,
@@ -143,7 +150,22 @@ def main(argv: list[str] | None = None) -> int:
 
     prediction_path = output_dir / "predictions.jsonl"
     prediction_path.write_text("".join(json.dumps(row, ensure_ascii=False) + "\n" for row in predictions), encoding="utf-8")
-    metrics = evaluate_predictions(predictions)
+    if args.task_schema == "state-only":
+        metrics = evaluate_state_predictions(predictions)
+        normalized = [{**row, "output": normalize_semantic_output(row["output"])} for row in predictions]
+        metrics["semantic_diagnostic"] = evaluate_state_predictions(normalized)
+        metrics["outer_fence_removed_count"] = sum(
+            row["output"].strip() != item["output"] for row, item in zip(predictions, normalized, strict=True)
+        )
+    elif args.semantic_diagnostic:
+        diagnostic = diagnose_predictions(predictions)
+        metrics = diagnostic["protocol"]
+        metrics["semantic_diagnostic"] = diagnostic["semantic"]
+        metrics["outer_fence_removed_count"] = diagnostic["outer_fence_removed_count"]
+    else:
+        metrics = evaluate_predictions(predictions)
+    if args.task_schema == "state-only" or args.semantic_diagnostic:
+        metrics["task_schema"] = args.task_schema
     metrics["mean_latency_seconds"] = sum(row["latency_seconds"] for row in predictions) / len(predictions) if predictions else 0.0
     metrics_path = output_dir / "metrics.json"
     write_json(metrics_path, metrics)

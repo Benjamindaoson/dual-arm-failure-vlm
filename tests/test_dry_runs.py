@@ -36,6 +36,32 @@ def prepared_root(root: Path) -> Path:
 
 
 class DryRunTests(unittest.TestCase):
+    def test_v2_rl_dry_run_requires_v2_gate_and_records_reward_scheme(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            dataset = prepared_root(root)
+            checkpoint = root / "checkpoint"
+            checkpoint.mkdir()
+            (checkpoint / "config.json").write_text('{"task_schema":"full"}', encoding="utf-8")
+            gate = root / "gate.json"
+            gate.write_text('{"decision":"RUN_RLVR","protocol":"V2","task_schema":"full","verifier_validated":true}', encoding="utf-8")
+            output = root / "rl-v2"
+            self.assertTrue((ROOT / "configs" / "reboot_grpo_v2.json").is_file())
+            args = ["--config", str(ROOT / "configs" / "reboot_grpo_v2.json"),
+                    "--gate-decision", str(gate), "--dataset-root", str(dataset),
+                    "--sft-checkpoint", str(checkpoint), "--output-dir", str(output), "--dry-run"]
+            self.assertEqual(0, load_script("train_rlvr").main(args))
+            summary = json.loads((output / "dry_run.json").read_text(encoding="utf-8"))
+            self.assertIn("reward_scheme", summary)
+            self.assertEqual("state_gated_v2", summary["reward_scheme"])
+            (checkpoint / "config.json").write_text('{"task_schema":"state-only"}', encoding="utf-8")
+            with self.assertRaisesRegex(SystemExit, "full-schema SFT checkpoint"):
+                load_script("train_rlvr").main(args[:-3] + ["--output-dir", str(root / "wrong-checkpoint"), "--dry-run"])
+            (checkpoint / "config.json").write_text('{"task_schema":"full"}', encoding="utf-8")
+            gate.write_text('{"decision":"RUN_RLVR"}', encoding="utf-8")
+            with self.assertRaisesRegex(SystemExit, "V2 gate"):
+                load_script("train_rlvr").main(args[:-3] + ["--output-dir", str(root / "rejected"), "--dry-run"])
+
     def test_base_sft_and_rlvr_dry_runs_leave_receipts(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

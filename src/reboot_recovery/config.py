@@ -23,6 +23,15 @@ def validate_rl_config(config: Mapping[str, Any]) -> dict[str, Any]:
         raise ValueError("num_generations must be >= 2")
     if not 1 <= completion <= 256:
         raise ValueError("max_completion_length must be between 1 and 256 for structured diagnosis")
+    reward_scheme = str(value.get("reward_scheme", "additive_v1"))
+    if reward_scheme not in {"additive_v1", "state_gated_v2"}:
+        raise ValueError("unknown reward_scheme")
+    if reward_scheme == "state_gated_v2":
+        if algorithm != "grpo":
+            raise ValueError("V2 state-gated reward is authorized for GRPO only")
+        if value.get("reward_weights") != [1.0]:
+            raise ValueError("state_gated_v2 requires reward_weights=[1.0]")
     value.update({"algorithm": algorithm, "importance_sampling_level": importance, "loss_type": loss_type,
-                  "num_generations": generations, "max_completion_length": completion})
+                  "num_generations": generations, "max_completion_length": completion,
+                  "reward_scheme": reward_scheme})
     return value

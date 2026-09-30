@@ -2,7 +2,7 @@
 
 状态：2026-09-30，已执行；项目身份：基于公开 REBOOT 数据的独立研究。数据 revision `0633573d0438be1185bddebdf1a2c8f5505f7b2a`，Qwen2.5-VL-3B-Instruct 模型 revision `66285546d2b821cf421d4f5eb2576359d3770cd3`，seed 42。全部完整评测使用冻结的 test episodes `02, 08, 18, 20, 47, 54`，每个输入版本均为 54 个窗口；split receipt SHA-256 为 `4301609f83c471cb00abdac1b61855449ceb1872f02189fe986a82f1945b774c`。
 
-主要结论：**没有一个模型识别出 held-out failure**。SFT 将严格 JSON 有效率从 0 提到 100%，State Macro-F1 达到 0.4012，但 Failure Recall 仍为 0/18。GRPO 和探索性 GSPO 都没有改善 Failure Recall，且总体 State Macro-F1 低于 SFT。该结果不支持把系统称为可靠的装配失败检测器。
+主要结论：**冻结的严格协议下，没有一个模型识别出 held-out failure**。SFT 将严格 JSON 有效率从 0 提到 100%，State Macro-F1 达到 0.4012，但 Failure Recall 仍为 0/18。事后机械去除 Base A2 的外层 JSON 围栏后，能看到 6/18 个正确的 failure 状态；这不是 V1 正式分数。GRPO 和探索性 GSPO 都没有改善 Failure Recall，且总体 State Macro-F1 低于 SFT。该结果不支持把系统称为可靠的装配失败检测器。
 
 ## 【硬件】
 
@@ -76,6 +76,19 @@ GRPO 未产生真实总体增益，故 GSPO **只作为探索性算法消融**�
 
 统计口径：每个方法只用 6 个 held-out episode、54 个评测窗口；95% CI 为按 episode 重采样 1,000 次的描述性区间，未计算成对差异 p 值，也不作统计显著性声明。Failure-mode 各类别 test support 仅 6–12，macro-F1 对单例预测敏感。所有原始预测、配置、环境、stdout、耗时、显存和回执在 [`artifacts/evidence`](../artifacts/evidence/sft-eval-A2-20260930T014920Z/run_receipt.json)；远端原始 adapter 的大小、路径和 SHA-256 见 [`adapter_inventory.json`](../artifacts/eval/adapter_inventory.json)。
 
+### V2 前的事后语义诊断（不得替代上表）
+
+在不修改任何答案字段或标签的前提下，仅去除完整输出最外层的小写 `json` Markdown 围栏，再重算同一批原始预测；输出仍含额外说明或非法标签时不修复。原始 V1 strict 指标保持不变。脚本、逐模型本地输入 SHA-256 与远端回执 SHA-256 见 [`v2_semantic_diagnostic.json`](../artifacts/eval/v2_semantic_diagnostic.json)。Windows 检出将四份 JSONL 的行尾转成 CRLF；逐文件仅将行尾还原为 LF 后，SHA-256 均与原始运行回执一致，预测内容未被重写。
+
+| 模型 | 去围栏数 | 语义可解析 | 语义 Failure Recall | 语义 State Macro-F1 | 全字段正确 | 预测状态分布 |
+|---|---:|---:|---:|---:|---:|---|
+| Base A2 | 54 | 54/54 | **6/18** | 0.3000 | **11/54** | nominal 42, failure 12 |
+| SFT A2 | 0 | 54/54 | **0/18** | 0.4012 | **7/54** | nominal 36, recovery 18 |
+| GRPO A2 | 0 | 54/54 | 0/18 | 0.1667 | 4/54 | recovery 54 |
+| GSPO A2 | 0 | 54/54 | 0/18 | 0.1619 | 4/54 | recovery 52, nominal 2 |
+
+因此可观察到 SFT 后 failure 类预测从 12 条降为 0，GRPO 的 held-out 输出塌缩到单一 recovery 类；但仅凭这些预测不能证明视觉视角、标签歧义或奖励结构中的哪一项是唯一原因。V1 训练代码的三个 reward function 确实分别奖励 phase、state、failure_mode，错误 state 仍可获得正确 mode 的奖励；实际 mode 项还乘以训练集类别权重，不能把示意性的 0.40/0.65 直接写成每条样本的真实奖励。V2 的双评分规则在新预测生成前冻结，但这六个 test episode 已被 V1 和本诊断反复查看，V2 对它们的结果只能称为探索性 pilot，不能称为全新独立确认。
+
 ## 【训练时间】与【峰值显存】
 
 正式 run 墙钟：SFT 2,142.50 s（35 分 43 秒），GRPO 6,100.28 s（1 小时 41 分 40 秒），探索性 GSPO 6,234.36 s（1 小时 43 分 54 秒），合计 **14,477.15 s（4 小时 1 分 17 秒）**。三个 5-step smoke 另约 1,730.63 s（28 分 51 秒）。峰值框架已分配显存：SFT 5.64 GB、GRPO/GSPO 8.71 GB；`nvidia-smi` 观察到 RL 进程约 9.7 GiB，口径不同，不能混为一项。Base A2 评测 112.77 s；正式模型评测墙钟详见总表。
@@ -107,4 +120,4 @@ GRPO 未产生真实总体增益，故 GSPO **只作为探索性算法消融**�
 
 ## 【Git】
 
-交付分支为 `reboot-precision-recovery`，现有 [PR #1](https://github.com/Benjamindaoson/multimodal-chart-gspo/pull/1) 保持未合并；本报告和证据随该分支提交。运行时远端 bundle 没有 `.git`，因此 run receipt 中的 `git_commit=null` 是已知来源限制，不能用后提交的 commit 冒充训练当时的源码哈希。
+V1 实验提交 `3a19a169` 已通过合并提交 [`c880de338765`](https://github.com/Benjamindaoson/dual-arm-failure-vlm/commit/c880de338765f88e950f24dfdec2d5ac8ac8939d) 进入默认 `master`；原 [PR #1](https://github.com/Benjamindaoson/dual-arm-failure-vlm/pull/1) 已合并，实验分支已删除，远端只保留 `master`。运行时远端 bundle 没有 `.git`，因此 V1 run receipt 中的 `git_commit=null` 是已知来源限制，不能用后提交的 commit 冒充训练当时的源码哈希。

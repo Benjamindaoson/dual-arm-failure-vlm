@@ -115,3 +115,23 @@ def score_prediction(
             if denominator else 0.0
         )
     return RewardBreakdown(1.0, phase, state, failure_mode, total * label_weight)
+
+
+def score_state_gated_prediction(
+    reference: dict[str, Any], output: str, *,
+    phase_labels: set[str] | None = None, failure_mode_labels: set[str] | None = None,
+) -> float:
+    pred = parse_structured_prediction(
+        output, phase_labels=phase_labels, failure_mode_labels=failure_mode_labels,
+    )
+    if pred is None:
+        return 0.0
+    state = str(reference["execution_state"]).strip().casefold()
+    if pred["state"] != state:
+        return 0.0
+    phase = pred["phase"] == str(reference["phase_name"]).strip().casefold()
+    if state == "nominal":
+        return 0.7 + 0.3 * phase
+    mode = pred["failure_mode"] == str(reference["failure_mode"]).strip().casefold()
+    # ponytail: no negative false-negative term; add it only if this gate still collapses.
+    return 0.7 + 0.1 * phase + 0.2 * mode
