@@ -1,0 +1,61 @@
+{
+  "bootstrap_samples": 1000,
+  "class_support": {
+    "failure": 18,
+    "nominal": 18,
+    "recovery": 18
+  },
+  "episode_support": 6,
+  "first": {
+    "failure_recall": 0.0,
+    "state_macro_f1": 0.0
+  },
+  "paired_state_outcomes": {
+    "failure": {
+      "both_correct": 0,
+      "both_wrong": 18,
+      "regressed": 0,
+      "rescued": 0
+    },
+    "nominal": {
+      "both_correct": 0,
+      "both_wrong": 0,
+      "regressed": 0,
+      "rescued": 18
+    },
+    "recovery": {
+      "both_correct": 0,
+      "both_wrong": 14,
+      "regressed": 0,
+      "rescued": 4
+    }
+  },
+  "protocol": "strict",
+  "sample_support": 54,
+  "second": {
+    "failure_recall": 0.0,
+    "state_macro_f1": 0.2950465065974475
+  },
+  "second_minus_first": {
+    "failure_recall": {
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "point": 0.0
+    },
+    "state_macro_f1": {
+      "ci95": [
+        0.20476190476190473,
+        0.3880070546737214
+      ],
+      "point": 0.2950465065974475
+    }
+  },
+  "seed": 42,
+  "source_sha256": {
+    "first": "83bd97e047affde4058262af5aacff9f0d2f2c650358e1545b11500db8c404c2",
+    "second": "62cf4ac3efb7146bbd767de53a5618470aeb3ff5c70bd838393b05198f45f43f"
+  },
+  "task_schema": "full"
+}

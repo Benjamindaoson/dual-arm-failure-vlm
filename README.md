@@ -16,7 +16,13 @@ The critic answers three grounded questions:
 
 The project uses public [REBOOT precision-assembly trajectories](https://huggingface.co/datasets/REBOOT26/sample_recovery-demonstration). It is an **independent research project**. It is not Chery internal work, does not use Chery data, and is not an official Georgia Tech research project.
 
-**Measured pilot outcome (2026-09-30, RTX 4090 D):** Qwen2.5-VL-3B QLoRA SFT reached State Macro-F1 **0.4012** and strict JSON validity **100%** on 54 windows from six frozen test episodes, but Failure Recall remained **0/18** and K=2 failure detection remained **0/6 episodes**. GRPO and exploratory GSPO did not improve failure recognition. See the [full experiment report](docs/EXPERIMENT_REPORT_CN.md) and [machine-readable comparison](artifacts/eval/final_model_comparison.json).
+**Measured outcome:** The V1 diagnostic SFT reached State Macro-F1 **0.4012** and strict JSON validity **100%**, but Failure Recall remained **0/18**. The subsequent V2 final refit found that state-only Base had **18/18 semantic failure recall only by also flagging all 18 nominal windows**; three QLoRA SFT seeds fell to **1/18, 7/18, and 7/18** semantic failure recall while reaching 100% strict JSON validity. Full-schema SFT remained at **0/18**. The V2 validation RL gate closed, so **no V2 GRPO/GSPO was run**. See the [full report](docs/EXPERIMENT_REPORT_CN.md), [paper draft](paper/main.tex), and [final split receipt](artifacts/v2/splits/paper_final_test_receipt.json). No checkpoint is qualified as a reliable failure detector.
+
+### Evidence boundary for the V2 result
+
+The V2 final test contains 54 windows from six episodes of one `16mm-cylinder-install` task. Its episodes are disjoint from the **final refit** train and validation sets, but participated in earlier method-development training. This is **internal Tier B evidence, not independent replication or cross-task generalization**. The frozen strict scorer rejects Markdown-fenced JSON; a separately reported semantic diagnostic removes only the outer fence. The Base model's strict 0/18 therefore cannot be used alone to claim SFT improved failure awareness. The [final run receipts and predictions](artifacts/v2/runs/final-base-state/run_receipt.json), [paired seed-43 comparison](artifacts/v2/paired/final-base-to-state-seed43.json), and [evidence verifier output](artifacts/v2/evidence_verification.json) support the reported numbers. Four final adapters are backed up locally outside Git with hashes matched to their receipts.
+
+The historical sections below describe the **V1 pilot**, except where V2 is explicitly named. In particular, V1 GRPO/GSPO runs and timing results are not V2 final-test outcomes.
 
 ## Why this problem matters
 
@@ -120,9 +126,9 @@ With TRL `>=0.29,<0.30`:
 - GRPO: `importance_sampling_level="token"`, `loss_type="grpo"`;
 - GSPO: `importance_sampling_level="sequence"`, `loss_type="grpo"`.
 
-The validator rejects `importance_sampling_level="sequence"` plus `loss_type="dr_grpo"` as “paper GSPO.” The completed comparison used four generations, 96 completion tokens, and 100 update steps for each RL algorithm.
+The validator rejects `importance_sampling_level="sequence"` plus `loss_type="dr_grpo"` as “paper GSPO.” The historical V1 comparison used four generations, 96 completion tokens, and 100 update steps for each RL algorithm. V2's stricter validation gate did not permit RL.
 
-## What was executed on GPU
+## What was executed on GPU in V1
 
 The 4090 D host passed `nvidia-smi`, `/dev/nvidia*`, `torch.cuda.is_available()`, and BF16 checks. A0/A1/A2/A3 were fully materialized from the already downloaded public dataset. Base A0/A1/A2 each had a two-sample smoke and complete 54-window held-out evaluation. A2 then received a five-step QLoRA smoke, a 94-step/two-epoch SFT, adapter reload, and full evaluation. The same six test episodes were used for failure/recovery timing and the A2-versus-A3 Trace-Text ablation. GRPO completed five smoke updates and 100 full updates; GSPO completed the same budget as an **exploratory** comparison because GRPO had not improved the held-out primary task. Four RL checkpoints (25/50/75/100) and final adapters remain on the remote data disk. Local and remote suites each pass 40 tests.
 
@@ -130,7 +136,7 @@ The three Base variants all scored zero under the fixed strict JSON parser becau
 
 Not executed: vision-language LoRA target ablation, a trace-trained adapter, or a full-suite cross-task holdout. These are not implied by the completed A2 pilot.
 
-## Pilot result vs cross-task result
+## V1 pilot result vs cross-task result
 
 ### Pilot result
 

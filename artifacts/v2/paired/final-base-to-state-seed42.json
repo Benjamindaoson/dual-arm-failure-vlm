@@ -1,0 +1,61 @@
+{
+  "bootstrap_samples": 1000,
+  "class_support": {
+    "failure": 18,
+    "nominal": 18,
+    "recovery": 18
+  },
+  "episode_support": 6,
+  "first": {
+    "failure_recall": 1.0,
+    "state_macro_f1": 0.16901408450704225
+  },
+  "paired_state_outcomes": {
+    "failure": {
+      "both_correct": 1,
+      "both_wrong": 0,
+      "regressed": 17,
+      "rescued": 0
+    },
+    "nominal": {
+      "both_correct": 0,
+      "both_wrong": 1,
+      "regressed": 0,
+      "rescued": 17
+    },
+    "recovery": {
+      "both_correct": 0,
+      "both_wrong": 18,
+      "regressed": 0,
+      "rescued": 0
+    }
+  },
+  "protocol": "semantic",
+  "sample_support": 54,
+  "second": {
+    "failure_recall": 0.05555555555555555,
+    "state_macro_f1": 0.19813973610209823
+  },
+  "second_minus_first": {
+    "failure_recall": {
+      "ci95": [
+        -1.0,
+        -0.8333333333333334
+      ],
+      "point": -0.9444444444444444
+    },
+    "state_macro_f1": {
+      "ci95": [
+        0.0,
+        0.06613756613756613
+      ],
+      "point": 0.02912565159505598
+    }
+  },
+  "seed": 42,
+  "source_sha256": {
+    "first": "ef5efc47aae55a3e9c2c54941d0161b72a442fd96724b2d43416f4b47c81c43a",
+    "second": "6186349b5cb8216834decd4beb91d72a7c16b842cfdc56547239b4d56a41ff21"
+  },
+  "task_schema": "state-only"
+}

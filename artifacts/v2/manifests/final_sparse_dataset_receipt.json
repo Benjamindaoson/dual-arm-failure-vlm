@@ -1,0 +1,6 @@
+{
+  "ablation": "A2",
+  "manifest": "/root/autodl-tmp/reboot_v2_workshop/artifacts/v2/manifests/final_sparse.jsonl",
+  "split_receipt": "/root/autodl-tmp/reboot_v2_workshop/artifacts/v2/splits/paper_final_test_receipt.json",
+  "split_receipt_sha256": "c34c175b360fa9505468c7aaf8590ee7a6a6feaa02316808e2c8c2c023ab4f38"
+}

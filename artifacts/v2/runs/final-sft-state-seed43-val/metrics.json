@@ -1,0 +1,149 @@
+{
+  "balanced_accuracy": 0.4388888888888889,
+  "episode_bootstrap": {
+    "failure_recall_95ci": [
+      0.2,
+      0.9166666666666666
+    ],
+    "samples": 1000,
+    "seed": 42,
+    "state_macro_f1_95ci": [
+      0.29650884744141554,
+      0.4888644761809648
+    ],
+    "unit": "episode"
+  },
+  "failure_correct": 7,
+  "failure_f1": 0.4375,
+  "failure_precision": 0.35,
+  "failure_recall": 0.5833333333333334,
+  "failure_support": 12,
+  "gold_state_counts": {
+    "failure": 12,
+    "nominal": 15,
+    "recovery": 15
+  },
+  "json_valid_rate": 1.0,
+  "mean_latency_seconds": 0.753890693786421,
+  "n": 42,
+  "nominal_recall": 0.5333333333333333,
+  "outer_fence_removed_count": 0,
+  "pre_failure_false_positive_rate": 0.4666666666666667,
+  "predicted_state_counts": {
+    "failure": 20,
+    "nominal": 19,
+    "recovery": 3
+  },
+  "predicted_state_distribution": {
+    "collapse_ratio": 0.47619047619047616,
+    "counts": {
+      "failure": 20,
+      "nominal": 19,
+      "recovery": 3
+    },
+    "invalid_count": 0,
+    "prediction_entropy_nats": 0.9006500244441655,
+    "probabilities": {
+      "failure": 0.47619047619047616,
+      "nominal": 0.4523809523809524,
+      "recovery": 0.07142857142857142
+    },
+    "valid_count": 42
+  },
+  "recovery_recall": 0.2,
+  "semantic_diagnostic": {
+    "balanced_accuracy": 0.4388888888888889,
+    "episode_bootstrap": {
+      "failure_recall_95ci": [
+        0.2,
+        0.9166666666666666
+      ],
+      "samples": 1000,
+      "seed": 42,
+      "state_macro_f1_95ci": [
+        0.29650884744141554,
+        0.4888644761809648
+      ],
+      "unit": "episode"
+    },
+    "failure_correct": 7,
+    "failure_f1": 0.4375,
+    "failure_precision": 0.35,
+    "failure_recall": 0.5833333333333334,
+    "failure_support": 12,
+    "gold_state_counts": {
+      "failure": 12,
+      "nominal": 15,
+      "recovery": 15
+    },
+    "json_valid_rate": 1.0,
+    "n": 42,
+    "nominal_recall": 0.5333333333333333,
+    "pre_failure_false_positive_rate": 0.4666666666666667,
+    "predicted_state_counts": {
+      "failure": 20,
+      "nominal": 19,
+      "recovery": 3
+    },
+    "predicted_state_distribution": {
+      "collapse_ratio": 0.47619047619047616,
+      "counts": {
+        "failure": 20,
+        "nominal": 19,
+        "recovery": 3
+      },
+      "invalid_count": 0,
+      "prediction_entropy_nats": 0.9006500244441655,
+      "probabilities": {
+        "failure": 0.47619047619047616,
+        "nominal": 0.4523809523809524,
+        "recovery": 0.07142857142857142
+      },
+      "valid_count": 42
+    },
+    "recovery_recall": 0.2,
+    "state_macro_f1": 0.4138071895424837,
+    "state_per_class": {
+      "failure": {
+        "f1": 0.4375,
+        "precision": 0.35,
+        "recall": 0.5833333333333334,
+        "support": 12.0
+      },
+      "nominal": {
+        "f1": 0.47058823529411764,
+        "precision": 0.42105263157894735,
+        "recall": 0.5333333333333333,
+        "support": 15.0
+      },
+      "recovery": {
+        "f1": 0.33333333333333337,
+        "precision": 1.0,
+        "recall": 0.2,
+        "support": 15.0
+      }
+    }
+  },
+  "state_macro_f1": 0.4138071895424837,
+  "state_per_class": {
+    "failure": {
+      "f1": 0.4375,
+      "precision": 0.35,
+      "recall": 0.5833333333333334,
+      "support": 12.0
+    },
+    "nominal": {
+      "f1": 0.47058823529411764,
+      "precision": 0.42105263157894735,
+      "recall": 0.5333333333333333,
+      "support": 15.0
+    },
+    "recovery": {
+      "f1": 0.33333333333333337,
+      "precision": 1.0,
+      "recall": 0.2,
+      "support": 15.0
+    }
+  },
+  "task_schema": "state-only"
+}

@@ -1,0 +1,203 @@
+[1/54] ep11-nominal-f0 1.21s
+[2/54] ep11-nominal-f60 0.69s
+[3/54] ep11-nominal-f120 0.68s
+[4/54] ep11-failure-f150 0.69s
+[5/54] ep11-failure-f224 0.68s
+[6/54] ep11-failure-f299 0.68s
+[7/54] ep11-recovery-f315 0.68s
+[8/54] ep11-recovery-f606 0.76s
+[9/54] ep11-recovery-f896 0.76s
+[10/54] ep23-nominal-f0 0.68s
+[11/54] ep23-nominal-f135 0.68s
+[12/54] ep23-nominal-f270 0.68s
+[13/54] ep23-failure-f300 0.68s
+[14/54] ep23-failure-f390 0.67s
+[15/54] ep23-failure-f479 0.68s
+[16/54] ep23-recovery-f495 0.68s
+[17/54] ep23-recovery-f696 0.76s
+[18/54] ep23-recovery-f896 0.68s
+[19/54] ep29-nominal-f0 0.76s
+[20/54] ep29-nominal-f135 0.68s
+[21/54] ep29-nominal-f270 0.68s
+[22/54] ep29-failure-f300 0.68s
+[23/54] ep29-failure-f360 0.77s
+[24/54] ep29-failure-f419 0.77s
+[25/54] ep29-recovery-f435 0.77s
+[26/54] ep29-recovery-f666 0.77s
+[27/54] ep29-recovery-f896 0.76s
+[28/54] ep33-nominal-f0 0.77s
+[29/54] ep33-nominal-f165 0.68s
+[30/54] ep33-nominal-f330 0.76s
+[31/54] ep33-failure-f360 0.76s
+[32/54] ep33-failure-f480 0.77s
+[33/54] ep33-failure-f599 0.76s
+[34/54] ep33-recovery-f615 0.69s
+[35/54] ep33-recovery-f756 0.76s
+[36/54] ep33-recovery-f896 0.68s
+[37/54] ep51-nominal-f0 0.69s
+[38/54] ep51-nominal-f150 0.69s
+[39/54] ep51-nominal-f300 0.70s
+[40/54] ep51-failure-f330 0.78s
+[41/54] ep51-failure-f390 0.77s
+[42/54] ep51-failure-f449 0.77s
+[43/54] ep51-recovery-f465 0.68s
+[44/54] ep51-recovery-f680 0.76s
+[45/54] ep51-recovery-f896 0.68s
+[46/54] ep58-nominal-f0 0.76s
+[47/54] ep58-nominal-f150 0.67s
+[48/54] ep58-nominal-f300 0.69s
+[49/54] ep58-failure-f330 0.75s
+[50/54] ep58-failure-f434 0.75s
+[51/54] ep58-failure-f539 0.76s
+[52/54] ep58-recovery-f555 0.75s
+[53/54] ep58-recovery-f726 0.75s
+[54/54] ep58-recovery-f896 0.76s
+{
+  "n": 54,
+  "json_valid_rate": 1.0,
+  "state_macro_f1": 0.29207579672695955,
+  "failure_recall": 0.3888888888888889,
+  "failure_precision": 0.25925925925925924,
+  "failure_f1": 0.3111111111111111,
+  "balanced_accuracy": 0.3333333333333333,
+  "failure_correct": 7,
+  "failure_support": 18,
+  "nominal_recall": 0.05555555555555555,
+  "recovery_recall": 0.5555555555555556,
+  "pre_failure_false_positive_rate": 0.7222222222222222,
+  "state_per_class": {
+    "failure": {
+      "precision": 0.25925925925925924,
+      "recall": 0.3888888888888889,
+      "f1": 0.3111111111111111,
+      "support": 18.0
+    },
+    "nominal": {
+      "precision": 0.5,
+      "recall": 0.05555555555555555,
+      "f1": 0.09999999999999999,
+      "support": 18.0
+    },
+    "recovery": {
+      "precision": 0.4,
+      "recall": 0.5555555555555556,
+      "f1": 0.46511627906976744,
+      "support": 18.0
+    }
+  },
+  "gold_state_counts": {
+    "nominal": 18,
+    "failure": 18,
+    "recovery": 18
+  },
+  "predicted_state_counts": {
+    "nominal": 2,
+    "failure": 27,
+    "recovery": 25
+  },
+  "predicted_state_distribution": {
+    "counts": {
+      "nominal": 2,
+      "failure": 27,
+      "recovery": 25
+    },
+    "probabilities": {
+      "nominal": 0.037037037037037035,
+      "failure": 0.5,
+      "recovery": 0.46296296296296297
+    },
+    "valid_count": 54,
+    "invalid_count": 0,
+    "collapse_ratio": 0.5,
+    "prediction_entropy_nats": 0.8251732064727597
+  },
+  "episode_bootstrap": {
+    "unit": "episode",
+    "samples": 1000,
+    "seed": 42,
+    "state_macro_f1_95ci": [
+      0.1523145843703335,
+      0.4166666666666667
+    ],
+    "failure_recall_95ci": [
+      0.05555555555555555,
+      0.7222222222222222
+    ]
+  },
+  "semantic_diagnostic": {
+    "n": 54,
+    "json_valid_rate": 1.0,
+    "state_macro_f1": 0.29207579672695955,
+    "failure_recall": 0.3888888888888889,
+    "failure_precision": 0.25925925925925924,
+    "failure_f1": 0.3111111111111111,
+    "balanced_accuracy": 0.3333333333333333,
+    "failure_correct": 7,
+    "failure_support": 18,
+    "nominal_recall": 0.05555555555555555,
+    "recovery_recall": 0.5555555555555556,
+    "pre_failure_false_positive_rate": 0.7222222222222222,
+    "state_per_class": {
+      "failure": {
+        "precision": 0.25925925925925924,
+        "recall": 0.3888888888888889,
+        "f1": 0.3111111111111111,
+        "support": 18.0
+      },
+      "nominal": {
+        "precision": 0.5,
+        "recall": 0.05555555555555555,
+        "f1": 0.09999999999999999,
+        "support": 18.0
+      },
+      "recovery": {
+        "precision": 0.4,
+        "recall": 0.5555555555555556,
+        "f1": 0.46511627906976744,
+        "support": 18.0
+      }
+    },
+    "gold_state_counts": {
+      "nominal": 18,
+      "failure": 18,
+      "recovery": 18
+    },
+    "predicted_state_counts": {
+      "nominal": 2,
+      "failure": 27,
+      "recovery": 25
+    },
+    "predicted_state_distribution": {
+      "counts": {
+        "nominal": 2,
+        "failure": 27,
+        "recovery": 25
+      },
+      "probabilities": {
+        "nominal": 0.037037037037037035,
+        "failure": 0.5,
+        "recovery": 0.46296296296296297
+      },
+      "valid_count": 54,
+      "invalid_count": 0,
+      "collapse_ratio": 0.5,
+      "prediction_entropy_nats": 0.8251732064727597
+    },
+    "episode_bootstrap": {
+      "unit": "episode",
+      "samples": 1000,
+      "seed": 42,
+      "state_macro_f1_95ci": [
+        0.1523145843703335,
+        0.4166666666666667
+      ],
+      "failure_recall_95ci": [
+        0.05555555555555555,
+        0.7222222222222222
+      ]
+    }
+  },
+  "outer_fence_removed_count": 0,
+  "task_schema": "state-only",
+  "mean_latency_seconds": 0.7303058753066041
+}

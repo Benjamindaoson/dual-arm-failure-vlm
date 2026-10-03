@@ -1,0 +1,61 @@
+{
+  "bootstrap_samples": 1000,
+  "class_support": {
+    "failure": 18,
+    "nominal": 18,
+    "recovery": 18
+  },
+  "episode_support": 6,
+  "first": {
+    "failure_recall": 0.0,
+    "state_macro_f1": 0.0
+  },
+  "paired_state_outcomes": {
+    "failure": {
+      "both_correct": 0,
+      "both_wrong": 11,
+      "regressed": 0,
+      "rescued": 7
+    },
+    "nominal": {
+      "both_correct": 0,
+      "both_wrong": 9,
+      "regressed": 0,
+      "rescued": 9
+    },
+    "recovery": {
+      "both_correct": 0,
+      "both_wrong": 14,
+      "regressed": 0,
+      "rescued": 4
+    }
+  },
+  "protocol": "strict",
+  "sample_support": 54,
+  "second": {
+    "failure_recall": 0.3888888888888889,
+    "state_macro_f1": 0.36190476190476195
+  },
+  "second_minus_first": {
+    "failure_recall": {
+      "ci95": [
+        0.2222222222222222,
+        0.5555555555555556
+      ],
+      "point": 0.3888888888888889
+    },
+    "state_macro_f1": {
+      "ci95": [
+        0.181950405780193,
+        0.5564592412418499
+      ],
+      "point": 0.36190476190476195
+    }
+  },
+  "seed": 42,
+  "source_sha256": {
+    "first": "ef5efc47aae55a3e9c2c54941d0161b72a442fd96724b2d43416f4b47c81c43a",
+    "second": "7854d241ca8651d71c5ef1e6573075a2cb80e54cf0b2da58d33b2d7bd8350cad"
+  },
+  "task_schema": "state-only"
+}

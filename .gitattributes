@@ -1,0 +1,5 @@
+# Preserve hash-verified V2 evidence bytes across Windows checkouts.
+artifacts/v2/*.json text eol=lf
+artifacts/v2/**/*.json text eol=lf
+artifacts/v2/**/*.jsonl text eol=lf
+artifacts/v2/**/*.log -text -diff

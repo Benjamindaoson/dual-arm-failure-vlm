@@ -1,0 +1,255 @@
+[1/42] ep14-nominal-f0 2.25s
+[2/42] ep14-nominal-f60 1.83s
+[3/42] ep14-nominal-f120 1.67s
+[4/42] ep14-failure-f150 1.65s
+[5/42] ep14-failure-f240 1.64s
+[6/42] ep14-failure-f329 1.65s
+[7/42] ep14-recovery-f345 1.63s
+[8/42] ep14-recovery-f620 1.63s
+[9/42] ep14-recovery-f896 1.64s
+[10/42] ep27-nominal-f0 1.65s
+[11/42] ep27-nominal-f105 1.66s
+[12/42] ep27-nominal-f210 1.66s
+[13/42] ep27-failure-f240 1.66s
+[14/42] ep27-failure-f374 1.64s
+[15/42] ep27-failure-f509 1.64s
+[16/42] ep27-recovery-f525 1.64s
+[17/42] ep27-recovery-f710 1.63s
+[18/42] ep27-recovery-f896 1.64s
+[19/42] ep35-nominal-f0 1.64s
+[20/42] ep35-nominal-f180 1.63s
+[21/42] ep35-nominal-f360 1.65s
+[22/42] ep35-recovery-f405 1.66s
+[23/42] ep35-recovery-f650 1.67s
+[24/42] ep35-recovery-f896 1.69s
+[25/42] ep36-nominal-f0 1.65s
+[26/42] ep36-nominal-f180 1.64s
+[27/42] ep36-nominal-f360 1.64s
+[28/42] ep36-failure-f390 1.64s
+[29/42] ep36-failure-f584 1.63s
+[30/42] ep36-failure-f779 1.64s
+[31/42] ep36-recovery-f795 1.64s
+[32/42] ep36-recovery-f846 1.65s
+[33/42] ep36-recovery-f896 1.66s
+[34/42] ep46-nominal-f0 1.66s
+[35/42] ep46-nominal-f165 1.65s
+[36/42] ep46-nominal-f330 1.65s
+[37/42] ep46-failure-f360 1.66s
+[38/42] ep46-failure-f510 1.73s
+[39/42] ep46-failure-f659 1.65s
+[40/42] ep46-recovery-f675 1.66s
+[41/42] ep46-recovery-f786 1.73s
+[42/42] ep46-recovery-f896 1.70s
+{
+  "n": 42,
+  "json_valid_rate": 1.0,
+  "phase_macro_f1": 0.0966183574879227,
+  "state_macro_f1": 0.16049382716049382,
+  "failure_recall": 0.0,
+  "failure_precision": 0.0,
+  "failure_f1": 0.0,
+  "balanced_accuracy": 0.2888888888888889,
+  "failure_correct": 0,
+  "failure_support": 12,
+  "recovery_recall": 0.0,
+  "pre_failure_false_positive_rate": 0.0,
+  "failure_mode_macro_f1": 0.04545454545454545,
+  "failure_mode_macro_f1_non_nominal": 0.04545454545454545,
+  "phase_per_class": {
+    "align (pick)": {
+      "precision": 0.15789473684210525,
+      "recall": 0.75,
+      "f1": 0.2608695652173913,
+      "support": 8.0
+    },
+    "align (place)": {
+      "precision": 1.0,
+      "recall": 0.125,
+      "f1": 0.2222222222222222,
+      "support": 8.0
+    },
+    "engage (pick)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 11.0
+    },
+    "engage (place)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 11.0
+    },
+    "transport": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 4.0
+    }
+  },
+  "state_per_class": {
+    "failure": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 12.0
+    },
+    "nominal": {
+      "precision": 0.3333333333333333,
+      "recall": 0.8666666666666667,
+      "f1": 0.48148148148148145,
+      "support": 15.0
+    },
+    "recovery": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 15.0
+    }
+  },
+  "failure_mode_per_class": {
+    "misalignment": {
+      "precision": 1.0,
+      "recall": 0.047619047619047616,
+      "f1": 0.0909090909090909,
+      "support": 21.0
+    },
+    "premature_release": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    }
+  },
+  "timing_slices": {
+    "failure": 0.0,
+    "nominal": 0.8666666666666667,
+    "recovery": 0.0
+  },
+  "gold_state_counts": {
+    "nominal": 15,
+    "failure": 12,
+    "recovery": 15
+  },
+  "episode_bootstrap": {
+    "unit": "episode",
+    "samples": 1000,
+    "seed": 42,
+    "state_macro_f1_95ci": [
+      0.11533018867924527,
+      0.19607843137254902
+    ],
+    "failure_recall_95ci": [
+      0.0,
+      0.0
+    ]
+  },
+  "semantic_diagnostic": {
+    "n": 42,
+    "json_valid_rate": 1.0,
+    "phase_macro_f1": 0.0966183574879227,
+    "state_macro_f1": 0.16049382716049382,
+    "failure_recall": 0.0,
+    "failure_precision": 0.0,
+    "failure_f1": 0.0,
+    "balanced_accuracy": 0.2888888888888889,
+    "failure_correct": 0,
+    "failure_support": 12,
+    "recovery_recall": 0.0,
+    "pre_failure_false_positive_rate": 0.0,
+    "failure_mode_macro_f1": 0.04545454545454545,
+    "failure_mode_macro_f1_non_nominal": 0.04545454545454545,
+    "phase_per_class": {
+      "align (pick)": {
+        "precision": 0.15789473684210525,
+        "recall": 0.75,
+        "f1": 0.2608695652173913,
+        "support": 8.0
+      },
+      "align (place)": {
+        "precision": 1.0,
+        "recall": 0.125,
+        "f1": 0.2222222222222222,
+        "support": 8.0
+      },
+      "engage (pick)": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 11.0
+      },
+      "engage (place)": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 11.0
+      },
+      "transport": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 4.0
+      }
+    },
+    "state_per_class": {
+      "failure": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 12.0
+      },
+      "nominal": {
+        "precision": 0.3333333333333333,
+        "recall": 0.8666666666666667,
+        "f1": 0.48148148148148145,
+        "support": 15.0
+      },
+      "recovery": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 15.0
+      }
+    },
+    "failure_mode_per_class": {
+      "misalignment": {
+        "precision": 1.0,
+        "recall": 0.047619047619047616,
+        "f1": 0.0909090909090909,
+        "support": 21.0
+      },
+      "premature_release": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 6.0
+      }
+    },
+    "timing_slices": {
+      "failure": 0.0,
+      "nominal": 0.8666666666666667,
+      "recovery": 0.0
+    },
+    "gold_state_counts": {
+      "nominal": 15,
+      "failure": 12,
+      "recovery": 15
+    },
+    "episode_bootstrap": {
+      "unit": "episode",
+      "samples": 1000,
+      "seed": 42,
+      "state_macro_f1_95ci": [
+        0.11533018867924527,
+        0.19607843137254902
+      ],
+      "failure_recall_95ci": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "outer_fence_removed_count": 0,
+  "task_schema": "full",
+  "mean_latency_seconds": 1.672457477543503
+}

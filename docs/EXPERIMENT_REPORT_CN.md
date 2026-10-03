@@ -1,8 +1,29 @@
-# REBOOT 精密装配失败识别：真实 GPU 实验报告
+# REBOOT 精密装配失败识别：V1 诊断与 V2 最终 refit 实验报告
 
-状态：2026-09-30，已执行；项目身份：基于公开 REBOOT 数据的独立研究。数据 revision `0633573d0438be1185bddebdf1a2c8f5505f7b2a`，Qwen2.5-VL-3B-Instruct 模型 revision `66285546d2b821cf421d4f5eb2576359d3770cd3`，seed 42。全部完整评测使用冻结的 test episodes `02, 08, 18, 20, 47, 54`，每个输入版本均为 54 个窗口；split receipt SHA-256 为 `4301609f83c471cb00abdac1b61855449ceb1872f02189fe986a82f1945b774c`。
+状态：V1 于 2026-09-30 执行，V2 final refit 已执行并于 2026-10-04 回收、复核证据；项目身份：基于公开 REBOOT 数据的独立研究。下文原有【硬件】至【Git】各节记录 **V1 历史实验**，不是 V2 final test。数据 revision `0633573d0438be1185bddebdf1a2c8f5505f7b2a`，Qwen2.5-VL-3B-Instruct 模型 revision `66285546d2b821cf421d4f5eb2576359d3770cd3`。V1 完整评测使用 test episodes `02, 08, 18, 20, 47, 54`，每个输入版本 54 个窗口；split receipt SHA-256 为 `4301609f83c471cb00abdac1b61855449ceb1872f02189fe986a82f1945b774c`。这些 episode 后来被用于诊断，不再称为全新独立测试。
 
-主要结论：**冻结的严格协议下，没有一个模型识别出 held-out failure**。SFT 将严格 JSON 有效率从 0 提到 100%，State Macro-F1 达到 0.4012，但 Failure Recall 仍为 0/18。事后机械去除 Base A2 的外层 JSON 围栏后，能看到 6/18 个正确的 failure 状态；这不是 V1 正式分数。GRPO 和探索性 GSPO 都没有改善 Failure Recall，且总体 State Macro-F1 低于 SFT。该结果不支持把系统称为可靠的装配失败检测器。
+主要结论：V1 的严格协议下没有模型识别出 failure；V2 的 final refit 更清楚地显示 **输出合规与失败识别可以反向变化**。state-only Base 在严格 JSON 下为 0/18，机械去除外层围栏后的语义诊断为 18/18，但同时对 18/18 个 nominal 窗口误报 failure；三个 SFT seed 的语义 Failure Recall 为 1/18、7/18、7/18，严格 JSON 均为 54/54。full-schema SFT 仍为 0/18。所有结果均不足以把模型称为可靠的装配失败检测器。
+
+## 【V2 final refit：已完成，但不是独立复制】
+
+V2 首先仅用 development validation 选择 sparse visual、state-only、C2（高位 + 左腕相机）方案。相机、密度、重新训练的 Trace-Text 和 full-schema 控制的验证结果见 [论文正文](../paper/main.tex)与 [`artifacts/v2`](../artifacts/v2)。验证集上的 full-schema Base 与 SFT 均为 0/12 failure，state-gated verifier 的确定性测试通过，但失败识别没有增益；[RL gate](../artifacts/v2/final_rl_gate_decision.json) 在查看 final test 前决定 `REVISIT_REPRESENTATION_OR_SUPERVISION`。**V2 没有运行 GRPO 或 GSPO**，不能把下文 V1 RL 结果写成 V2 对照。
+
+[冻结分割回执](../artifacts/v2/splits/paper_final_test_receipt.json)记录单任务 `16mm-cylinder-install`、test episodes `11, 23, 29, 33, 51, 58`，以及最终 refit 的 train/validation/test episode 隔离；[最终数据物化回执](../artifacts/v2/manifests/final_sparse_dataset_receipt.json)从远端逐字节回收并通过 SHA-256 核对。54 个 test 窗口按 nominal/failure/recovery 各 18 个，所有六组预测使用相同 ID、reference 与 split SHA-256 `c34c175b360fa9505468c7aaf8590ee7a6a6feaa02316808e2c8c2c023ab4f38`。**限制：这六个 episode 在更早的方法开发阶段曾进入训练池**；所以本轮属于内部 Tier B 单任务证据，不是全新独立复制、跨任务泛化或部署性能。
+
+| final test 模型 | 严格 JSON | 严格 Failure Recall | 语义 Failure Recall | 语义 Failure Precision | nominal 误报 failure | 语义 State Macro-F1 | 语义 Recovery Recall |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| state-only Base | 0/54 | 0/18 | **18/18** | 0.3396 | **18/18** | 0.1690 | 0/18 |
+| state-only SFT seed 42 | 54/54 | 1/18 | 1/18 | 0.2000 | 1/18 | 0.1981 | 0/18 |
+| state-only SFT seed 43 | 54/54 | 7/18 | 7/18 | 0.3182 | 8/18 | **0.3619** | 4/18 |
+| state-only SFT seed 44 | 54/54 | 7/18 | 7/18 | 0.2593 | 13/18 | 0.2921 | 10/18 |
+| full-schema Base | 0/54 | 0/18 | 0/18 | 0 | 0/18 | 0.1667 | 0/18 |
+| full-schema SFT seed 42 | 54/54 | 0/18 | 0/18 | 0 | 0/18 | 0.2950 | 4/18 |
+
+“严格”是预先固定的裸 JSON schema；“语义”只机械去除包裹整个输出的外层 Markdown 围栏，不修复字段或标签。state-only Base 有 53 个围栏内的 `failure`、1 个语义无效输出，因此语义 failure 18/18 实际是**近乎全判 failure**，不是可靠预警。严格 JSON 从 0 到 100% 的提升不能作为视觉失败识别增益。full-schema SFT 的严格 State Macro-F1 为 0.2950、Phase Macro-F1 为 0.1571、Failure-mode Macro-F1 为 0.0303，但首要 Failure Recall 仍为 0。state-only 模型不输出 phase/mode，不能把这两个字段的 0 当作同一任务的对照结果。
+
+逐 episode 配对分析显示，seed 43 相对语义 Base 丢失 11 个原本正确的 failure 窗口，同时救回 9 个 nominal 与 4 个 recovery 窗口。其 Failure Recall 差值为 -0.6111（按 6 个 episode 重采样 1000 次的 95% 描述性区间 `[-0.7778,-0.4444]`），State Macro-F1 差值 +0.1929（`[0.0144,0.3898]`）。seed 43 的 7 个正确 failure 分布于 5 个 episode；seed 44 同为 7/18，却集中在 3 个 episode 且 nominal 误报更多。各 failure mode 仅由少数 episode 支撑，例如 seed 43 的 `retention_failure` 为 0/3，不能据此排序机制难度。小样本、方法选择和此前暴露均限制这些区间的外推，不做总体显著性声明。
+
+原始 [六组 final-test 运行目录](../artifacts/v2/runs/final-base-state/run_receipt.json)、[四组语义配对文件](../artifacts/v2/paired/final-base-to-state-seed43.json)及同名 `-strict.json` 留在仓库；每组目录包含 `predictions.jsonl`、`metrics.json`、`config.json`、`environment.json`、`stdout.log`、`run_receipt.json`、`timing.json`、`memory.json`。本地 [`evidence_verification.json`](../artifacts/v2/evidence_verification.json)复核了 44 个完成的 V2 run，其中 15 个是本轮 final run。四份 final SFT adapter 已按哈希备份到本地忽略目录 `checkpoints/v2-final/`，同时保留远端原件，均不进入 Git。训练 receipt 记录 wall-clock、峰值显存、模型/数据 revision、代码 commit 与输出哈希。final test 没有重新做 onset timing 或 Trace ablation；相关 V2 观察分别是已复用 V1 episode 的时序诊断和 development-validation 对照。
 
 ## 【硬件】
 

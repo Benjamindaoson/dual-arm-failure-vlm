@@ -1,0 +1,255 @@
+[1/42] ep14-nominal-f0 1.93s
+[2/42] ep14-nominal-f60 1.53s
+[3/42] ep14-nominal-f120 1.49s
+[4/42] ep14-failure-f150 1.53s
+[5/42] ep14-failure-f240 1.51s
+[6/42] ep14-failure-f329 1.52s
+[7/42] ep14-recovery-f345 1.54s
+[8/42] ep14-recovery-f620 1.51s
+[9/42] ep14-recovery-f896 1.49s
+[10/42] ep27-nominal-f0 1.49s
+[11/42] ep27-nominal-f105 1.49s
+[12/42] ep27-nominal-f210 1.52s
+[13/42] ep27-failure-f240 1.50s
+[14/42] ep27-failure-f374 1.51s
+[15/42] ep27-failure-f509 1.51s
+[16/42] ep27-recovery-f525 1.50s
+[17/42] ep27-recovery-f710 1.51s
+[18/42] ep27-recovery-f896 1.50s
+[19/42] ep35-nominal-f0 1.51s
+[20/42] ep35-nominal-f180 1.50s
+[21/42] ep35-nominal-f360 1.50s
+[22/42] ep35-recovery-f405 1.52s
+[23/42] ep35-recovery-f650 1.49s
+[24/42] ep35-recovery-f896 1.49s
+[25/42] ep36-nominal-f0 1.49s
+[26/42] ep36-nominal-f180 1.49s
+[27/42] ep36-nominal-f360 1.49s
+[28/42] ep36-failure-f390 1.50s
+[29/42] ep36-failure-f584 1.50s
+[30/42] ep36-failure-f779 1.52s
+[31/42] ep36-recovery-f795 1.51s
+[32/42] ep36-recovery-f846 1.53s
+[33/42] ep36-recovery-f896 1.51s
+[34/42] ep46-nominal-f0 1.50s
+[35/42] ep46-nominal-f165 1.49s
+[36/42] ep46-nominal-f330 1.55s
+[37/42] ep46-failure-f360 1.48s
+[38/42] ep46-failure-f510 1.48s
+[39/42] ep46-failure-f659 1.48s
+[40/42] ep46-recovery-f675 1.48s
+[41/42] ep46-recovery-f786 1.48s
+[42/42] ep46-recovery-f896 1.48s
+{
+  "n": 42,
+  "json_valid_rate": 0.0,
+  "phase_macro_f1": 0.0,
+  "state_macro_f1": 0.0,
+  "failure_recall": 0.0,
+  "failure_precision": 0.0,
+  "failure_f1": 0.0,
+  "balanced_accuracy": 0.0,
+  "failure_correct": 0,
+  "failure_support": 12,
+  "recovery_recall": 0.0,
+  "pre_failure_false_positive_rate": 0.0,
+  "failure_mode_macro_f1": 0.0,
+  "failure_mode_macro_f1_non_nominal": 0.0,
+  "phase_per_class": {
+    "align (pick)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 8.0
+    },
+    "align (place)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 8.0
+    },
+    "engage (pick)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 11.0
+    },
+    "engage (place)": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 11.0
+    },
+    "transport": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 4.0
+    }
+  },
+  "state_per_class": {
+    "failure": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 12.0
+    },
+    "nominal": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 15.0
+    },
+    "recovery": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 15.0
+    }
+  },
+  "failure_mode_per_class": {
+    "misalignment": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 21.0
+    },
+    "premature_release": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6.0
+    }
+  },
+  "timing_slices": {
+    "failure": 0.0,
+    "nominal": 0.0,
+    "recovery": 0.0
+  },
+  "gold_state_counts": {
+    "nominal": 15,
+    "failure": 12,
+    "recovery": 15
+  },
+  "episode_bootstrap": {
+    "unit": "episode",
+    "samples": 1000,
+    "seed": 42,
+    "state_macro_f1_95ci": [
+      0.0,
+      0.0
+    ],
+    "failure_recall_95ci": [
+      0.0,
+      0.0
+    ]
+  },
+  "semantic_diagnostic": {
+    "n": 42,
+    "json_valid_rate": 1.0,
+    "phase_macro_f1": 0.064,
+    "state_macro_f1": 0.17543859649122806,
+    "failure_recall": 0.0,
+    "failure_precision": 0.0,
+    "failure_f1": 0.0,
+    "balanced_accuracy": 0.3333333333333333,
+    "failure_correct": 0,
+    "failure_support": 12,
+    "recovery_recall": 0.0,
+    "pre_failure_false_positive_rate": 0.0,
+    "failure_mode_macro_f1": 0.0,
+    "failure_mode_macro_f1_non_nominal": 0.0,
+    "phase_per_class": {
+      "align (pick)": {
+        "precision": 0.19047619047619047,
+        "recall": 1.0,
+        "f1": 0.32,
+        "support": 8.0
+      },
+      "align (place)": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 8.0
+      },
+      "engage (pick)": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 11.0
+      },
+      "engage (place)": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 11.0
+      },
+      "transport": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 4.0
+      }
+    },
+    "state_per_class": {
+      "failure": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 12.0
+      },
+      "nominal": {
+        "precision": 0.35714285714285715,
+        "recall": 1.0,
+        "f1": 0.5263157894736842,
+        "support": 15.0
+      },
+      "recovery": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 15.0
+      }
+    },
+    "failure_mode_per_class": {
+      "misalignment": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 21.0
+      },
+      "premature_release": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 6.0
+      }
+    },
+    "timing_slices": {
+      "failure": 0.0,
+      "nominal": 1.0,
+      "recovery": 0.0
+    },
+    "gold_state_counts": {
+      "nominal": 15,
+      "failure": 12,
+      "recovery": 15
+    },
+    "episode_bootstrap": {
+      "unit": "episode",
+      "samples": 1000,
+      "seed": 42,
+      "state_macro_f1_95ci": [
+        0.16666666666666666,
+        0.19607843137254902
+      ],
+      "failure_recall_95ci": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "outer_fence_removed_count": 42,
+  "task_schema": "full",
+  "mean_latency_seconds": 1.5134337867743202
+}
