@@ -45,6 +45,16 @@ class FinalPaperAssetTests(unittest.TestCase):
         self.assertIn("figures/final_tradeoff.tex", assets)
         self.assertIn("tables/paired_contrasts.tex", assets)
 
+    def test_three_metric_axes_remain_distinguishable_without_color(self):
+        root = Path(__file__).resolve().parents[1]
+        figure = render_final_assets(load_final_evidence(root, bootstrap_samples=100))["figures/final_tradeoff.tex"]
+        self.assertIn("fill=white", figure)
+        self.assertIn("fill=black!65", figure)
+        self.assertIn("pattern=north east lines", figure)
+        self.assertIn("JSON", figure)
+        self.assertIn("F-rec", figure)
+        self.assertIn("N-FA", figure)
+
 
 if __name__ == "__main__":
     unittest.main()

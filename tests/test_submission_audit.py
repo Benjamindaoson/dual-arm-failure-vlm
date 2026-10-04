@@ -4,7 +4,9 @@ import hashlib
 import json
 from pathlib import Path
 
-from scripts.audit_submission import audit_submission, verify_recomputed_evidence, verify_rl_gate
+from scripts.audit_submission import (
+    audit_submission, submission_author_blockers, verify_recomputed_evidence, verify_rl_gate,
+)
 
 
 class SubmissionAuditTests(unittest.TestCase):
@@ -69,6 +71,55 @@ class SubmissionAuditTests(unittest.TestCase):
             gate_path.write_text(json.dumps(gate), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "RL gate"):
                 verify_rl_gate(root)
+
+    def test_single_blind_submission_uses_author_visible_preprint_without_main_conference_footer(self):
+        author = r"\author{Jane Doe\\Example Institute\\\texttt{jane@example.org}}"
+        self.assertIn("author confirmation",
+                      submission_author_blockers(r"\usepackage[preprint]{corl_2026}" + "\n" + author))
+        self.assertIn("author-visible style",
+                      submission_author_blockers(r"\usepackage{corl_2026}" + "\n" + author))
+        self.assertIn("main-conference footer",
+                      submission_author_blockers(r"\usepackage[final]{corl_2026}" + "\n" + author))
+        self.assertIn("author metadata",
+                      submission_author_blockers(r"\usepackage[preprint]{corl_2026}" + "\n"
+                                                 + r"\author{Jane Doe\\Example Institute}"))
+        self.assertIn("PDF author metadata",
+                      submission_author_blockers(r"\usepackage[preprint]{corl_2026}" + "\n" + author,
+                                                 pdf_author="Anonymous Submission"))
+
+    def test_author_confirmation_requires_matching_identity_and_pdf_order(self):
+        manuscript = (r"\usepackage[preprint]{corl_2026}"
+                      + "\n" + r"\author{Jane Doe\\Example Institute\\\texttt{jane@example.org}}")
+        confirmation = {"confirmed_by_author": True,
+                        "openreview_profiles_confirmed": True,
+                        "email_sharing_confirmed": True,
+                        "public_release_confirmed": True,
+                        "authors": [
+            {"name": "Jane Doe", "affiliation": "Example Institute", "email": "jane@example.org", "order": 1}
+        ]}
+        self.assertEqual(submission_author_blockers(manuscript, pdf_author="Jane Doe",
+                                                    author_confirmation=confirmation), [])
+        self.assertIn("OpenReview confirmations",
+                      submission_author_blockers(manuscript, pdf_author="Jane Doe",
+                                                 author_confirmation={**confirmation,
+                                                                      "public_release_confirmed": False}))
+        self.assertIn("PDF author metadata",
+                      submission_author_blockers(manuscript, pdf_author="Someone Else",
+                                                 author_confirmation=confirmation))
+        self.assertIn("author confirmation",
+                      submission_author_blockers(manuscript.replace("Jane Doe", "mail@example.org"),
+                                                 pdf_author="Jane Doe", author_confirmation=confirmation))
+
+    def test_author_confirmation_requires_source_display_order(self):
+        manuscript = (r"\usepackage[preprint]{corl_2026}"
+                      + "\n" + r"\author{Bob B\\Unit B\\\texttt{bob@example.org}"
+                      + r"\and Alice A\\Unit A\\\texttt{alice@example.org}}")
+        confirmation = {"confirmed_by_author": True, "authors": [
+            {"name": "Alice A", "affiliation": "Unit A", "email": "alice@example.org", "order": 1},
+            {"name": "Bob B", "affiliation": "Unit B", "email": "bob@example.org", "order": 2},
+        ]}
+        self.assertIn("author confirmation", submission_author_blockers(
+            manuscript, pdf_author="Alice A, Bob B", author_confirmation=confirmation))
 
 
 if __name__ == "__main__":

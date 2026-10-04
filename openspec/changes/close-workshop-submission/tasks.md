@@ -3,5 +3,9 @@
 - [x] Recompute final metrics and paired episode-bootstrap contrasts from predictions.
 - [x] Generate final paper tables and figures with source hashes.
 - [x] Rewrite the paper to the supported claim hierarchy and verify its 4-page build.
-- [x] Run 83 tests, evidence/hash checks, source-bound PDF build, and final audit; evidence passes with limitations.
+- [x] Run 88 tests, evidence/hash checks, source-bound PDF build, and final audit; evidence passes with limitations.
+- [x] Reconfirm each Table 1/Table 2/Figure 1 value against saved predictions and document per-result PASS/FAIL.
+- [x] Make the requested narrow wording and related-work corrections without changing frozen metrics or conclusions.
+- [x] Make Figure 1 distinguishable without color, rebuild the source-bound PDF, and inspect all pages.
+- [ ] Record and verify the exact committed paper-source hash in the final build receipt; workshop/OpenReview format is checked and author-metadata blocker remains fail-closed.
 - [ ] Insert real author metadata for single-blind review, rebuild, and rerun audit before uploading. User will supply later.

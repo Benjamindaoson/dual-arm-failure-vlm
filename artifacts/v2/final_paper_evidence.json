@@ -1,6 +1,6 @@
 {
   "analysis_code_sha256": {
-    "scripts/generate_final_paper_assets.py": "1dbb8f9aa8855d1c17fa08e69fd0ddfec3de0bd61edc20469106cccad080d78c",
+    "scripts/generate_final_paper_assets.py": "fc5b4aa310d0c077ea7ffc8648ed338322dc75429808d67c3c8a053ded7bd37e",
     "scripts/paired_compare.py": "fec4f0f9ec5dfd896fc43127450a251f11c34dbd1803c0b824196cf7d9be0f78",
     "scripts/verify_v2_evidence.py": "a71cc048f3558b3acfc1094ceb21e082be5463ac5afea9e0191fce0add9865e7",
     "src/reboot_recovery/metrics.py": "63d32b478efa8fde7a18da302fc175c90d8051f10dfdea07c90e1107ab4fd4ce",
@@ -277,7 +277,7 @@
     }
   },
   "generated_sha256": {
-    "figures/final_tradeoff.tex": "075ed00293525f222ad95d631a217bc150e2659ef81975590afbcf14594b6cf3",
+    "figures/final_tradeoff.tex": "021b78abf373d8177db0b4c8062ee3a46855028270bb87978e3c2a45978bf9ef",
     "tables/final.tex": "1d74b02db629c8e621ed9b61e7f1bcaba6b8c43a9848727728b647df9fd267e6",
     "tables/paired_contrasts.tex": "ac4f8daeaaebd5e937d81f8700c0356f8558bb0627942bff6a4513f5516dc7bb"
   },

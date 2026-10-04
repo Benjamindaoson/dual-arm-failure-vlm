@@ -1,0 +1,581 @@
+{
+  "verified_run_count": 44,
+  "runs": [
+    {
+      "run_id": "c0-base-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "db5faf1802459189c83750f2487eed726bb62695"
+    },
+    {
+      "run_id": "c0-sft",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "3cd123dfe58eccdbe7a24c51ca5ed6031227af1e992aebf0ae0cfced6975dc77"
+      },
+      "git_commit": "db5faf1802459189c83750f2487eed726bb62695"
+    },
+    {
+      "run_id": "c0-sft-smoke",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "707d19a6c98a7f652d6961bf27473813c11b59cf0051b79a9bdb2c3639457b7c"
+      },
+      "git_commit": "db5faf1802459189c83750f2487eed726bb62695"
+    },
+    {
+      "run_id": "c0-sft-v1-diagnostic",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "786857277d7a39dccdbaacfce85d589474575f0f"
+    },
+    {
+      "run_id": "c0-sft-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "786857277d7a39dccdbaacfce85d589474575f0f"
+    },
+    {
+      "run_id": "c1-base-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "786857277d7a39dccdbaacfce85d589474575f0f"
+    },
+    {
+      "run_id": "c1-sft",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "74bdc9ebcdbfca6d5d6463bb7e3d39dc606f2786982bcb0309b2e547fe24c485"
+      },
+      "git_commit": "786857277d7a39dccdbaacfce85d589474575f0f"
+    },
+    {
+      "run_id": "c1-sft-smoke",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "1a9d18a1b9463cb1885d1a9b288577549ccd1f922f05b7ec7f7d710b033a40b2"
+      },
+      "git_commit": "786857277d7a39dccdbaacfce85d589474575f0f"
+    },
+    {
+      "run_id": "c1-sft-v1-diagnostic",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "1970ed52f2bc09b917da71823b6ea97ca8a67f1f"
+    },
+    {
+      "run_id": "c1-sft-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "1970ed52f2bc09b917da71823b6ea97ca8a67f1f"
+    },
+    {
+      "run_id": "c2-base-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "1970ed52f2bc09b917da71823b6ea97ca8a67f1f"
+    },
+    {
+      "run_id": "c2-sft",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "25602c7cd319e7785b53cc303d74c62645f9f118e0758ecec4528d96b44067f0"
+      },
+      "git_commit": "d45b264856268fdbcbd64ea1b9a0c35ed602187d"
+    },
+    {
+      "run_id": "c2-sft-smoke",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "80ba26523e3f556c2225601403210e825f52b473cf0d829f9bffd6d31595d6b2"
+      },
+      "git_commit": "1970ed52f2bc09b917da71823b6ea97ca8a67f1f"
+    },
+    {
+      "run_id": "c2-sft-v1-diagnostic",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "c2-sft-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "dense-sft",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "4faaaee6dcddef75e44ab9eae273d42c38ac4c9958353b20746639e44c4d0365"
+      },
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "dense-sft-smoke",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "f7fb806db7b9066b5b484363962401bbd02c7a14ebc265f56a9b978f7dc280a6"
+      },
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "dense-sft-v1-diagnostic",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "dense-sft-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "final-base-full-test",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "final-base-full-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "final-base-state",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "final-sft-full-seed42",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "6e66ed144935c492dfcfba9c4a711535d2dafd40fd07daee929db4e3e3fbdcd1"
+      },
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "final-sft-full-seed42-test",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "final-sft-full-seed42-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "final-sft-state-seed42",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "18af06707fca96d0d1a340c7aabd3da99c2816e5bec3fe2154c8bd8dadabbdd0"
+      },
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "final-sft-state-seed42-test",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "final-sft-state-seed42-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "final-sft-state-seed43",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "638f383df6775484fa4da62f0a97966f669827a746f0ab07c91068384368dd61"
+      },
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "final-sft-state-seed43-test",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "final-sft-state-seed43-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "final-sft-state-seed44",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "533ed229d35417015c28e0c425fbf4ff52c10976443915c9cb57ccf2d8abf5a3"
+      },
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "final-sft-state-seed44-test",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "final-sft-state-seed44-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "multitask-base-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "multitask-sft",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "92c1e8905476ea32907ec3e96dbb38d0fc1ab3aa560ca0537b22ae07f4ae9937"
+      },
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "multitask-sft-smoke",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "92032af5bb4f8440dfb2fd0e04737ffb101fbdda3dd4b3282cb8482179f84ece"
+      },
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "multitask-sft-v1-diagnostic",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "multitask-sft-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "timing-state-only",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "trace-sft",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "77d5c5cf957226805c4ecd4a6d102fabd56e833d1affd5bb4d099dec0782c234"
+      },
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "trace-sft-smoke",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "adapter_config.json": "BYTE_MATCH",
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH",
+        "train_log.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {
+        "adapter_model.safetensors": "2d660936245837b153d1daecc1e4ccf103bbcc902e93a793d47c7f4a19dc66a9"
+      },
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "trace-sft-v1-diagnostic",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    },
+    {
+      "run_id": "trace-sft-val",
+      "status": "VERIFIED",
+      "hashed_outputs": {
+        "memory.json": "BYTE_MATCH",
+        "metrics.json": "BYTE_MATCH",
+        "predictions.jsonl": "BYTE_MATCH",
+        "timing.json": "BYTE_MATCH"
+      },
+      "external_checkpoint_sha256": {},
+      "git_commit": "a7a4c5ffa78b77209ce5fd70f8e329418c706e0b"
+    }
+  ]
+}

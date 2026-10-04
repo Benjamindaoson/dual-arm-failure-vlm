@@ -7,6 +7,7 @@ import hashlib
 import importlib.util
 import json
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -30,6 +31,46 @@ def verify_recomputed_evidence(saved: dict, regenerated: dict) -> None:
     """Compare every figure/table input, not just a headline count."""
     if {key: value for key, value in saved.items() if key != "generated_sha256"} != regenerated:
         raise ValueError("saved final evidence differs from full recomputation")
+
+
+def submission_author_blockers(manuscript: str, *, pdf_author: str | None = None,
+                               author_confirmation: dict | None = None) -> list[str]:
+    """Check the workshop's single-blind PDF without modifying official style."""
+    blockers = []
+    style = re.search(r"\\usepackage(?:\[([^\]]+)\])?\{corl_2026\}", manuscript)
+    option = style.group(1) if style else None
+    if option == "final":
+        blockers.append("main-conference footer")
+    elif option != "preprint":
+        blockers.append("author-visible style")
+    author = manuscript.split(r"\author{", 1)[1].split(r"\begin{document}", 1)[0] if r"\author{" in manuscript else ""
+    if "@" not in author or any(word in author.lower() for word in ("pending", "anonymous", "todo")):
+        blockers.append("author metadata")
+    records = author_confirmation.get("authors") if isinstance(author_confirmation, dict) else None
+    valid_records = (isinstance(records, list) and bool(records)
+                     and author_confirmation.get("confirmed_by_author") is True
+                     and all(isinstance(item, dict)
+                             and item.get("order") == index
+                             and all(isinstance(item.get(field), str) and item[field].strip()
+                                     for field in ("name", "affiliation", "email"))
+                             and "@" in item["email"]
+                             and all(item[field] in author for field in ("name", "affiliation", "email"))
+                             for index, item in enumerate(records, 1))
+                     and [author.find(item["name"]) for item in records]
+                     == sorted(author.find(item["name"]) for item in records))
+    if not valid_records:
+        blockers.append("author confirmation")
+    if not isinstance(author_confirmation, dict) or not all(
+        author_confirmation.get(key) is True for key in
+        ("openreview_profiles_confirmed", "email_sharing_confirmed", "public_release_confirmed")
+    ):
+        blockers.append("OpenReview confirmations")
+    expected_pdf_author = ", ".join(item["name"] for item in records) if valid_records else None
+    if pdf_author is not None and (not pdf_author.strip() or
+                                   any(word in pdf_author.lower() for word in ("anonymous", "pending")) or
+                                   (expected_pdf_author is not None and pdf_author.strip() != expected_pdf_author)):
+        blockers.append("PDF author metadata")
+    return blockers
 
 
 def verify_rl_gate(root: Path) -> dict:
@@ -83,6 +124,17 @@ def _pdf_pages(path: Path) -> int | None:
     raise ValueError("pdfinfo did not report page count")
 
 
+def _pdf_author(path: Path) -> str | None:
+    executable = shutil.which("pdfinfo")
+    if not executable or not path.is_file():
+        return None
+    result = subprocess.run([executable, str(path)], capture_output=True, text=True, errors="replace", check=True)
+    for line in result.stdout.splitlines():
+        if line.startswith("Author:"):
+            return line.split(":", 1)[1].strip()
+    return ""
+
+
 def _candidate_metadata(root: Path) -> dict[str, dict]:
     candidates = {}
     for name in ("usbc_recovery_install", "rj45_recovery_install", "m12_recovery_install"):
@@ -127,7 +179,7 @@ def audit_submission(root: Path = ROOT) -> dict:
     if not all(term in manuscript for term in ("internal evidence", "No V2 GRPO or GSPO was run",
                                                "nominal false alarms", r"\input{tables/final.tex}")):
         raise ValueError("manuscript omits an evidence limitation or generated table")
-    if r"\usepackage{corl_2026}" not in manuscript:
+    if not re.search(r"\\usepackage(?:\[[^\]]+\])?\{corl_2026\}", manuscript):
         raise ValueError("official CoRL 2026 submission style not loaded")
     pdf = root / "outputs/v2/paper_build/main.pdf"
     pages = _pdf_pages(pdf)
@@ -137,9 +189,10 @@ def audit_submission(root: Path = ROOT) -> dict:
     gate = verify_rl_gate(root)
     candidates = _candidate_metadata(root)
     second_task_local_ready = any(all(value.values()) for value in candidates.values())
-    blockers = []
-    if "Author information pending" in manuscript or r"\usepackage[final]{corl_2026}" not in manuscript:
-        blockers.append("author metadata")
+    confirmation_path = root / "paper/author_confirmation.json"
+    confirmation = json.loads(confirmation_path.read_text(encoding="utf-8")) if confirmation_path.is_file() else None
+    blockers = submission_author_blockers(manuscript, pdf_author=_pdf_author(pdf),
+                                          author_confirmation=confirmation)
     if pages is None:
         blockers.append("PDF page count not independently verified")
     return {
