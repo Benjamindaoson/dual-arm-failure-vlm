@@ -1,0 +1,137 @@
+{
+  "adapter_hashes_verified": 4,
+  "adapter_sha256": {
+    "final-sft-full-seed42": "6e66ed144935c492dfcfba9c4a711535d2dafd40fd07daee929db4e3e3fbdcd1",
+    "final-sft-state-seed42": "18af06707fca96d0d1a340c7aabd3da99c2816e5bec3fe2154c8bd8dadabbdd0",
+    "final-sft-state-seed43": "638f383df6775484fa4da62f0a97966f669827a746f0ab07c91068384368dd61",
+    "final-sft-state-seed44": "533ed229d35417015c28e0c425fbf4ff52c10976443915c9cb57ccf2d8abf5a3"
+  },
+  "analysis_code_sha256": {
+    "scripts/generate_final_paper_assets.py": "1dbb8f9aa8855d1c17fa08e69fd0ddfec3de0bd61edc20469106cccad080d78c",
+    "scripts/paired_compare.py": "fec4f0f9ec5dfd896fc43127450a251f11c34dbd1803c0b824196cf7d9be0f78",
+    "scripts/verify_v2_evidence.py": "a71cc048f3558b3acfc1094ceb21e082be5463ac5afea9e0191fce0add9865e7",
+    "src/reboot_recovery/metrics.py": "63d32b478efa8fde7a18da302fc175c90d8051f10dfdea07c90e1107ab4fd4ce",
+    "src/reboot_recovery/rewards.py": "a56e5cb6d4953ac10fd6304eade26a807731fdc88cc2600f97911cbdb165bd8c",
+    "src/reboot_recovery/semantic_parser.py": "2d22e646a940df5fd0d056427063311eba64d818641640fd3f5f403de83e7c1b"
+  },
+  "claim_hierarchy": {
+    "H1": "SUPPORTED_INTERNAL",
+    "H2": "SUPPORTED_RECIPE_SPECIFIC_ONLY",
+    "H3": "UNTESTED_INTERVENTION"
+  },
+  "completed_v2_runs_verified": 44,
+  "episode_exposure": {
+    "episodes": 60,
+    "internal_tier_b": [
+      "11",
+      "23",
+      "29",
+      "33",
+      "51",
+      "58"
+    ],
+    "ledger_sha256": "22e03a29fade645bd63697986eeef72f9d7a2f2198b5860696f541b5208bf554",
+    "untouched_same_task": 0,
+    "usable": 53
+  },
+  "evidence_status": "PASS_WITH_LIMITATIONS",
+  "final_prediction_source_sha256": {
+    "artifacts/v2/manifests/final_sparse.jsonl": "08da13cfac217d960e23e3ba10a1c4faf7fbb635b8d8ce62ffae5523b66baec2",
+    "artifacts/v2/manifests/final_sparse_dataset_receipt.json": "bb8ac00f71dfadd382f82dec132110e73a7647639918ef8a0515b2b4a9622c69",
+    "artifacts/v2/runs/final-base-full-test/config.json": "02b4ddd5043f34993bb5a9f3aaa74379c8b84001e45a1147375dcf78fcd76ad4",
+    "artifacts/v2/runs/final-base-full-test/metrics.json": "419b4ed769365636e1feb2e53b42742338fb120ef3055c8c65444395fa419875",
+    "artifacts/v2/runs/final-base-full-test/predictions.jsonl": "83bd97e047affde4058262af5aacff9f0d2f2c650358e1545b11500db8c404c2",
+    "artifacts/v2/runs/final-base-full-test/run_receipt.json": "156a5e49442e3325092a92e1bff970e8eed959f68b7bf33adeae9ce2dc6e42b1",
+    "artifacts/v2/runs/final-base-state/config.json": "1d2ea2c43aa416bbefa42185b72793370b3271992f2faf33a905ad78e54c61d1",
+    "artifacts/v2/runs/final-base-state/metrics.json": "6e06ea89d1d2139bea432f12c2c769fba3f09cb793ca4f485931becf32af88ae",
+    "artifacts/v2/runs/final-base-state/predictions.jsonl": "ef5efc47aae55a3e9c2c54941d0161b72a442fd96724b2d43416f4b47c81c43a",
+    "artifacts/v2/runs/final-base-state/run_receipt.json": "c9211684d9dcaf8879152a3628b5dc33a8a2c3f2e0095902daf33587923f8d41",
+    "artifacts/v2/runs/final-sft-full-seed42-test/config.json": "2d4898cc37b255618bbf582f34902ba02d776d896968738acd917e6816828b08",
+    "artifacts/v2/runs/final-sft-full-seed42-test/metrics.json": "0ce6d71904502c016882b14863140f13e8b102dee1bfca3c7ba97090143f5147",
+    "artifacts/v2/runs/final-sft-full-seed42-test/predictions.jsonl": "62cf4ac3efb7146bbd767de53a5618470aeb3ff5c70bd838393b05198f45f43f",
+    "artifacts/v2/runs/final-sft-full-seed42-test/run_receipt.json": "21bfd5763a8056be5b03843f1ce14bcfb171144a3188a31b58b6f114110f1347",
+    "artifacts/v2/runs/final-sft-state-seed42-test/config.json": "a7dc0cd3c9261f5a693641c1338ebc4f4a2be872d0ed0ba6b8a751d2ece735d0",
+    "artifacts/v2/runs/final-sft-state-seed42-test/metrics.json": "0be0619cb74f70a25fdd081add071013d18f2be13b3cb1ab61cb6a86edec7e3a",
+    "artifacts/v2/runs/final-sft-state-seed42-test/predictions.jsonl": "6186349b5cb8216834decd4beb91d72a7c16b842cfdc56547239b4d56a41ff21",
+    "artifacts/v2/runs/final-sft-state-seed42-test/run_receipt.json": "d5b401e408a4b2502f5408b600668be0ebfdd97cf43348e478457110b3fbf9cc",
+    "artifacts/v2/runs/final-sft-state-seed43-test/config.json": "b56d0b611da5b69d84dd7b4d499bbffedc081efd2897174e727b334c2d3f2551",
+    "artifacts/v2/runs/final-sft-state-seed43-test/metrics.json": "1f4afca1942c0d7d10fe1e743b6315600ed82d8d6bc3c6854024c0c12262de74",
+    "artifacts/v2/runs/final-sft-state-seed43-test/predictions.jsonl": "7854d241ca8651d71c5ef1e6573075a2cb80e54cf0b2da58d33b2d7bd8350cad",
+    "artifacts/v2/runs/final-sft-state-seed43-test/run_receipt.json": "168ba4e049050ff423a54238c0ca7c8de0e93eb36791b265ab3814f2a629c7e5",
+    "artifacts/v2/runs/final-sft-state-seed44-test/config.json": "ceb25bff8dfa75d5e11d073a99ac60dd38b64136fb72e7ce5bcb2f20e5f2b3cf",
+    "artifacts/v2/runs/final-sft-state-seed44-test/metrics.json": "0c27570d79daffe8295716671784ec0d0e68e75baa611bb1745c6717561cc68e",
+    "artifacts/v2/runs/final-sft-state-seed44-test/predictions.jsonl": "98d2ca1942ea704cc7a21e19aff8ec6b8940d94a574a699d994c33e10c84a34e",
+    "artifacts/v2/runs/final-sft-state-seed44-test/run_receipt.json": "8d870748e0b3211f91f3bf99738e2c49e5120f189edd035fae42965c34a89de8",
+    "artifacts/v2/splits/paper_final_test_receipt.json": "c34c175b360fa9505468c7aaf8590ee7a6a6feaa02316808e2c8c2c023ab4f38"
+  },
+  "final_run_ids": {
+    "Full Base": "final-base-full-test",
+    "Full SFT": "final-sft-full-seed42-test",
+    "State Base": "final-base-state",
+    "State SFT 42": "final-sft-state-seed42-test",
+    "State SFT 43": "final-sft-state-seed43-test",
+    "State SFT 44": "final-sft-state-seed44-test"
+  },
+  "generated_asset_sha256": {
+    "figures/final_tradeoff.tex": "075ed00293525f222ad95d631a217bc150e2659ef81975590afbcf14594b6cf3",
+    "tables/final.tex": "1d74b02db629c8e621ed9b61e7f1bcaba6b8c43a9848727728b647df9fd267e6",
+    "tables/paired_contrasts.tex": "ac4f8daeaaebd5e937d81f8700c0356f8558bb0627942bff6a4513f5516dc7bb"
+  },
+  "independent_evidence": {
+    "candidate_local_metadata": {
+      "m12_recovery_install": {
+        "episodes_parquet_complete_magic": false,
+        "info_json_present": false,
+        "phase_annotations_present": false,
+        "videos_present": false
+      },
+      "rj45_recovery_install": {
+        "episodes_parquet_complete_magic": true,
+        "info_json_present": true,
+        "phase_annotations_present": false,
+        "videos_present": false
+      },
+      "usbc_recovery_install": {
+        "episodes_parquet_complete_magic": false,
+        "info_json_present": true,
+        "phase_annotations_present": false,
+        "videos_present": false
+      }
+    },
+    "claim": "internal single-task diagnostic; no independent or cross-task replication",
+    "route1_same_task": "NO_UNTOUCHED_EPISODES_IN_LOCAL_60_EPISODE_SAMPLE",
+    "route2_second_task": "NOT_EXECUTED_NO_LOCAL_LABEL_GROUNDED_VIDEO_OR_GPU"
+  },
+  "local_compute": {
+    "base_qwen_model_local": false,
+    "nvidia_smi_found": false,
+    "project_venv_torch_installed": false
+  },
+  "official_venue": {
+    "deadline": "2026-10-16",
+    "format": "2-4 page extended abstract, CoRL main-conference template",
+    "review": "single-blind",
+    "url": "https://umi-arena.airoa.io/"
+  },
+  "paper_build_source_sha256": {
+    "paper/corl_2026.sty": "58e08aad0335832892081bd7ffea56bd3c2a2ee31e457c13da79752d74f633f0",
+    "paper/corlabbrvnat.bst": "eb5c200b6c5a81cd774155c79c28d3a32ac8a5e25bb246a40dda74deb94dfa71",
+    "paper/figures/final_tradeoff.tex": "075ed00293525f222ad95d631a217bc150e2659ef81975590afbcf14594b6cf3",
+    "paper/main.tex": "bd3553963508aaa321a7e9fed1a223e160560327b994b0f3df9c8b25d123f7a8",
+    "paper/references.bib": "9047d28533e1bb9d0dc7ab3fc9c60b8ecf4759868f899de0839a22bda9908f55",
+    "paper/tables/final.tex": "1d74b02db629c8e621ed9b61e7f1bcaba6b8c43a9848727728b647df9fd267e6",
+    "paper/tables/paired_contrasts.tex": "ac4f8daeaaebd5e937d81f8700c0356f8558bb0627942bff6a4513f5516dc7bb"
+  },
+  "pdf_pages": 4,
+  "pdf_sha256": "d757b9e80de8ef001b4a4978dbe29cceafb04ed93c52869d8f8d1c0e191aecc6",
+  "rl_gate": "REVISIT_REPRESENTATION_OR_SUPERVISION; no V2 GRPO or GSPO",
+  "rl_gate_source_sha256": {
+    "artifacts/v2/final_rl_gate_decision.json": "a65e5b92766f4f6f543e8f7938c7a1e50262a12ddbe50901c661927affa74f42",
+    "artifacts/v2/runs/final-base-full-val/predictions.jsonl": "69df2cc146e418eabfd9b1b52ef6631020ec210003349def4d17e20ed22e7723",
+    "artifacts/v2/runs/final-sft-full-seed42-val/predictions.jsonl": "b30366b797d829177d1ca282de59727cc7e9dd75c7059f6a6fa65f5c49478543"
+  },
+  "submission_blockers": [
+    "author metadata"
+  ],
+  "submission_ready": false
+}

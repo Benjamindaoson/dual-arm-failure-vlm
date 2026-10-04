@@ -63,7 +63,10 @@ def compare(first: list[dict], second: list[dict], *, task_schema: str,
                  "rescued" if first_state != gold and second_state == gold else
                  "regressed" if first_state == gold and second_state != gold else "both_wrong")
         outcomes[gold][label] += 1
-    endpoints = ("failure_recall", "state_macro_f1")
+    # This rate is measured only on nominal windows; it is not onset-relative.
+    endpoints = ("failure_recall", "state_macro_f1", "nominal_false_alarm_rate")
+    source_endpoint = {"nominal_false_alarm_rate": "pre_failure_false_positive_rate"}
+    value = lambda metrics, name: float(metrics[source_endpoint.get(name, name)])
     differences = {name: [] for name in endpoints}
     rng = random.Random(seed)
     for _ in range(samples):
@@ -71,15 +74,15 @@ def compare(first: list[dict], second: list[dict], *, task_schema: str,
         resampled_keys = [key for episode in chosen for key in groups[episode]]
         am, bm = score(a, resampled_keys), score(b, resampled_keys)
         for name in endpoints:
-            differences[name].append(float(bm[name]) - float(am[name]))
+            differences[name].append(value(bm, name) - value(am, name))
     return {
         "protocol": "semantic" if semantic else "strict", "task_schema": task_schema,
         "episode_support": len(episode_ids), "sample_support": len(keys),
         "class_support": base["gold_state_counts"], "bootstrap_samples": samples, "seed": seed,
-        "first": {name: base[name] for name in endpoints},
-        "second": {name: candidate[name] for name in endpoints},
+        "first": {name: value(base, name) for name in endpoints},
+        "second": {name: value(candidate, name) for name in endpoints},
         "paired_state_outcomes": outcomes,
-        "second_minus_first": {name: {"point": candidate[name] - base[name],
+        "second_minus_first": {name: {"point": value(candidate, name) - value(base, name),
                                       "ci95": [_percentile(differences[name], 0.025),
                                                _percentile(differences[name], 0.975)]}
                                for name in endpoints},

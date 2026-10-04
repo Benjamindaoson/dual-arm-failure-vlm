@@ -1,0 +1,7 @@
+- [x] Build and validate an episode exposure ledger from frozen source manifests.
+- [x] Audit independent-data availability and record Route 3: no executable independent test in the current local resources.
+- [x] Recompute final metrics and paired episode-bootstrap contrasts from predictions.
+- [x] Generate final paper tables and figures with source hashes.
+- [x] Rewrite the paper to the supported claim hierarchy and verify its 4-page build.
+- [x] Run 83 tests, evidence/hash checks, source-bound PDF build, and final audit; evidence passes with limitations.
+- [ ] Insert real author metadata for single-blind review, rebuild, and rerun audit before uploading. User will supply later.

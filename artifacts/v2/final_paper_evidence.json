@@ -1,0 +1,1477 @@
+{
+  "analysis_code_sha256": {
+    "scripts/generate_final_paper_assets.py": "1dbb8f9aa8855d1c17fa08e69fd0ddfec3de0bd61edc20469106cccad080d78c",
+    "scripts/paired_compare.py": "fec4f0f9ec5dfd896fc43127450a251f11c34dbd1803c0b824196cf7d9be0f78",
+    "scripts/verify_v2_evidence.py": "a71cc048f3558b3acfc1094ceb21e082be5463ac5afea9e0191fce0add9865e7",
+    "src/reboot_recovery/metrics.py": "63d32b478efa8fde7a18da302fc175c90d8051f10dfdea07c90e1107ab4fd4ce",
+    "src/reboot_recovery/rewards.py": "a56e5cb6d4953ac10fd6304eade26a807731fdc88cc2600f97911cbdb165bd8c",
+    "src/reboot_recovery/semantic_parser.py": "2d22e646a940df5fd0d056427063311eba64d818641640fd3f5f403de83e7c1b"
+  },
+  "bootstrap_samples": 2000,
+  "bootstrap_seed": 42,
+  "bootstrap_unit": "episode",
+  "contrasts": {
+    "Full SFT": {
+      "bootstrap_samples": 2000,
+      "class_support": {
+        "failure": 18,
+        "nominal": 18,
+        "recovery": 18
+      },
+      "episode_support": 6,
+      "first": {
+        "failure_recall": 0.0,
+        "nominal_false_alarm_rate": 0.0,
+        "state_macro_f1": 0.16666666666666666
+      },
+      "paired_state_outcomes": {
+        "failure": {
+          "both_correct": 0,
+          "both_wrong": 18,
+          "regressed": 0,
+          "rescued": 0
+        },
+        "nominal": {
+          "both_correct": 18,
+          "both_wrong": 0,
+          "regressed": 0,
+          "rescued": 0
+        },
+        "recovery": {
+          "both_correct": 0,
+          "both_wrong": 14,
+          "regressed": 0,
+          "rescued": 4
+        }
+      },
+      "protocol": "semantic",
+      "sample_support": 54,
+      "second": {
+        "failure_recall": 0.0,
+        "nominal_false_alarm_rate": 0.0,
+        "state_macro_f1": 0.2950465065974475
+      },
+      "second_minus_first": {
+        "failure_recall": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "point": 0.0
+        },
+        "nominal_false_alarm_rate": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "point": 0.0
+        },
+        "state_macro_f1": {
+          "ci95": [
+            0.03809523809523807,
+            0.22134038800705472
+          ],
+          "point": 0.12837983993078086
+        }
+      },
+      "seed": 42,
+      "task_schema": "full"
+    },
+    "State SFT 42": {
+      "bootstrap_samples": 2000,
+      "class_support": {
+        "failure": 18,
+        "nominal": 18,
+        "recovery": 18
+      },
+      "episode_support": 6,
+      "first": {
+        "failure_recall": 1.0,
+        "nominal_false_alarm_rate": 1.0,
+        "state_macro_f1": 0.16901408450704225
+      },
+      "paired_state_outcomes": {
+        "failure": {
+          "both_correct": 1,
+          "both_wrong": 0,
+          "regressed": 17,
+          "rescued": 0
+        },
+        "nominal": {
+          "both_correct": 0,
+          "both_wrong": 1,
+          "regressed": 0,
+          "rescued": 17
+        },
+        "recovery": {
+          "both_correct": 0,
+          "both_wrong": 18,
+          "regressed": 0,
+          "rescued": 0
+        }
+      },
+      "protocol": "semantic",
+      "sample_support": 54,
+      "second": {
+        "failure_recall": 0.05555555555555555,
+        "nominal_false_alarm_rate": 0.05555555555555555,
+        "state_macro_f1": 0.19813973610209823
+      },
+      "second_minus_first": {
+        "failure_recall": {
+          "ci95": [
+            -1.0,
+            -0.8333333333333334
+          ],
+          "point": -0.9444444444444444
+        },
+        "nominal_false_alarm_rate": {
+          "ci95": [
+            -1.0,
+            -0.8333333333333334
+          ],
+          "point": -0.9444444444444444
+        },
+        "state_macro_f1": {
+          "ci95": [
+            0.0,
+            0.06613756613756613
+          ],
+          "point": 0.02912565159505598
+        }
+      },
+      "seed": 42,
+      "task_schema": "state-only"
+    },
+    "State SFT 43": {
+      "bootstrap_samples": 2000,
+      "class_support": {
+        "failure": 18,
+        "nominal": 18,
+        "recovery": 18
+      },
+      "episode_support": 6,
+      "first": {
+        "failure_recall": 1.0,
+        "nominal_false_alarm_rate": 1.0,
+        "state_macro_f1": 0.16901408450704225
+      },
+      "paired_state_outcomes": {
+        "failure": {
+          "both_correct": 7,
+          "both_wrong": 0,
+          "regressed": 11,
+          "rescued": 0
+        },
+        "nominal": {
+          "both_correct": 0,
+          "both_wrong": 9,
+          "regressed": 0,
+          "rescued": 9
+        },
+        "recovery": {
+          "both_correct": 0,
+          "both_wrong": 14,
+          "regressed": 0,
+          "rescued": 4
+        }
+      },
+      "protocol": "semantic",
+      "sample_support": 54,
+      "second": {
+        "failure_recall": 0.3888888888888889,
+        "nominal_false_alarm_rate": 0.4444444444444444,
+        "state_macro_f1": 0.36190476190476195
+      },
+      "second_minus_first": {
+        "failure_recall": {
+          "ci95": [
+            -0.7777777777777778,
+            -0.4444444444444444
+          ],
+          "point": -0.6111111111111112
+        },
+        "nominal_false_alarm_rate": {
+          "ci95": [
+            -0.7777777777777778,
+            -0.38888888888888884
+          ],
+          "point": -0.5555555555555556
+        },
+        "state_macro_f1": {
+          "ci95": [
+            0.00802044753568573,
+            0.38595667572687586
+          ],
+          "point": 0.1928906773977197
+        }
+      },
+      "seed": 42,
+      "task_schema": "state-only"
+    },
+    "State SFT 44": {
+      "bootstrap_samples": 2000,
+      "class_support": {
+        "failure": 18,
+        "nominal": 18,
+        "recovery": 18
+      },
+      "episode_support": 6,
+      "first": {
+        "failure_recall": 1.0,
+        "nominal_false_alarm_rate": 1.0,
+        "state_macro_f1": 0.16901408450704225
+      },
+      "paired_state_outcomes": {
+        "failure": {
+          "both_correct": 7,
+          "both_wrong": 0,
+          "regressed": 11,
+          "rescued": 0
+        },
+        "nominal": {
+          "both_correct": 0,
+          "both_wrong": 17,
+          "regressed": 0,
+          "rescued": 1
+        },
+        "recovery": {
+          "both_correct": 0,
+          "both_wrong": 8,
+          "regressed": 0,
+          "rescued": 10
+        }
+      },
+      "protocol": "semantic",
+      "sample_support": 54,
+      "second": {
+        "failure_recall": 0.3888888888888889,
+        "nominal_false_alarm_rate": 0.7222222222222222,
+        "state_macro_f1": 0.29207579672695955
+      },
+      "second_minus_first": {
+        "failure_recall": {
+          "ci95": [
+            -0.9444444444444444,
+            -0.2777777777777778
+          ],
+          "point": -0.6111111111111112
+        },
+        "nominal_false_alarm_rate": {
+          "ci95": [
+            -0.5,
+            -0.11111111111111116
+          ],
+          "point": -0.2777777777777778
+        },
+        "state_macro_f1": {
+          "ci95": [
+            -0.018853695324283548,
+            0.2505808622044078
+          ],
+          "point": 0.1230617122199173
+        }
+      },
+      "seed": 42,
+      "task_schema": "state-only"
+    }
+  },
+  "generated_sha256": {
+    "figures/final_tradeoff.tex": "075ed00293525f222ad95d631a217bc150e2659ef81975590afbcf14594b6cf3",
+    "tables/final.tex": "1d74b02db629c8e621ed9b61e7f1bcaba6b8c43a9848727728b647df9fd267e6",
+    "tables/paired_contrasts.tex": "ac4f8daeaaebd5e937d81f8700c0356f8558bb0627942bff6a4513f5516dc7bb"
+  },
+  "protocol": "frozen strict and one-outer-fence semantic",
+  "runs": {
+    "Full Base": {
+      "outer_fence_removed_count": 54,
+      "run_id": "final-base-full-test",
+      "schema": "full",
+      "semantic": {
+        "balanced_accuracy": 0.3333333333333333,
+        "episode_bootstrap": {
+          "failure_recall_95ci": [
+            0.0,
+            0.0
+          ],
+          "samples": 2000,
+          "seed": 42,
+          "state_macro_f1_95ci": [
+            0.16666666666666666,
+            0.16666666666666666
+          ],
+          "unit": "episode"
+        },
+        "failure_correct": 0,
+        "failure_f1": 0.0,
+        "failure_mode_macro_f1": 0.0,
+        "failure_mode_macro_f1_non_nominal": 0.0,
+        "failure_mode_per_class": {
+          "excessive_force": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "misalignment": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "poor_engagement": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "premature_release": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "retention_failure": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "slip": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          }
+        },
+        "failure_precision": 0.0,
+        "failure_recall": 0.0,
+        "failure_support": 18,
+        "gold_state_counts": {
+          "failure": 18,
+          "nominal": 18,
+          "recovery": 18
+        },
+        "json_valid_rate": 1.0,
+        "n": 54,
+        "phase_macro_f1": 0.06769230769230769,
+        "phase_per_class": {
+          "align (pick)": {
+            "f1": 0.3384615384615384,
+            "precision": 0.2037037037037037,
+            "recall": 1.0,
+            "support": 11.0
+          },
+          "align (place)": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 14.0
+          },
+          "engage (pick)": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 4.0
+          },
+          "engage (place)": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 11.0
+          },
+          "transport": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 14.0
+          }
+        },
+        "pre_failure_false_positive_rate": 0.0,
+        "recovery_recall": 0.0,
+        "state_macro_f1": 0.16666666666666666,
+        "state_per_class": {
+          "failure": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 18.0
+          },
+          "nominal": {
+            "f1": 0.5,
+            "precision": 0.3333333333333333,
+            "recall": 1.0,
+            "support": 18.0
+          },
+          "recovery": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 18.0
+          }
+        },
+        "timing_slices": {
+          "failure": 0.0,
+          "nominal": 1.0,
+          "recovery": 0.0
+        }
+      },
+      "semantic_predicted_state_counts": {
+        "failure": 0,
+        "invalid": 0,
+        "nominal": 54,
+        "recovery": 0
+      },
+      "strict": {
+        "balanced_accuracy": 0.0,
+        "episode_bootstrap": {
+          "failure_recall_95ci": [
+            0.0,
+            0.0
+          ],
+          "samples": 2000,
+          "seed": 42,
+          "state_macro_f1_95ci": [
+            0.0,
+            0.0
+          ],
+          "unit": "episode"
+        },
+        "failure_correct": 0,
+        "failure_f1": 0.0,
+        "failure_mode_macro_f1": 0.0,
+        "failure_mode_macro_f1_non_nominal": 0.0,
+        "failure_mode_per_class": {
+          "excessive_force": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "misalignment": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "poor_engagement": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "premature_release": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "retention_failure": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "slip": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          }
+        },
+        "failure_precision": 0.0,
+        "failure_recall": 0.0,
+        "failure_support": 18,
+        "gold_state_counts": {
+          "failure": 18,
+          "nominal": 18,
+          "recovery": 18
+        },
+        "json_valid_rate": 0.0,
+        "n": 54,
+        "phase_macro_f1": 0.0,
+        "phase_per_class": {
+          "align (pick)": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 11.0
+          },
+          "align (place)": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 14.0
+          },
+          "engage (pick)": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 4.0
+          },
+          "engage (place)": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 11.0
+          },
+          "transport": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 14.0
+          }
+        },
+        "pre_failure_false_positive_rate": 0.0,
+        "recovery_recall": 0.0,
+        "state_macro_f1": 0.0,
+        "state_per_class": {
+          "failure": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 18.0
+          },
+          "nominal": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 18.0
+          },
+          "recovery": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 18.0
+          }
+        },
+        "timing_slices": {
+          "failure": 0.0,
+          "nominal": 0.0,
+          "recovery": 0.0
+        }
+      }
+    },
+    "Full SFT": {
+      "outer_fence_removed_count": 0,
+      "run_id": "final-sft-full-seed42-test",
+      "schema": "full",
+      "semantic": {
+        "balanced_accuracy": 0.40740740740740744,
+        "episode_bootstrap": {
+          "failure_recall_95ci": [
+            0.0,
+            0.0
+          ],
+          "samples": 2000,
+          "seed": 42,
+          "state_macro_f1_95ci": [
+            0.20476190476190473,
+            0.3880070546737214
+          ],
+          "unit": "episode"
+        },
+        "failure_correct": 0,
+        "failure_f1": 0.0,
+        "failure_mode_macro_f1": 0.0303030303030303,
+        "failure_mode_macro_f1_non_nominal": 0.0303030303030303,
+        "failure_mode_per_class": {
+          "excessive_force": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "misalignment": {
+            "f1": 0.1818181818181818,
+            "precision": 0.2,
+            "recall": 0.16666666666666666,
+            "support": 6.0
+          },
+          "poor_engagement": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "premature_release": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "retention_failure": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "slip": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          }
+        },
+        "failure_precision": 0.0,
+        "failure_recall": 0.0,
+        "failure_support": 18,
+        "gold_state_counts": {
+          "failure": 18,
+          "nominal": 18,
+          "recovery": 18
+        },
+        "json_valid_rate": 1.0,
+        "n": 54,
+        "phase_macro_f1": 0.15714285714285717,
+        "phase_per_class": {
+          "align (pick)": {
+            "f1": 0.33333333333333337,
+            "precision": 0.20930232558139536,
+            "recall": 0.8181818181818182,
+            "support": 11.0
+          },
+          "align (place)": {
+            "f1": 0.2857142857142857,
+            "precision": 0.42857142857142855,
+            "recall": 0.21428571428571427,
+            "support": 14.0
+          },
+          "engage (pick)": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 4.0
+          },
+          "engage (place)": {
+            "f1": 0.16666666666666669,
+            "precision": 1.0,
+            "recall": 0.09090909090909091,
+            "support": 11.0
+          },
+          "transport": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 14.0
+          }
+        },
+        "pre_failure_false_positive_rate": 0.0,
+        "recovery_recall": 0.2222222222222222,
+        "state_macro_f1": 0.2950465065974475,
+        "state_per_class": {
+          "failure": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 18.0
+          },
+          "nominal": {
+            "f1": 0.5373134328358209,
+            "precision": 0.3673469387755102,
+            "recall": 1.0,
+            "support": 18.0
+          },
+          "recovery": {
+            "f1": 0.3478260869565218,
+            "precision": 0.8,
+            "recall": 0.2222222222222222,
+            "support": 18.0
+          }
+        },
+        "timing_slices": {
+          "failure": 0.0,
+          "nominal": 1.0,
+          "recovery": 0.2222222222222222
+        }
+      },
+      "semantic_predicted_state_counts": {
+        "failure": 0,
+        "invalid": 0,
+        "nominal": 49,
+        "recovery": 5
+      },
+      "strict": {
+        "balanced_accuracy": 0.40740740740740744,
+        "episode_bootstrap": {
+          "failure_recall_95ci": [
+            0.0,
+            0.0
+          ],
+          "samples": 2000,
+          "seed": 42,
+          "state_macro_f1_95ci": [
+            0.20476190476190473,
+            0.3880070546737214
+          ],
+          "unit": "episode"
+        },
+        "failure_correct": 0,
+        "failure_f1": 0.0,
+        "failure_mode_macro_f1": 0.0303030303030303,
+        "failure_mode_macro_f1_non_nominal": 0.0303030303030303,
+        "failure_mode_per_class": {
+          "excessive_force": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "misalignment": {
+            "f1": 0.1818181818181818,
+            "precision": 0.2,
+            "recall": 0.16666666666666666,
+            "support": 6.0
+          },
+          "poor_engagement": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "premature_release": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "retention_failure": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          },
+          "slip": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 6.0
+          }
+        },
+        "failure_precision": 0.0,
+        "failure_recall": 0.0,
+        "failure_support": 18,
+        "gold_state_counts": {
+          "failure": 18,
+          "nominal": 18,
+          "recovery": 18
+        },
+        "json_valid_rate": 1.0,
+        "n": 54,
+        "phase_macro_f1": 0.15714285714285717,
+        "phase_per_class": {
+          "align (pick)": {
+            "f1": 0.33333333333333337,
+            "precision": 0.20930232558139536,
+            "recall": 0.8181818181818182,
+            "support": 11.0
+          },
+          "align (place)": {
+            "f1": 0.2857142857142857,
+            "precision": 0.42857142857142855,
+            "recall": 0.21428571428571427,
+            "support": 14.0
+          },
+          "engage (pick)": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 4.0
+          },
+          "engage (place)": {
+            "f1": 0.16666666666666669,
+            "precision": 1.0,
+            "recall": 0.09090909090909091,
+            "support": 11.0
+          },
+          "transport": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 14.0
+          }
+        },
+        "pre_failure_false_positive_rate": 0.0,
+        "recovery_recall": 0.2222222222222222,
+        "state_macro_f1": 0.2950465065974475,
+        "state_per_class": {
+          "failure": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 18.0
+          },
+          "nominal": {
+            "f1": 0.5373134328358209,
+            "precision": 0.3673469387755102,
+            "recall": 1.0,
+            "support": 18.0
+          },
+          "recovery": {
+            "f1": 0.3478260869565218,
+            "precision": 0.8,
+            "recall": 0.2222222222222222,
+            "support": 18.0
+          }
+        },
+        "timing_slices": {
+          "failure": 0.0,
+          "nominal": 1.0,
+          "recovery": 0.2222222222222222
+        }
+      }
+    },
+    "State Base": {
+      "outer_fence_removed_count": 53,
+      "run_id": "final-base-state",
+      "schema": "state-only",
+      "semantic": {
+        "balanced_accuracy": 0.3333333333333333,
+        "episode_bootstrap": {
+          "failure_recall_95ci": [
+            1.0,
+            1.0
+          ],
+          "samples": 2000,
+          "seed": 42,
+          "state_macro_f1_95ci": [
+            0.16666666666666666,
+            0.17391304347826086
+          ],
+          "unit": "episode"
+        },
+        "failure_correct": 18,
+        "failure_f1": 0.5070422535211268,
+        "failure_precision": 0.33962264150943394,
+        "failure_recall": 1.0,
+        "failure_support": 18,
+        "gold_state_counts": {
+          "failure": 18,
+          "nominal": 18,
+          "recovery": 18
+        },
+        "json_valid_rate": 0.9814814814814815,
+        "n": 54,
+        "nominal_recall": 0.0,
+        "pre_failure_false_positive_rate": 1.0,
+        "predicted_state_counts": {
+          "__invalid__": 1,
+          "failure": 53
+        },
+        "predicted_state_distribution": {
+          "collapse_ratio": 1.0,
+          "counts": {
+            "failure": 53,
+            "nominal": 0,
+            "recovery": 0
+          },
+          "invalid_count": 1,
+          "prediction_entropy_nats": -0.0,
+          "probabilities": {
+            "failure": 1.0,
+            "nominal": 0.0,
+            "recovery": 0.0
+          },
+          "valid_count": 53
+        },
+        "recovery_recall": 0.0,
+        "state_macro_f1": 0.16901408450704225,
+        "state_per_class": {
+          "failure": {
+            "f1": 0.5070422535211268,
+            "precision": 0.33962264150943394,
+            "recall": 1.0,
+            "support": 18.0
+          },
+          "nominal": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 18.0
+          },
+          "recovery": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 18.0
+          }
+        }
+      },
+      "semantic_predicted_state_counts": {
+        "failure": 53,
+        "invalid": 1,
+        "nominal": 0,
+        "recovery": 0
+      },
+      "strict": {
+        "balanced_accuracy": 0.0,
+        "episode_bootstrap": {
+          "failure_recall_95ci": [
+            0.0,
+            0.0
+          ],
+          "samples": 2000,
+          "seed": 42,
+          "state_macro_f1_95ci": [
+            0.0,
+            0.0
+          ],
+          "unit": "episode"
+        },
+        "failure_correct": 0,
+        "failure_f1": 0.0,
+        "failure_precision": 0.0,
+        "failure_recall": 0.0,
+        "failure_support": 18,
+        "gold_state_counts": {
+          "failure": 18,
+          "nominal": 18,
+          "recovery": 18
+        },
+        "json_valid_rate": 0.0,
+        "n": 54,
+        "nominal_recall": 0.0,
+        "pre_failure_false_positive_rate": 0.0,
+        "predicted_state_counts": {
+          "__invalid__": 54
+        },
+        "predicted_state_distribution": {
+          "collapse_ratio": null,
+          "counts": {
+            "failure": 0,
+            "nominal": 0,
+            "recovery": 0
+          },
+          "invalid_count": 54,
+          "prediction_entropy_nats": 0,
+          "probabilities": {
+            "failure": 0.0,
+            "nominal": 0.0,
+            "recovery": 0.0
+          },
+          "valid_count": 0
+        },
+        "recovery_recall": 0.0,
+        "state_macro_f1": 0.0,
+        "state_per_class": {
+          "failure": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 18.0
+          },
+          "nominal": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 18.0
+          },
+          "recovery": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 18.0
+          }
+        }
+      }
+    },
+    "State SFT 42": {
+      "outer_fence_removed_count": 0,
+      "run_id": "final-sft-state-seed42-test",
+      "schema": "state-only",
+      "semantic": {
+        "balanced_accuracy": 0.3333333333333333,
+        "episode_bootstrap": {
+          "failure_recall_95ci": [
+            0.0,
+            0.16666666666666666
+          ],
+          "samples": 2000,
+          "seed": 42,
+          "state_macro_f1_95ci": [
+            0.16901408450704225,
+            0.2328999434708875
+          ],
+          "unit": "episode"
+        },
+        "failure_correct": 1,
+        "failure_f1": 0.08695652173913045,
+        "failure_precision": 0.2,
+        "failure_recall": 0.05555555555555555,
+        "failure_support": 18,
+        "gold_state_counts": {
+          "failure": 18,
+          "nominal": 18,
+          "recovery": 18
+        },
+        "json_valid_rate": 1.0,
+        "n": 54,
+        "nominal_recall": 0.9444444444444444,
+        "pre_failure_false_positive_rate": 0.05555555555555555,
+        "predicted_state_counts": {
+          "failure": 5,
+          "nominal": 49
+        },
+        "predicted_state_distribution": {
+          "collapse_ratio": 0.9074074074074074,
+          "counts": {
+            "failure": 5,
+            "nominal": 49,
+            "recovery": 0
+          },
+          "invalid_count": 0,
+          "prediction_entropy_nats": 0.30849545083110386,
+          "probabilities": {
+            "failure": 0.09259259259259259,
+            "nominal": 0.9074074074074074,
+            "recovery": 0.0
+          },
+          "valid_count": 54
+        },
+        "recovery_recall": 0.0,
+        "state_macro_f1": 0.19813973610209823,
+        "state_per_class": {
+          "failure": {
+            "f1": 0.08695652173913045,
+            "precision": 0.2,
+            "recall": 0.05555555555555555,
+            "support": 18.0
+          },
+          "nominal": {
+            "f1": 0.5074626865671642,
+            "precision": 0.3469387755102041,
+            "recall": 0.9444444444444444,
+            "support": 18.0
+          },
+          "recovery": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 18.0
+          }
+        }
+      },
+      "semantic_predicted_state_counts": {
+        "failure": 5,
+        "invalid": 0,
+        "nominal": 49,
+        "recovery": 0
+      },
+      "strict": {
+        "balanced_accuracy": 0.3333333333333333,
+        "episode_bootstrap": {
+          "failure_recall_95ci": [
+            0.0,
+            0.16666666666666666
+          ],
+          "samples": 2000,
+          "seed": 42,
+          "state_macro_f1_95ci": [
+            0.16901408450704225,
+            0.2328999434708875
+          ],
+          "unit": "episode"
+        },
+        "failure_correct": 1,
+        "failure_f1": 0.08695652173913045,
+        "failure_precision": 0.2,
+        "failure_recall": 0.05555555555555555,
+        "failure_support": 18,
+        "gold_state_counts": {
+          "failure": 18,
+          "nominal": 18,
+          "recovery": 18
+        },
+        "json_valid_rate": 1.0,
+        "n": 54,
+        "nominal_recall": 0.9444444444444444,
+        "pre_failure_false_positive_rate": 0.05555555555555555,
+        "predicted_state_counts": {
+          "failure": 5,
+          "nominal": 49
+        },
+        "predicted_state_distribution": {
+          "collapse_ratio": 0.9074074074074074,
+          "counts": {
+            "failure": 5,
+            "nominal": 49,
+            "recovery": 0
+          },
+          "invalid_count": 0,
+          "prediction_entropy_nats": 0.30849545083110386,
+          "probabilities": {
+            "failure": 0.09259259259259259,
+            "nominal": 0.9074074074074074,
+            "recovery": 0.0
+          },
+          "valid_count": 54
+        },
+        "recovery_recall": 0.0,
+        "state_macro_f1": 0.19813973610209823,
+        "state_per_class": {
+          "failure": {
+            "f1": 0.08695652173913045,
+            "precision": 0.2,
+            "recall": 0.05555555555555555,
+            "support": 18.0
+          },
+          "nominal": {
+            "f1": 0.5074626865671642,
+            "precision": 0.3469387755102041,
+            "recall": 0.9444444444444444,
+            "support": 18.0
+          },
+          "recovery": {
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 18.0
+          }
+        }
+      }
+    },
+    "State SFT 43": {
+      "outer_fence_removed_count": 0,
+      "run_id": "final-sft-state-seed43-test",
+      "schema": "state-only",
+      "semantic": {
+        "balanced_accuracy": 0.3703703703703704,
+        "episode_bootstrap": {
+          "failure_recall_95ci": [
+            0.2222222222222222,
+            0.5555555555555556
+          ],
+          "samples": 2000,
+          "seed": 42,
+          "state_macro_f1_95ci": [
+            0.17709026918848347,
+            0.5549707602339181
+          ],
+          "unit": "episode"
+        },
+        "failure_correct": 7,
+        "failure_f1": 0.35000000000000003,
+        "failure_precision": 0.3181818181818182,
+        "failure_recall": 0.3888888888888889,
+        "failure_support": 18,
+        "gold_state_counts": {
+          "failure": 18,
+          "nominal": 18,
+          "recovery": 18
+        },
+        "json_valid_rate": 1.0,
+        "n": 54,
+        "nominal_recall": 0.5,
+        "pre_failure_false_positive_rate": 0.4444444444444444,
+        "predicted_state_counts": {
+          "failure": 22,
+          "nominal": 22,
+          "recovery": 10
+        },
+        "predicted_state_distribution": {
+          "collapse_ratio": 0.4074074074074074,
+          "counts": {
+            "failure": 22,
+            "nominal": 22,
+            "recovery": 10
+          },
+          "invalid_count": 0,
+          "prediction_entropy_nats": 1.0439522154956382,
+          "probabilities": {
+            "failure": 0.4074074074074074,
+            "nominal": 0.4074074074074074,
+            "recovery": 0.18518518518518517
+          },
+          "valid_count": 54
+        },
+        "recovery_recall": 0.2222222222222222,
+        "state_macro_f1": 0.36190476190476195,
+        "state_per_class": {
+          "failure": {
+            "f1": 0.35000000000000003,
+            "precision": 0.3181818181818182,
+            "recall": 0.3888888888888889,
+            "support": 18.0
+          },
+          "nominal": {
+            "f1": 0.45,
+            "precision": 0.4090909090909091,
+            "recall": 0.5,
+            "support": 18.0
+          },
+          "recovery": {
+            "f1": 0.2857142857142857,
+            "precision": 0.4,
+            "recall": 0.2222222222222222,
+            "support": 18.0
+          }
+        }
+      },
+      "semantic_predicted_state_counts": {
+        "failure": 22,
+        "invalid": 0,
+        "nominal": 22,
+        "recovery": 10
+      },
+      "strict": {
+        "balanced_accuracy": 0.3703703703703704,
+        "episode_bootstrap": {
+          "failure_recall_95ci": [
+            0.2222222222222222,
+            0.5555555555555556
+          ],
+          "samples": 2000,
+          "seed": 42,
+          "state_macro_f1_95ci": [
+            0.17709026918848347,
+            0.5549707602339181
+          ],
+          "unit": "episode"
+        },
+        "failure_correct": 7,
+        "failure_f1": 0.35000000000000003,
+        "failure_precision": 0.3181818181818182,
+        "failure_recall": 0.3888888888888889,
+        "failure_support": 18,
+        "gold_state_counts": {
+          "failure": 18,
+          "nominal": 18,
+          "recovery": 18
+        },
+        "json_valid_rate": 1.0,
+        "n": 54,
+        "nominal_recall": 0.5,
+        "pre_failure_false_positive_rate": 0.4444444444444444,
+        "predicted_state_counts": {
+          "failure": 22,
+          "nominal": 22,
+          "recovery": 10
+        },
+        "predicted_state_distribution": {
+          "collapse_ratio": 0.4074074074074074,
+          "counts": {
+            "failure": 22,
+            "nominal": 22,
+            "recovery": 10
+          },
+          "invalid_count": 0,
+          "prediction_entropy_nats": 1.0439522154956382,
+          "probabilities": {
+            "failure": 0.4074074074074074,
+            "nominal": 0.4074074074074074,
+            "recovery": 0.18518518518518517
+          },
+          "valid_count": 54
+        },
+        "recovery_recall": 0.2222222222222222,
+        "state_macro_f1": 0.36190476190476195,
+        "state_per_class": {
+          "failure": {
+            "f1": 0.35000000000000003,
+            "precision": 0.3181818181818182,
+            "recall": 0.3888888888888889,
+            "support": 18.0
+          },
+          "nominal": {
+            "f1": 0.45,
+            "precision": 0.4090909090909091,
+            "recall": 0.5,
+            "support": 18.0
+          },
+          "recovery": {
+            "f1": 0.2857142857142857,
+            "precision": 0.4,
+            "recall": 0.2222222222222222,
+            "support": 18.0
+          }
+        }
+      }
+    },
+    "State SFT 44": {
+      "outer_fence_removed_count": 0,
+      "run_id": "final-sft-state-seed44-test",
+      "schema": "state-only",
+      "semantic": {
+        "balanced_accuracy": 0.3333333333333333,
+        "episode_bootstrap": {
+          "failure_recall_95ci": [
+            0.05555555555555555,
+            0.7222222222222222
+          ],
+          "samples": 2000,
+          "seed": 42,
+          "state_macro_f1_95ci": [
+            0.1478129713423831,
+            0.42002635046113307
+          ],
+          "unit": "episode"
+        },
+        "failure_correct": 7,
+        "failure_f1": 0.3111111111111111,
+        "failure_precision": 0.25925925925925924,
+        "failure_recall": 0.3888888888888889,
+        "failure_support": 18,
+        "gold_state_counts": {
+          "failure": 18,
+          "nominal": 18,
+          "recovery": 18
+        },
+        "json_valid_rate": 1.0,
+        "n": 54,
+        "nominal_recall": 0.05555555555555555,
+        "pre_failure_false_positive_rate": 0.7222222222222222,
+        "predicted_state_counts": {
+          "failure": 27,
+          "nominal": 2,
+          "recovery": 25
+        },
+        "predicted_state_distribution": {
+          "collapse_ratio": 0.5,
+          "counts": {
+            "failure": 27,
+            "nominal": 2,
+            "recovery": 25
+          },
+          "invalid_count": 0,
+          "prediction_entropy_nats": 0.8251732064727597,
+          "probabilities": {
+            "failure": 0.5,
+            "nominal": 0.037037037037037035,
+            "recovery": 0.46296296296296297
+          },
+          "valid_count": 54
+        },
+        "recovery_recall": 0.5555555555555556,
+        "state_macro_f1": 0.29207579672695955,
+        "state_per_class": {
+          "failure": {
+            "f1": 0.3111111111111111,
+            "precision": 0.25925925925925924,
+            "recall": 0.3888888888888889,
+            "support": 18.0
+          },
+          "nominal": {
+            "f1": 0.09999999999999999,
+            "precision": 0.5,
+            "recall": 0.05555555555555555,
+            "support": 18.0
+          },
+          "recovery": {
+            "f1": 0.46511627906976744,
+            "precision": 0.4,
+            "recall": 0.5555555555555556,
+            "support": 18.0
+          }
+        }
+      },
+      "semantic_predicted_state_counts": {
+        "failure": 27,
+        "invalid": 0,
+        "nominal": 2,
+        "recovery": 25
+      },
+      "strict": {
+        "balanced_accuracy": 0.3333333333333333,
+        "episode_bootstrap": {
+          "failure_recall_95ci": [
+            0.05555555555555555,
+            0.7222222222222222
+          ],
+          "samples": 2000,
+          "seed": 42,
+          "state_macro_f1_95ci": [
+            0.1478129713423831,
+            0.42002635046113307
+          ],
+          "unit": "episode"
+        },
+        "failure_correct": 7,
+        "failure_f1": 0.3111111111111111,
+        "failure_precision": 0.25925925925925924,
+        "failure_recall": 0.3888888888888889,
+        "failure_support": 18,
+        "gold_state_counts": {
+          "failure": 18,
+          "nominal": 18,
+          "recovery": 18
+        },
+        "json_valid_rate": 1.0,
+        "n": 54,
+        "nominal_recall": 0.05555555555555555,
+        "pre_failure_false_positive_rate": 0.7222222222222222,
+        "predicted_state_counts": {
+          "failure": 27,
+          "nominal": 2,
+          "recovery": 25
+        },
+        "predicted_state_distribution": {
+          "collapse_ratio": 0.5,
+          "counts": {
+            "failure": 27,
+            "nominal": 2,
+            "recovery": 25
+          },
+          "invalid_count": 0,
+          "prediction_entropy_nats": 0.8251732064727597,
+          "probabilities": {
+            "failure": 0.5,
+            "nominal": 0.037037037037037035,
+            "recovery": 0.46296296296296297
+          },
+          "valid_count": 54
+        },
+        "recovery_recall": 0.5555555555555556,
+        "state_macro_f1": 0.29207579672695955,
+        "state_per_class": {
+          "failure": {
+            "f1": 0.3111111111111111,
+            "precision": 0.25925925925925924,
+            "recall": 0.3888888888888889,
+            "support": 18.0
+          },
+          "nominal": {
+            "f1": 0.09999999999999999,
+            "precision": 0.5,
+            "recall": 0.05555555555555555,
+            "support": 18.0
+          },
+          "recovery": {
+            "f1": 0.46511627906976744,
+            "precision": 0.4,
+            "recall": 0.5555555555555556,
+            "support": 18.0
+          }
+        }
+      }
+    }
+  },
+  "source_sha256": {
+    "artifacts/v2/manifests/final_sparse.jsonl": "08da13cfac217d960e23e3ba10a1c4faf7fbb635b8d8ce62ffae5523b66baec2",
+    "artifacts/v2/manifests/final_sparse_dataset_receipt.json": "bb8ac00f71dfadd382f82dec132110e73a7647639918ef8a0515b2b4a9622c69",
+    "artifacts/v2/runs/final-base-full-test/config.json": "02b4ddd5043f34993bb5a9f3aaa74379c8b84001e45a1147375dcf78fcd76ad4",
+    "artifacts/v2/runs/final-base-full-test/metrics.json": "419b4ed769365636e1feb2e53b42742338fb120ef3055c8c65444395fa419875",
+    "artifacts/v2/runs/final-base-full-test/predictions.jsonl": "83bd97e047affde4058262af5aacff9f0d2f2c650358e1545b11500db8c404c2",
+    "artifacts/v2/runs/final-base-full-test/run_receipt.json": "156a5e49442e3325092a92e1bff970e8eed959f68b7bf33adeae9ce2dc6e42b1",
+    "artifacts/v2/runs/final-base-state/config.json": "1d2ea2c43aa416bbefa42185b72793370b3271992f2faf33a905ad78e54c61d1",
+    "artifacts/v2/runs/final-base-state/metrics.json": "6e06ea89d1d2139bea432f12c2c769fba3f09cb793ca4f485931becf32af88ae",
+    "artifacts/v2/runs/final-base-state/predictions.jsonl": "ef5efc47aae55a3e9c2c54941d0161b72a442fd96724b2d43416f4b47c81c43a",
+    "artifacts/v2/runs/final-base-state/run_receipt.json": "c9211684d9dcaf8879152a3628b5dc33a8a2c3f2e0095902daf33587923f8d41",
+    "artifacts/v2/runs/final-sft-full-seed42-test/config.json": "2d4898cc37b255618bbf582f34902ba02d776d896968738acd917e6816828b08",
+    "artifacts/v2/runs/final-sft-full-seed42-test/metrics.json": "0ce6d71904502c016882b14863140f13e8b102dee1bfca3c7ba97090143f5147",
+    "artifacts/v2/runs/final-sft-full-seed42-test/predictions.jsonl": "62cf4ac3efb7146bbd767de53a5618470aeb3ff5c70bd838393b05198f45f43f",
+    "artifacts/v2/runs/final-sft-full-seed42-test/run_receipt.json": "21bfd5763a8056be5b03843f1ce14bcfb171144a3188a31b58b6f114110f1347",
+    "artifacts/v2/runs/final-sft-state-seed42-test/config.json": "a7dc0cd3c9261f5a693641c1338ebc4f4a2be872d0ed0ba6b8a751d2ece735d0",
+    "artifacts/v2/runs/final-sft-state-seed42-test/metrics.json": "0be0619cb74f70a25fdd081add071013d18f2be13b3cb1ab61cb6a86edec7e3a",
+    "artifacts/v2/runs/final-sft-state-seed42-test/predictions.jsonl": "6186349b5cb8216834decd4beb91d72a7c16b842cfdc56547239b4d56a41ff21",
+    "artifacts/v2/runs/final-sft-state-seed42-test/run_receipt.json": "d5b401e408a4b2502f5408b600668be0ebfdd97cf43348e478457110b3fbf9cc",
+    "artifacts/v2/runs/final-sft-state-seed43-test/config.json": "b56d0b611da5b69d84dd7b4d499bbffedc081efd2897174e727b334c2d3f2551",
+    "artifacts/v2/runs/final-sft-state-seed43-test/metrics.json": "1f4afca1942c0d7d10fe1e743b6315600ed82d8d6bc3c6854024c0c12262de74",
+    "artifacts/v2/runs/final-sft-state-seed43-test/predictions.jsonl": "7854d241ca8651d71c5ef1e6573075a2cb80e54cf0b2da58d33b2d7bd8350cad",
+    "artifacts/v2/runs/final-sft-state-seed43-test/run_receipt.json": "168ba4e049050ff423a54238c0ca7c8de0e93eb36791b265ab3814f2a629c7e5",
+    "artifacts/v2/runs/final-sft-state-seed44-test/config.json": "ceb25bff8dfa75d5e11d073a99ac60dd38b64136fb72e7ce5bcb2f20e5f2b3cf",
+    "artifacts/v2/runs/final-sft-state-seed44-test/metrics.json": "0c27570d79daffe8295716671784ec0d0e68e75baa611bb1745c6717561cc68e",
+    "artifacts/v2/runs/final-sft-state-seed44-test/predictions.jsonl": "98d2ca1942ea704cc7a21e19aff8ec6b8940d94a574a699d994c33e10c84a34e",
+    "artifacts/v2/runs/final-sft-state-seed44-test/run_receipt.json": "8d870748e0b3211f91f3bf99738e2c49e5120f189edd035fae42965c34a89de8",
+    "artifacts/v2/splits/paper_final_test_receipt.json": "c34c175b360fa9505468c7aaf8590ee7a6a6feaa02316808e2c8c2c023ab4f38"
+  }
+}
