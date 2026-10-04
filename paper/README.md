@@ -1,37 +1,35 @@
-# Workshop paper source
+# WEBP workshop paper source
 
-paper/main.tex is the four-page evidence-qualified draft for the CoRL 2026
-UMI Arena workshop. It uses the official CoRL style. The current draft remains
-anonymous because the actual author list, affiliations, and order have not yet
-been supplied; it is **not** a single-blind submission PDF.
+`main.tex` is the double-blind submission draft for the CoRL 2026 workshop
+[Everything Beneath the Policy (WEBP)](https://beneath-the-policy.github.io/).
+It uses the user-supplied official `corl_2026` template in its default
+anonymous submission mode. WEBP permits at most four **main-text** pages;
+references and appendices are excluded. The current source deliberately uses
+an empty `\author{}` block, and the resulting anonymous template title block,
+line numbers, and main-conference submission footer are expected. Do not
+switch to `[preprint]` or `[final]` for double-blind review, and do not edit the
+official style to hide these elements.
 
-From the repository root, regenerate Table 1, Table 2, and Figure 1 from
-receipt-verified final predictions with:
+From the repository root, use the project-local `.venv`:
 
     .\.venv\Scripts\python.exe scripts\generate_final_paper_assets.py --bootstrap-samples 2000
-
-Build the PDF and its source-hash receipt with:
-
     .\.venv\Scripts\python.exe scripts\build_paper.py --tectonic <path-to-tectonic.exe>
-
-The build requires every paper input to match a committed Git blob. Its
-receipt records that source commit and a fixed build epoch, so rebuilding the
-same source yields identical PDF bytes.
-
-Then run the final audit:
-
     .\.venv\Scripts\python.exe scripts\audit_submission.py
 
-The final Tier-B episodes are disjoint from the final refit's fit split but
-were exposed during earlier development; all reported results are internal
-single-task diagnostics. No V2 controlled RL or cross-task result is claimed.
-Only after actual author metadata is supplied should the official style's
-author-visible preprint mode be used for the workshop submission; do not edit
-the style file to remove its main-conference notice or anonymous title block.
-Before claiming submission readiness, record the author-confirmed names,
-affiliations, emails, and order in `paper/author_confirmation.json`, ensure
-the manuscript author block follows that order, and set matching PDF Author
-metadata. The audit remains blocked without this confirmation.
-The confirmation record must also mark the workshop OpenReview profiles,
-email-sharing confirmation, and accepted-paper public-release confirmation
-as resolved before `submission_ready` can become true.
+The build requires each paper input to match a committed Git blob. It records
+the source commit, fixed build epoch, PDF hash, and the bibliography-start
+label used to verify the main-text page bound. The local PDF and build receipt
+are under ignored `outputs/v2/paper_build/`; the machine audit is
+`artifacts/final_audit.json`.
+
+The paper is an internal single-task diagnostic. Its final Tier-B episodes
+were exposed during earlier method development, and no V2 GRPO/GSPO or
+independent cross-task replication is claimed. The fixed-checkpoint validation
+schema contrast and final test metrics are separately identified in the text.
+
+PDF readiness and OpenReview form readiness are distinct. The former can pass
+without disclosing author identities. The latter requires the authors to
+confirm their ordered names and OpenReview profile IDs plus the form's
+email-sharing and data-release choices. If needed, place this private record
+at ignored `outputs/v2/openreview_confirmation.json`; never commit it or put
+identities in the double-blind source/PDF. No submission is made automatically.

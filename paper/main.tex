@@ -2,46 +2,45 @@
 \usepackage{corl_2026}
 \usepackage{booktabs}
 \usepackage{graphicx}
+\usepackage{placeins}
 \usepackage{tikz}
 \usetikzlibrary{patterns}
 \usepackage{microtype}
 
-\title{More Compliant, Less Aware:\\Diagnosing Post-Training Collapse in Multimodal Robot Failure Critics}
-\author{Author information pending for single-blind workshop submission}
+\title{More Compliant, Less Aware:\\Evaluation-Protocol Sensitivity in Multimodal Robot Failure Critics}
+\author{}
 \begin{document}
 \maketitle
 
 \begin{abstract}
-A robot execution critic can obey its output contract without recognizing when an assembly fails. We examine that distinction in past-only REBOOT precision-assembly observation windows with a Qwen2.5-VL-3B critic. Supervised fine-tuning (SFT) makes every final-test response valid JSON, but its three state-only seeds identify substantially fewer failure windows than a fenced-output Base model. Base itself is not a useful detector: it predicts failure almost everywhere, including every nominal window. A separate validation contrast shows that asking for phase and failure mode as well as state can change the failure readout even before training. These are small, single-task, internally exposed diagnostics, not independent replication or a production-safety result.
+A robot execution critic can appear to improve or degrade depending on an output and evaluation protocol often treated as an implementation detail. We use one precision-assembly task and a Qwen2.5-VL-3B critic as a small model organism for this evaluation substrate: output schema, strict versus narrowly normalized parsing, and supervised fine-tuning (SFT) under that interface. At a fixed Base checkpoint, identical C2 observations, and identical validation IDs, state-only output recognizes 15/15 failure windows while phase/state/failure-mode output recognizes 0/15 after the same outer-fence normalization. On an internally exposed 54-window Tier-B diagnostic, SFT changes strict JSON validity from 0/54 to 54/54 but state-only failure recall from 18/18 to 1/18 or 7/18; Base's perfect recall also incurs 18/18 nominal false alarms. The improvement verdict therefore depends on the evaluation axis. We propose a minimal reporting checklist, not a new detector or a claim of independent replication.
 \end{abstract}
-\keywords{robot failure monitoring, multimodal critics, evaluation reliability}
+\keywords{evaluation substrate, robot execution monitoring, output contracts, reporting}
 
 \section{Introduction}
-In contact-rich assembly, an execution monitor is useful only if its answer is both consumable by a downstream system and informative about the current state. These are different properties. A valid JSON object can say \emph{nominal} during a failure; an otherwise useful answer can be rejected because it is enclosed in a Markdown fence. We call the first property \emph{interface compliance} and the second \emph{failure awareness}. The question here is whether post-training moves them together.
+An execution critic may look better because it obeys a JSON contract, yet worse because it misses failures. Conversely, a critic that recognizes every failure may merely raise an alarm on almost every frame. Calling either one ``improved'' depends on the output and evaluation substrate beneath the reported score. We examine this non-policy design choice rather than propose a new robot policy or a stronger failure detector.
 
-REBOOT provides bimanual precision-assembly trajectories with phase, failure, and recovery annotations~\citep{reboot2026}. We use its cylinder-install sample to study a Qwen2.5-VL-3B~\citep{qwen2025} execution critic, not a recovery policy. Prior runtime monitors use action-consistency and task-progress cues or predictive visual representations~\citep{sentinel2025,robomonitor2026}, while FailBench probes VLM failure judgments~\citep{failbench2026}; our narrower object is the output contract versus the failure-state readout. The contribution is a paired diagnostic protocol that keeps strict interface scoring separate from a narrowly normalized semantic readout and reports failure recall together with precision, nominal false alarms, and prediction distribution. Here \emph{collapse} means suppression or degeneration of this measured failure readout, not global model degradation.
+We use a precision-assembly failure critic as a small model organism for evaluation-substrate effects. REBOOT supplies bimanual trajectories with phase, failure, and recovery annotations~\citep{reboot2026}; Qwen2.5-VL-3B supplies the critic family~\citep{qwen2025}. Runtime monitors have studied consistency/progress cues and predictive representations~\citep{sentinel2025,robomonitor2026}, while FailBench examines VLM judgments of robot success~\citep{failbench2026}. Our narrower question is how a critic's measured failure readout depends on the interface through which it is asked and scored.
 
-\section{Setup and evidence boundaries}
+We make four contributions: (i) decompose interface compliance from semantic failure awareness; (ii) show fixed-checkpoint sensitivity to a state-only versus phase/state/failure-mode output contract on identical validation observations; (iii) diagnose SFT under a frozen Tier-B protocol across validity, state Macro-F1, failure recall, false alarms, and class distribution; and (iv) propose a compact reporting checklist. These controls show \emph{output-formulation sensitivity}, not which internal representation or task component caused it.
+
+\section{Study design: the evaluation substrate}
 \paragraph{Data and splits.}
-The locally audited REBOOT sample contains 60 episodes; seven are quarantined for annotation/frame inconsistencies, leaving 53 usable episodes. We sample four past-only timestamps over the preceding two seconds from a two-camera view, never reading beyond the anchor frame. V1 partitions complete episodes into train, validation, and diagnostic test. V2 development screens camera, supervision density, trace input, and output schema on development episodes. The final C2 sparse-visual refit uses a frozen six-episode Tier-B test with 54 windows, balanced across nominal, failure, and recovery. Those six episodes are disjoint from the \emph{final refit's} train and validation sets, but all six appeared in an earlier development training pool. The exposure ledger therefore classifies Tier B as \emph{internal evidence}; no same-task episode in this 60-episode sample is untouched.
+The locally audited REBOOT sample contains 60 episodes; seven with annotation/frame inconsistencies are quarantined, leaving 53 usable. The C2 input contains two RGB cameras and four past-only timestamps over the preceding two seconds, never beyond the anchor frame. Development validation has five episodes and 43 windows. The final sparse-visual refit uses six frozen Tier-B episodes and 54 windows, 18 per state. These six episodes are disjoint from the \emph{final refit's} fit and validation data, but all appeared in an earlier method-development training pool. The exposure ledger therefore labels Tier B \emph{internal evidence}; no episode in the local 60-episode same-task sample is completely untouched.
 
-\paragraph{Scoring.}
-Strict scoring requires a bare valid JSON object with the exact required keys and labels. Semantic scoring may remove whitespace and at most one complete outer unlabeled or lowercase-\texttt{json} fence; it performs no JSON repair, field extraction, or label remapping. The same task evaluator then scores both forms. We report strict validity, semantic state Macro-F1, failure recall and precision, nominal-window false-alarm rate (N-FA), recovery recall, and predicted-state counts. N-FA is not an onset-relative early-warning measure. Uncertainty is computed by resampling whole episodes, with the identical paired episode draw for two models; correlated windows are never resampled independently.
+\paragraph{Three substrate layers.}
+First, the output contract requests either \texttt{state} alone or \texttt{phase}, \texttt{state}, and \texttt{failure\_mode}. Second, strict interface scoring requires a bare JSON object with the exact keys and labels; the separately reported semantic diagnostic strips whitespace and at most one complete outer unlabeled or lowercase-\texttt{json} fence, with no JSON repair or label remapping. Third, state-only SFT is compared with Base under the same frozen Tier-B windows, with three training seeds. We report validity, semantic state Macro-F1, failure precision/recall, nominal-window false alarms (N-FA), and predicted-class counts. N-FA is not onset-relative early warning. Paired intervals resample whole episodes using identical draws for both models, never individual correlated windows.
 
-\section{Discovery and controlled diagnostics}
-The retrospective V1 diagnostic exposed a format/content mismatch: outer fences made Base responses fail strict parsing, whereas a narrowly normalized semantic diagnostic could recover their state content. The later V1 SFT and historical RL runs do not form a matched causal intervention, so we use them only to motivate the V2 controls.
+\section{Fixed-checkpoint interface sensitivity}
+The strongest interface control compares two \emph{Base} runs before SFT. Both use the same checkpoint, C2 images, four frames, decoding budget and seed, and the same ordered 43 validation IDs and references; the recorded configurations differ only in \texttt{task\_schema}. With state-only output, semantic failure recall is 15/15; requesting phase/state/failure-mode output yields 0/15. All full-schema responses parse after the narrow outer-fence normalization, so its zero recall is not merely a parse failure. An apparently secondary output contract therefore changes the returned failure-state readout before fine-tuning. This comparison implicates the output formulation, but does not isolate instruction length, field coupling, or an internal mechanism. The state-only Base also over-alarms on nominal windows and misses recovery; it is not an actionable monitor.
 
-On the five-episode development-validation set, the chosen high-plus-left-wrist C2 view attains high failure recall under a state-only output, but also makes many nominal false alarms and fails to recognize recovery. Thus the camera-selection rule (failure recall, then state Macro-F1) selected an observable signal, not an actionable detector. Denser supervision changed class balance as well as temporal density, so its inferior validation Macro-F1 cannot isolate a temporal mechanism. A separately trained Trace-Text adapter improved Macro-F1 while missing failures that the visual-only adapter recognized; it was not selected by the failure-first rule.
-
-The most direct formulation contrast uses the same C2 images and validation IDs. With a state-only prompt, both Base and its state-only SFT recognize all failure windows. With a phase/state/failure-mode prompt, both corresponding full-schema conditions recognize none. The \emph{Base} contrast holds checkpoint and image input fixed and implicates prompt/output formulation before training; the SFT contrast additionally changes targets and adapter. Neither contrast identifies whether phase, failure mode, instruction length, or label coupling is responsible. A decomposition would require a new, pre-specified experiment and is not claimed here.
-
-\section{Internal Tier-B refit: compliance is not awareness}
-Table~\ref{tab:final} is regenerated from six receipt-verified prediction files, with identical final sample IDs. State-only Base has zero strict JSON validity but recognizes all failure windows after outer-fence normalization. It also marks every nominal window as failure and produces failure in 53 of 54 responses: perfect failure recall here is a high-alarm failure mode, not strong monitoring. All three SFT seeds produce bare valid JSON, but their failure sensitivity and false-alarm rates differ. The full-schema Base and SFT both miss every failure window. The full-schema SFT's improvement in protocol validity and some non-failure state discrimination therefore is not an improvement in failure awareness.
+\section{Tier-B diagnostic: the verdict depends on the axis}
+Table~\ref{tab:final} comes from six receipt-verified prediction files on identical frozen IDs. Under \emph{strict JSON validity}, state-only Base is 0/54 and every SFT seed is 54/54: training looks dramatically better. Under semantic state Macro-F1, some SFT seeds improve on Base. Under \emph{failure recall}, Base is 18/18 while the SFT seeds reach only 1/18, 7/18, and 7/18: failure sensitivity looks worse. Yet Base predicts failure in 53/54 responses and falsely alarms on all 18 nominal windows. Its perfect recall is a degenerate high-alarm operating point, not strong monitoring. The direction of the qualitative improvement verdict changes with the evaluation axis; no single number establishes that SFT either improved or degraded the critic overall.
 
 \begin{table}[t]
 \centering\scriptsize
 \resizebox{\textwidth}{!}{\input{tables/final.tex}}
-\caption{Frozen internal Tier-B test: 54 windows from six episodes, 18 per state. F-rec and F-prec use the semantic protocol; N-FA counts nominal windows labeled failure. Pred N/F/R/I lists nominal, failure, recovery, invalid semantic responses. Strict JSON is a separate protocol measure.}
+\caption{Frozen internal Tier-B diagnostic: 54 windows from six episodes, 18 per state. F-rec and F-prec use the semantic protocol; N-FA counts nominal windows labeled failure. Pred N/F/R/I lists nominal, failure, recovery, and invalid semantic responses. Strict JSON is a separate protocol measure.}
 \label{tab:final}
 \end{table}
 
@@ -52,7 +51,7 @@ Table~\ref{tab:final} is regenerated from six receipt-verified prediction files,
 \label{fig:tradeoff}
 \end{figure}
 
-Table~\ref{tab:paired} quantifies candidate-minus-Base differences under the same semantic parser. Every interval resamples the six complete episodes in matched pairs. Seed 43 gains state Macro-F1 and reduces nominal false alarms, but loses failure recall; seeds 42 and 44 show different operating points. These intervals describe this exposed sample and do not support population-level significance or a best-seed claim. The final test was not used to choose the seed or reopen training.
+Table~\ref{tab:paired} quantifies SFT-minus-Base differences under the same semantic parser. Every interval resamples the six complete episodes in matched pairs. Seed 43 gains state Macro-F1 and reduces nominal false alarms while losing failure recall; seeds 42 and 44 produce different operating points. These intervals describe an exposed small sample, not population-level significance or a best-seed selection. The final test was not used to choose a seed or reopen training.
 
 \begin{table}[t]
 \centering\scriptsize
@@ -61,10 +60,16 @@ Table~\ref{tab:paired} quantifies candidate-minus-Base differences under the sam
 \label{tab:paired}
 \end{table}
 
+\FloatBarrier
+\paragraph{Minimal reporting checklist for robot execution critics.}
+Our diagnostics motivate reporting (1) the exact past-observation boundary and camera/input configuration; (2) the required output schema and parser/normalization rules; (3) interface-validity rate alongside semantic state metrics, failure precision and recall, nominal false-alarm rate, and predicted-class distribution; and (4) episode-level split and prior-exposure status. This is a proposed reporting convention, not a universal standard.
+
 \section{Limitations and conclusion}
-The finding supported here is that protocol compliance and semantic failure recognition can move in different directions for this recipe. It is \emph{not} that Base is a good detector, that SFT generally destroys robot awareness, or that the schema experiment proves an internal representation mechanism. There are only six internally exposed final episodes from one cylinder-install task. Annotation-defined failure intervals are not independent human judgments of visual observability. Compatible second tasks are listed in public REBOOT metadata, but the required label-grounded observations and compute were not available for a frozen replication in this study; cross-task generalization remains unmeasured.
+This is one critic family on one task, with only six internally exposed final episodes; it is a controlled diagnostic model organism, not an independent or cross-task replication. Annotation-defined failure intervals are not independent human judgments of visual observability. The schema contrast changes the requested fields and associated parser together, so it does not identify a unique prompt component or internal representation mechanism. No production-safety or recovery-policy improvement follows. A planned V2 reward intervention failed its pre-test validation gate, so no V2 GRPO or GSPO was run; historical V1 RL runs are not controlled causal evidence.
 
-A deterministic V2 reward verifier passed its tests, but the pre-test validation gate found no full-schema SFT outcome gain over Base and called for revisiting representation or supervision. No V2 GRPO or GSPO was run; state-gated reward remains an untested intervention. Historical V1 RL outputs do not establish a controlled reward comparison. The practical lesson is methodological: evaluate a robot critic's interface, failure sensitivity, and false-alarm behavior separately before treating a format improvement as a safety-relevant gain.
+The lesson is methodological: making interface and evaluator choices explicit can change the strength and even the direction of the \emph{qualitative} claim about a robot critic. Report the substrate before attributing a measured gain to post-training.
 
+\clearpage
+\label{referencesstart}
 \bibliography{references}
 \end{document}

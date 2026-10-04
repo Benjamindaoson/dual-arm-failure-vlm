@@ -1,118 +1,97 @@
-# Workshop submission audit — 2026-10-04
+# WEBP submission audit — 2026-10-04
 
-Evidence package: **PASS WITH LIMITATIONS**. OpenReview submission readiness: **NO**, pending real author metadata and an author-visible build for the workshop's single-blind review. This is an auditable four-page anonymous checkpoint, not an uploaded final submission.
+Target: [Everything Beneath the Policy (WEBP)](https://beneath-the-policy.github.io/),
+CoRL 2026. The call permits at most four main-text pages (references and
+appendices excluded), the CoRL 2026 submission template, and double-blind
+review. Its deadline is October 9, 2026, 11:59 p.m. Central Time. This
+repository holds an anonymous, locally compiled paper; it is **not** an
+OpenReview submission. The machine-readable [audit](../artifacts/final_audit.json)
+keeps `pdf_ready` separate from `submission_ready`.
 
-## What was verified
+## Claim and provenance boundary
 
-- The actual repository is Benjamindaoson/dual-arm-failure-vlm on master. Frozen final split and strict/semantic evaluators were not changed.
-- The episode ledger has 60 rows: 53 usable and seven quarantined. All 53 usable cylinder-install episodes appear in V1 train, validation, or diagnostic test. The six final Tier-B episodes (11, 23, 29, 33, 51, 58) were in earlier method-development training. Thus the final result is **internal single-task evidence**, not independent replication.
-- All 44 completed V2 run receipts verify. The four final adapter weight files match their training-receipt SHA-256 values. Six final prediction files reproduce their stored strict and semantic primary metrics; each sample ID and reference equals the pre-inference frozen test manifest and split receipt.
-- The paper's final table, three-axis figure, and paired contrast table are generated from those saved predictions. The paired confidence intervals use 2,000 deterministic bootstrap draws over six *whole episodes* with identical paired draws, not independently sampled windows.
-- The CoRL 2026 template was obtained from the official [CoRL author page](https://www.corl.org/contributions/instruction-for-authors), and the four-page PDF compiled. A local build receipt binds the PDF SHA-256 to the exact manuscript, bibliography, style, table, and figure inputs and verifies that each input equals the recorded Git commit's blob. The PDF build fixes `SOURCE_DATE_EPOCH` to the latest committed paper-source timestamp; two consecutive builds from the same source produced the same PDF SHA-256. All five cited works were checked against their arXiv or PMLR records. The [UMI Arena call](https://umi-arena.airoa.io/) confirms a 2–4 page extended abstract (references excluded), CoRL format, single-blind review, and October 16, 2026 paper deadline.
-- The V2 RL gate artifact, its two validation prediction hashes, and all V2 run-stage configs were checked. The gate remains closed at REVISIT_REPRESENTATION_OR_SUPERVISION. No V2 GRPO or GSPO was run. The manuscript treats the state-gated reward as untested.
+The paper is an evaluation-protocol diagnostic, not a new detector or policy.
+Its fixed-checkpoint contrast compares two receipt-verified Base validation
+runs: the same model, C2 observations, four timestamps, decoding settings,
+43 ordered IDs, references, and frozen split receipt. Recorded run configs
+differ only in `task_schema`. The state-only output recognizes 15/15 failure
+windows, whereas full phase/state/failure-mode output recognizes 0/15 after
+the same narrow outer-fence normalization. The full-schema zero is semantic,
+not a failure to parse normalized JSON. This establishes sensitivity to the
+output formulation; it does **not** identify which changed field, instruction
+length, or internal mechanism caused the difference.
 
-The authoritative machine report is [final_audit.json](../artifacts/final_audit.json); source hashes and generated-asset hashes are in [final_paper_evidence.json](../artifacts/v2/final_paper_evidence.json). The exposure ledger has its own [receipt](../artifacts/episode_exposure_ledger_receipt.json).
+The Tier-B comparison is distinct from that validation control. It uses six
+frozen, internally exposed episodes, 54 windows, and identical sample IDs
+across the saved Base/SFT predictions. State-only Base has strict JSON validity
+0/54, failure recall 18/18, and nominal false alarms 18/18. Three SFT seeds
+have strict validity 54/54 and failure recall 1/18, 7/18, and 7/18. The
+individual seeds occupy different state-Macro-F1/false-alarm operating points;
+none warrants an unconditional “SFT improves” or “SFT harms” conclusion.
+Table 1, Table 2, and Figure 1 are generated from saved prediction files,
+not hand-entered results. Paired intervals use 2,000 deterministic draws of
+six whole episodes with identical draws for both conditions.
 
-## Manuscript-result PASS/FAIL ledger
+The episode exposure ledger covers the local 60-episode same-task sample:
+seven are quarantined, 53 usable, and none untouched after earlier method
+development. The final six Tier-B episodes are disjoint from the final refit's
+fit/validation split but were exposed earlier. Thus the results are **internal
+single-task evidence**, not independent or cross-task replication. A reward
+intervention did not pass the V2 validation gate; no V2 GRPO or GSPO was run.
+No production-safety or recovery-policy improvement is claimed.
 
-PASS means the result was recomputed from saved predictions or frozen source
-metadata, not that it generalizes beyond this internal test. The final
-evidence generator verifies each run receipt and prediction hash, binds all
-54 IDs and references to the frozen test manifest/split receipt, compares
-strict and narrowly normalized semantic metrics against saved metrics, and
-compares every regenerated field with the saved evidence JSON. Its paired
-intervals resample complete episodes with 2,000 draws and seed 42.
+## Verification ledger
 
-| Manuscript result | Check | Source |
-| --- | --- | --- |
-| Table 1: State Base | PASS | final-base-state prediction/metric/receipt/config files; final_paper_evidence.json |
-| Table 1: State SFT seeds 42, 43, 44 | PASS, each seed | Three final-sft-state-seed*-test run directories; final_paper_evidence.json |
-| Table 1: Full Base and Full SFT | PASS, each condition | final-base-full-test and final-sft-full-seed42-test run directories; final_paper_evidence.json |
-| Table 1: strict JSON, semantic failure support/recall/precision, nominal false alarms, State Macro-F1, predicted-class distribution | PASS, every cell | scripts/generate_final_paper_assets.py regenerates paper/tables/final.tex from the six prediction files |
-| Table 2: SFT 42, 43, 44 minus Base | PASS, each contrast and interval | scripts/paired_compare.py on paired final IDs; paper/tables/paired_contrasts.tex |
-| Figure 1: strict JSON validity | PASS, all six bars | Strict parser output in final_paper_evidence.json; generated figure |
-| Figure 1: semantic failure recall | PASS, all six bars | One-outer-fence semantic parser output in final_paper_evidence.json; generated figure |
-| Figure 1: nominal-window false-alarm rate | PASS, all six bars | Nominal gold windows and semantic state predictions; generated figure |
-| Text: 60 audited, seven quarantined, 53 usable, six internal Tier-B episodes | PASS | Frozen source audit, split receipts, episode_exposure_ledger.csv and its validated receipt |
-| Text: two cameras, four past-only frames within the stated history | PASS | Final run configs and sampled-frame indices in the frozen final manifest |
-| Text: 54 final windows with 18 per state; Base predicts failure in 53/54 and falsely alarms on 18/18 nominal windows | PASS | Frozen final manifest and State Base prediction rows |
-| Text: five development-validation episodes and closed V2 RL gate | PASS | Frozen final split receipt and final_rl_gate_decision.json, bound to its validation prediction hashes |
-| Independent or cross-task replication claim | NOT CLAIMED | All six Tier-B episodes had prior method-development exposure; no new task inference was run |
+| Check | Source and required outcome |
+| --- | --- |
+| Frozen experiment provenance | 44 completed V2 receipts verify; four final adapter hashes match training receipts. |
+| Schema control | `scripts/audit_submission.py` independently checks both run receipts, ordered IDs/references/split hash, config-only schema difference, and recomputed normalized semantic metrics. |
+| Tier-B primary evidence | `scripts/generate_final_paper_assets.py` verifies final runs and regenerates `paper/tables/final.tex`, `paper/tables/paired_contrasts.tex`, and `paper/figures/final_tradeoff.tex`. |
+| Split exposure | `scripts/build_episode_exposure_ledger.py --validate-only` rebuilds the ledger against its receipt. |
+| RL gate | `scripts/audit_submission.py` checks the validation prediction hashes and rejects any V2 RL run stage. |
+| PDF source binding | `scripts/build_paper.py` requires committed Git blobs for all paper inputs, records the source commit, SHA-256 values, fixed build epoch, bibliography-start page, and PDF SHA-256. |
+| Submission format | Default `corl_2026` mode, empty source author block, `Anonymous Submission` PDF metadata, and at most four main-text pages. |
 
-The three drawn measures are distinct; Figure 1 now also uses white,
-dark-gray, and hatched fills so the legend remains interpretable without
-color. No manuscript metric was hand-entered into a generated table or figure.
+The authoritative data records are
+[final_paper_evidence.json](../artifacts/v2/final_paper_evidence.json),
+the [episode-exposure receipt](../artifacts/episode_exposure_ledger_receipt.json),
+the [verified-run summary](../artifacts/v2/verified_run_receipts.json), and
+the local [PDF build receipt](../outputs/v2/paper_build/build_receipt.json).
+The local submission [PDF](../outputs/v2/paper_build/main.pdf) is ignored by
+Git; its exact source commit and hash are in that build receipt.
 
-## Independent-evidence route decision
+## Format, review, and remaining gate
 
-Route 1 is exhausted *within the locally audited 60-episode same-task sample*: zero usable episodes are untouched. This does **not** prove that no other cylinder-install episodes exist elsewhere.
+The user-supplied official template is under
+`corl_2026_template_submission/corl_2026_template_submission/`. Its default
+style deliberately prints anonymous author placeholders, line numbers, and
+the main-conference submission footer. For WEBP's double-blind review, these
+are expected template artifacts, not missing real author metadata in the PDF.
+Neither the style file nor the frozen evaluation/split semantics were edited
+to change them. The `[preprint]` and `[final]` style modes are not used.
 
-Route 2 was not executed. Public REBOOT describes additional tasks, but locally held USB-C and RJ45 candidate folders contain only partial metadata; neither has a phase/onset annotation file or video payload. The USB-C episodes parquet copy lacks a valid closing PAR1 marker. M12 task labels were not locally inspected. This local environment has no nvidia-smi executable, no PyTorch in the project's .venv, and no local Qwen base weights. We did not freeze a new test set, tune on one, claim cross-task performance, or restart a paid GPU instance.
+The public [WEBP OpenReview group](https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/WEBP)
+requires author profiles and form confirmations concerning email sharing and
+release of accepted submissions. The user has said author information will
+be provided later. No names, affiliations, profile IDs, or consent choices
+were invented, and no PDF was uploaded. The anonymous PDF can be ready while
+`submission_ready` remains false. Any eventual author-confirmed form record
+belongs in ignored `outputs/v2/openreview_confirmation.json`, not in the
+anonymous manuscript or Git.
 
-Route 3 therefore applies: retain an **internal diagnostic workshop study** and state that independent/cross-task replication is unmeasured.
+## Reproduction and visual QA
 
-## Format and visual QA
-
-The [workshop call](https://umi-arena.airoa.io/) specifies a single-blind
-2–4-page extended abstract, with acknowledgments/references excluded, in the
-CoRL main-conference format. The [workshop OpenReview invitation](https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/UMI_Arena)
-was also inspected through its public API on October 4: it asks for author
-profiles, title, abstract, PDF, and explicit confirmations concerning author
-email sharing with program chairs and release of accepted submissions. The
-actual authors and those confirmations are not available here; no form was
-submitted.
-
-The unmodified official style's default mode prints anonymous author fields
-and a main-conference submission footer. Its preprint option displays the
-supplied author list and omits that main-conference notice; its final option
-prints a main-conference proceedings footer. For this single-blind workshop,
-preprint is the defensible author-visible source option **by inference from
-the supplied style and workshop call**, not an explicit workshop instruction
-about the footer. The source must also override the style's default
-anonymous PDF Author metadata with the real authors. Do not edit the style
-file. Until real metadata is supplied, the current PDF remains a draft and
-fails the author-visibility check. The audit also requires a separate
-`paper/author_confirmation.json` containing an author-confirmed ordered list
-of names, affiliations, and emails; each identity and its order must match
-the rendered-source author block and the PDF Author string. The same record
-must attest that the OpenReview profiles and the form's email-sharing and
-accepted-paper public-release confirmations have been resolved. No such
-confirmation exists yet, so this gate fails closed.
-
-All four pages were rendered and inspected at normal reading size. PASS:
-no overflowing text, clipped table/figure/caption, broken citation, broken
-visible URL, or draft TODO was seen; Table 1, Table 2, and Figure 1 are
-legible, and Figure 1's three encodings remain distinguishable in grayscale.
-The bundled Tectonic build emitted nonfatal font/xcolor and intermediate-pass
-citation warnings; the final PDF visibly resolves all five references.
-FAIL for submission readiness: page 1 still has the template's anonymous
-author block and main-conference submission footer, and PDF Author metadata
-says Anonymous Submission. These are explicit unresolved placeholders,
-not a silent QA pass.
-
-## Claim hierarchy
-
-- H1, interface compliance and semantic failure recognition need not track: **supported on internal evidence**.
-- H2, this specific SFT setup can suppress the failure readout: **supported only in a recipe-specific sense**. Base's perfect failure recall is accompanied by maximal nominal false alarms and is not a good detector. Output formulation is implicated by a same-image Base prompt contrast, but the causal subcomponent is not isolated.
-- H3, a state-gated reward prevents shortcut learning: **untested empirical intervention**; no V2 RL result.
-
-No production robot safety, recovery-controller improvement, independent replication, cross-task generalization, or universal SFT degradation is claimed.
-
-## Reproduction commands executed
-
-Run from the repository root with the project-local Python environment:
+From the repository root in its project-local `.venv`:
 
     .\.venv\Scripts\python.exe -m unittest discover -s tests -q
     .\.venv\Scripts\python.exe -m compileall -q src scripts tests
-    openspec validate close-workshop-submission --strict
+    openspec validate webp-evaluation-substrate --strict
     .\.venv\Scripts\python.exe scripts\build_episode_exposure_ledger.py --validate-only
     .\.venv\Scripts\python.exe scripts\verify_v2_evidence.py --runs-root artifacts\v2\runs --output artifacts\v2\verified_run_receipts.json
     .\.venv\Scripts\python.exe scripts\generate_final_paper_assets.py --bootstrap-samples 2000
     .\.venv\Scripts\python.exe scripts\build_paper.py --tectonic <path-to-tectonic.exe>
     .\.venv\Scripts\python.exe scripts\audit_submission.py
 
-The 88 regression tests, bytecode compile, OpenSpec validation, ledger validation, evidence verification, and final audit pass. The [verified run-receipt summary](../artifacts/v2/verified_run_receipts.json) records all 44 completed runs. The PDF was compiled with the Codex-bundled Tectonic executable (not an uninstalled global TeX package), and pdfinfo independently reports four pages. The ignored local [build receipt](../outputs/v2/paper_build/build_receipt.json) records compiler, source commit, source-input hashes, build epoch, and PDF hash. The PDF remains at [main.pdf](../outputs/v2/paper_build/main.pdf) in ignored local output storage. The exact source commit used for the final certified build is recorded in that receipt; uncommitted paper input cannot pass certification.
-
-## Required before actual submission
-
-The user will provide author names, affiliations, email addresses, and order later. Confirm that every author has the OpenReview profile required by the form, and obtain the form's email-sharing and public-release confirmations from the authors. Record an author-confirmed ordered identity list, replace the current anonymous draft metadata, switch the unmodified official style to its author-visible preprint mode, set matching non-anonymous PDF Author metadata, rebuild the PDF, inspect all pages, and rerun this audit. Until then, do **not** call the package submission-ready or upload the PDF.
+The complete verification results, including page-by-page visual inspection,
+are recorded in the final handoff. The audit must not be described as an
+OpenReview upload or as proof that the workshop will accept the paper.

@@ -39,6 +39,14 @@ def _pdf_pages(path: Path) -> int:
     raise ValueError("pdfinfo did not report a page count")
 
 
+def reference_start_page(aux_text: str) -> int:
+    """Read the LaTeX label placed after the main-text float flush."""
+    match = re.search(r"\\newlabel\{referencesstart\}\{\{[^{}]*\}\{([0-9]+)\}", aux_text)
+    if not match:
+        raise ValueError("referencesstart label missing from LaTeX auxiliary file")
+    return int(match.group(1))
+
+
 def build_environment(source_date_epoch: int) -> dict[str, str]:
     """Keep TeX PDF timestamps stable across repeated builds of the same sources."""
     if source_date_epoch <= 0:
@@ -62,15 +70,20 @@ def _committed_source_sha256(root: Path, commit: str, relative: str) -> str:
 
 
 def verify_build_receipt(root: Path, observed_pages: int | None) -> dict:
-    """Reject stale PDFs even when the output file exists and has four pages."""
+    """Reject stale PDFs even when the output exists and meets the page bound."""
     output = root / "outputs/v2/paper_build"
     receipt_path = output / "build_receipt.json"
     pdf = output / "main.pdf"
-    if not receipt_path.is_file() or not pdf.is_file():
-        raise ValueError("paper build receipt or PDF missing")
+    aux = output / "main.aux"
+    if not receipt_path.is_file() or not pdf.is_file() or not aux.is_file():
+        raise ValueError("paper build receipt, PDF, or auxiliary page label missing")
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
     if receipt.get("status") != "BUILT" or receipt.get("pages") != observed_pages or observed_pages is None:
         raise ValueError("paper build receipt page count or status disagrees")
+    first_reference_page = reference_start_page(aux.read_text(encoding="utf-8"))
+    if (receipt.get("main_pages") != first_reference_page - 1
+            or not 1 <= receipt["main_pages"] <= 4 or first_reference_page > observed_pages):
+        raise ValueError("paper build main-text page count disagrees or exceeds WEBP limit")
     if not re.fullmatch(r"[0-9a-f]{40}", str(receipt.get("git_commit", ""))):
         raise ValueError("paper build git commit is missing or invalid")
     if not isinstance(receipt.get("source_date_epoch"), int) or receipt["source_date_epoch"] <= 0:
@@ -101,6 +114,7 @@ def build_paper(root: Path, tectonic: str) -> dict:
     output = root / "outputs/v2/paper_build"
     output.mkdir(parents=True, exist_ok=True)
     command = [tectonic, "-X", "compile", "--outdir", str(output), "--outfmt", "pdf",
+               "--keep-intermediates",
                "--print", "--untrusted", "main.tex"]
     result = subprocess.run(command, cwd=root / "paper", capture_output=True, text=True,
                             errors="replace", check=False, env=build_environment(source_date_epoch))
@@ -109,13 +123,16 @@ def build_paper(root: Path, tectonic: str) -> dict:
         raise RuntimeError(f"Tectonic failed ({result.returncode}); see {output / 'stdout.log'}")
     pdf = output / "main.pdf"
     pages = _pdf_pages(pdf)
-    if not 2 <= pages <= 4:
-        raise ValueError(f"workshop PDF must have 2-4 pages: {pages}")
+    first_reference_page = reference_start_page((output / "main.aux").read_text(encoding="utf-8"))
+    main_pages = first_reference_page - 1
+    if not 1 <= main_pages <= 4 or first_reference_page > pages:
+        raise ValueError(f"WEBP main text must have at most 4 pages: {main_pages}")
     version = subprocess.run([tectonic, "--version"], capture_output=True, text=True,
                              errors="replace", check=True).stdout.strip()
     receipt = {
         "status": "BUILT", "compiler": version, "command": command,
-        "pages": pages, "git_commit": git_commit, "source_date_epoch": source_date_epoch,
+        "pages": pages, "main_pages": main_pages,
+        "git_commit": git_commit, "source_date_epoch": source_date_epoch,
         "source_sha256": {name: _text_sha256(root / name) for name in PAPER_INPUTS},
         "pdf_sha256": hashlib.sha256(pdf.read_bytes()).hexdigest(),
     }
@@ -133,7 +150,8 @@ def main() -> int:
     if not args.tectonic:
         parser.error("Tectonic not on PATH; supply --tectonic with its executable path")
     receipt = build_paper(args.root, args.tectonic)
-    print(json.dumps({"pages": receipt["pages"], "pdf_sha256": receipt["pdf_sha256"]}))
+    print(json.dumps({"pages": receipt["pages"], "main_pages": receipt["main_pages"],
+                      "pdf_sha256": receipt["pdf_sha256"]}))
     return 0
 
 

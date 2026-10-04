@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from scripts import build_paper
 from scripts.build_paper import PAPER_INPUTS, build_environment, verify_build_receipt
 from scripts.generate_final_paper_assets import text_sha256
 
@@ -26,8 +27,10 @@ class PaperBuildTests(unittest.TestCase):
             pdf = root / "outputs/v2/paper_build/main.pdf"
             pdf.parent.mkdir(parents=True)
             pdf.write_bytes(b"%PDF-1.7\nfixture")
+            (pdf.parent / "main.aux").write_text(
+                r"\newlabel{referencesstart}{{5}{4}{Limitations}{section.5}{}}", encoding="utf-8")
             receipt = {
-                "status": "BUILT", "pages": 4,
+                "status": "BUILT", "pages": 4, "main_pages": 3,
                 "git_commit": commit, "source_date_epoch": 1791111111,
                 "source_sha256": {name: text_sha256(root / name) for name in PAPER_INPUTS},
                 "pdf_sha256": hashlib.sha256(pdf.read_bytes()).hexdigest(),
@@ -50,6 +53,13 @@ class PaperBuildTests(unittest.TestCase):
     def test_build_environment_fixes_pdf_timestamp(self):
         env = build_environment(1791111111)
         self.assertEqual(env["SOURCE_DATE_EPOCH"], "1791111111")
+
+    def test_reference_start_label_counts_only_main_text_pages(self):
+        parse = getattr(build_paper, "reference_start_page", None)
+        self.assertIsNotNone(parse)
+        self.assertEqual(parse(r"\newlabel{referencesstart}{{5}{5}{Limitations}{section.5}{}}"), 5)
+        with self.assertRaisesRegex(ValueError, "referencesstart"):
+            parse(r"\newlabel{another}{{}{5}}")
 
 
 if __name__ == "__main__":

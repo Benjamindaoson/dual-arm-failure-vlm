@@ -5,12 +5,13 @@ import json
 from pathlib import Path
 
 from scripts.audit_submission import (
-    audit_submission, submission_author_blockers, verify_recomputed_evidence, verify_rl_gate,
+    audit_submission, verify_recomputed_evidence, verify_rl_gate,
 )
+from scripts import audit_submission as submission_module
 
 
 class SubmissionAuditTests(unittest.TestCase):
-    def test_current_saved_evidence_passes_but_submission_needs_authors(self):
+    def test_current_saved_evidence_has_anonymous_webp_pdf_but_needs_form(self):
         root = Path(__file__).resolve().parents[1]
         report = audit_submission(root)
         self.assertEqual(report["evidence_status"], "PASS_WITH_LIMITATIONS")
@@ -18,9 +19,14 @@ class SubmissionAuditTests(unittest.TestCase):
         self.assertEqual(report["completed_v2_runs_verified"], 44)
         self.assertEqual(report["episode_exposure"]["untouched_same_task"], 0)
         self.assertEqual(report["adapter_hashes_verified"], 4)
-        self.assertEqual(report["pdf_pages"], 4)
+        self.assertTrue(report["pdf_ready"])
+        self.assertEqual(report["pdf_pages"], 5)
+        self.assertEqual(report["main_text_pages"], 4)
+        self.assertEqual(report["fixed_checkpoint_schema_contrast"]["state_only_semantic_failure_correct"], 15)
+        self.assertEqual(report["fixed_checkpoint_schema_contrast"]["full_schema_semantic_failure_correct"], 0)
+        self.assertEqual(report["official_venue"]["review"], "double-blind")
         self.assertRegex(report["paper_build_git_commit"], r"^[0-9a-f]{40}$")
-        self.assertIn("author metadata", report["submission_blockers"])
+        self.assertIn("OpenReview form", report["submission_blockers"])
 
     def test_mismatched_generated_asset_is_rejected(self):
         from scripts.audit_submission import verify_hash_map
@@ -73,54 +79,27 @@ class SubmissionAuditTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "RL gate"):
                 verify_rl_gate(root)
 
-    def test_single_blind_submission_uses_author_visible_preprint_without_main_conference_footer(self):
-        author = r"\author{Jane Doe\\Example Institute\\\texttt{jane@example.org}}"
-        self.assertIn("author confirmation",
-                      submission_author_blockers(r"\usepackage[preprint]{corl_2026}" + "\n" + author))
-        self.assertIn("author-visible style",
-                      submission_author_blockers(r"\usepackage{corl_2026}" + "\n" + author))
-        self.assertIn("main-conference footer",
-                      submission_author_blockers(r"\usepackage[final]{corl_2026}" + "\n" + author))
-        self.assertIn("author metadata",
-                      submission_author_blockers(r"\usepackage[preprint]{corl_2026}" + "\n"
-                                                 + r"\author{Jane Doe\\Example Institute}"))
-        self.assertIn("PDF author metadata",
-                      submission_author_blockers(r"\usepackage[preprint]{corl_2026}" + "\n" + author,
-                                                 pdf_author="Anonymous Submission"))
+    def test_webp_pdf_requires_default_anonymous_style_and_no_source_identity(self):
+        check = getattr(submission_module, "webp_pdf_blockers", None)
+        self.assertIsNotNone(check)
+        anonymous = r"\usepackage{corl_2026}" + "\n" + r"\author{}"
+        self.assertEqual(check(anonymous, pdf_author="Anonymous Submission"), [])
+        self.assertIn("double-blind style", check(anonymous.replace(
+            r"\usepackage{corl_2026}", r"\usepackage[preprint]{corl_2026}"),
+            pdf_author="Anonymous Submission"))
+        self.assertIn("source author identity", check(anonymous.replace(
+            r"\author{}", r"\author{Jane Doe}"), pdf_author="Anonymous Submission"))
+        self.assertIn("PDF author metadata", check(anonymous, pdf_author="Jane Doe"))
 
-    def test_author_confirmation_requires_matching_identity_and_pdf_order(self):
-        manuscript = (r"\usepackage[preprint]{corl_2026}"
-                      + "\n" + r"\author{Jane Doe\\Example Institute\\\texttt{jane@example.org}}")
-        confirmation = {"confirmed_by_author": True,
-                        "openreview_profiles_confirmed": True,
-                        "email_sharing_confirmed": True,
-                        "public_release_confirmed": True,
-                        "authors": [
-            {"name": "Jane Doe", "affiliation": "Example Institute", "email": "jane@example.org", "order": 1}
-        ]}
-        self.assertEqual(submission_author_blockers(manuscript, pdf_author="Jane Doe",
-                                                    author_confirmation=confirmation), [])
-        self.assertIn("OpenReview confirmations",
-                      submission_author_blockers(manuscript, pdf_author="Jane Doe",
-                                                 author_confirmation={**confirmation,
-                                                                      "public_release_confirmed": False}))
-        self.assertIn("PDF author metadata",
-                      submission_author_blockers(manuscript, pdf_author="Someone Else",
-                                                 author_confirmation=confirmation))
-        self.assertIn("author confirmation",
-                      submission_author_blockers(manuscript.replace("Jane Doe", "mail@example.org"),
-                                                 pdf_author="Jane Doe", author_confirmation=confirmation))
-
-    def test_author_confirmation_requires_source_display_order(self):
-        manuscript = (r"\usepackage[preprint]{corl_2026}"
-                      + "\n" + r"\author{Bob B\\Unit B\\\texttt{bob@example.org}"
-                      + r"\and Alice A\\Unit A\\\texttt{alice@example.org}}")
+    def test_openreview_upload_needs_private_author_profile_and_form_confirmations(self):
+        check = getattr(submission_module, "openreview_form_blockers", None)
+        self.assertIsNotNone(check)
+        self.assertIn("OpenReview form", check(None))
         confirmation = {"confirmed_by_author": True, "authors": [
-            {"name": "Alice A", "affiliation": "Unit A", "email": "alice@example.org", "order": 1},
-            {"name": "Bob B", "affiliation": "Unit B", "email": "bob@example.org", "order": 2},
-        ]}
-        self.assertIn("author confirmation", submission_author_blockers(
-            manuscript, pdf_author="Alice A, Bob B", author_confirmation=confirmation))
+            {"name": "Jane Doe", "profile_id": "~Jane_Doe1", "order": 1}],
+            "email_sharing_confirmed": True, "data_release_confirmed": True}
+        self.assertEqual(check(confirmation), [])
+        self.assertIn("OpenReview form", check({**confirmation, "data_release_confirmed": False}))
 
 
 if __name__ == "__main__":
