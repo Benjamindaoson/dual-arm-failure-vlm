@@ -96,13 +96,24 @@ Verification on October 4 passed: 90 regression tests, bytecode compilation,
 strict OpenSpec validation, the 60-episode ledger check, all 44 completed run
 receipts, and full evidence-asset regeneration. Two consecutive certified
 Tectonic builds produced identical PDF SHA-256
-`966fbd8860de0a43e58452a376aa98aa725a0fd54b74d2d62e0fbe41c7f40efa`
-from source commit `4fee1f9`. `pdfinfo` reports five total pages and PDF Author
+`785d2ddafeaa9b53781bde0f5aa958dc9ee198093931911c34ef0f91a86ae1c5`
+from source commit `0f22c0b`. `pdfinfo` reports five total pages and PDF Author
 `Anonymous Submission`; the auxiliary bibliography label puts references on
 page 5, so the main text occupies four pages. All five rendered pages were
 inspected: tables, figure, citations, and visible URLs are legible and not
 clipped. The default anonymous title block/footer is present by design.
-The paper ends on a relatively sparse page 4; no layout rule was relaxed to
-fill it. The local audit reports `pdf_ready=true` and
+Page 4 now contains a restrained boxed reporting checklist and two clearly
+unexecuted future tests: a $2\times2$ output-interface decomposition and a
+protocol-frozen cross-task replication. Title, abstract, Sections 1--4,
+frozen numerical results, tables, and figure were unchanged. No margin,
+font-size, or style-file adjustment was made. The final pass has no overfull
+box or unresolved citation/reference warning; the build retains one
+noncritical page-1 underfull-vbox notice (badness 1708) and template/font
+warnings. No TODO/FIXME or identifying repository URL appears in the paper;
+PDF links are only to cited arXiv/PMLR sources. The local audit reports `pdf_ready=true` and
 `submission_ready=false` solely because the OpenReview form needs author
-confirmation. This is neither an OpenReview upload nor proof of acceptance.
+confirmation. A local [submission package](../outputs/v2/webp_submission_package.zip)
+contains this PDF and only its required anonymous LaTeX source, bibliography,
+official style/BST, and generated table/figure inputs; the archive inventory
+was read back after creation. It is a handoff archive, not an OpenReview upload
+or proof of acceptance.
