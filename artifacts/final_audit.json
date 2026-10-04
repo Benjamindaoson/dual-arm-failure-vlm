@@ -7,7 +7,7 @@
     "final-sft-state-seed44": "533ed229d35417015c28e0c425fbf4ff52c10976443915c9cb57ccf2d8abf5a3"
   },
   "analysis_code_sha256": {
-    "scripts/generate_final_paper_assets.py": "1dbb8f9aa8855d1c17fa08e69fd0ddfec3de0bd61edc20469106cccad080d78c",
+    "scripts/generate_final_paper_assets.py": "fc5b4aa310d0c077ea7ffc8648ed338322dc75429808d67c3c8a053ded7bd37e",
     "scripts/paired_compare.py": "fec4f0f9ec5dfd896fc43127450a251f11c34dbd1803c0b824196cf7d9be0f78",
     "scripts/verify_v2_evidence.py": "a71cc048f3558b3acfc1094ceb21e082be5463ac5afea9e0191fce0add9865e7",
     "src/reboot_recovery/metrics.py": "63d32b478efa8fde7a18da302fc175c90d8051f10dfdea07c90e1107ab4fd4ce",
@@ -73,7 +73,7 @@
     "State SFT 44": "final-sft-state-seed44-test"
   },
   "generated_asset_sha256": {
-    "figures/final_tradeoff.tex": "075ed00293525f222ad95d631a217bc150e2659ef81975590afbcf14594b6cf3",
+    "figures/final_tradeoff.tex": "021b78abf373d8177db0b4c8062ee3a46855028270bb87978e3c2a45978bf9ef",
     "tables/final.tex": "1d74b02db629c8e621ed9b61e7f1bcaba6b8c43a9848727728b647df9fd267e6",
     "tables/paired_contrasts.tex": "ac4f8daeaaebd5e937d81f8700c0356f8558bb0627942bff6a4513f5516dc7bb"
   },
@@ -113,17 +113,19 @@
     "review": "single-blind",
     "url": "https://umi-arena.airoa.io/"
   },
+  "paper_build_git_commit": "2c0d6a40ad32159a117d3d628ed42916089d01c9",
+  "paper_build_source_date_epoch": 1791078006,
   "paper_build_source_sha256": {
     "paper/corl_2026.sty": "58e08aad0335832892081bd7ffea56bd3c2a2ee31e457c13da79752d74f633f0",
     "paper/corlabbrvnat.bst": "eb5c200b6c5a81cd774155c79c28d3a32ac8a5e25bb246a40dda74deb94dfa71",
-    "paper/figures/final_tradeoff.tex": "075ed00293525f222ad95d631a217bc150e2659ef81975590afbcf14594b6cf3",
-    "paper/main.tex": "bd3553963508aaa321a7e9fed1a223e160560327b994b0f3df9c8b25d123f7a8",
-    "paper/references.bib": "9047d28533e1bb9d0dc7ab3fc9c60b8ecf4759868f899de0839a22bda9908f55",
+    "paper/figures/final_tradeoff.tex": "021b78abf373d8177db0b4c8062ee3a46855028270bb87978e3c2a45978bf9ef",
+    "paper/main.tex": "c8c978fd52514fa74d748ec20a9277cbfbd42144c29d9a1049fdd566293f1038",
+    "paper/references.bib": "e1af0cf9fa292e7e9fa8822978f62668f9c079c0358dd560ccfd5c878a1315fa",
     "paper/tables/final.tex": "1d74b02db629c8e621ed9b61e7f1bcaba6b8c43a9848727728b647df9fd267e6",
     "paper/tables/paired_contrasts.tex": "ac4f8daeaaebd5e937d81f8700c0356f8558bb0627942bff6a4513f5516dc7bb"
   },
   "pdf_pages": 4,
-  "pdf_sha256": "d757b9e80de8ef001b4a4978dbe29cceafb04ed93c52869d8f8d1c0e191aecc6",
+  "pdf_sha256": "569997fd9e5fe1a787ce4e451de35604f6ca5ffd12a5cdc2f2d5f4182e979e82",
   "rl_gate": "REVISIT_REPRESENTATION_OR_SUPERVISION; no V2 GRPO or GSPO",
   "rl_gate_source_sha256": {
     "artifacts/v2/final_rl_gate_decision.json": "a65e5b92766f4f6f543e8f7938c7a1e50262a12ddbe50901c661927affa74f42",
@@ -131,7 +133,11 @@
     "artifacts/v2/runs/final-sft-full-seed42-val/predictions.jsonl": "b30366b797d829177d1ca282de59727cc7e9dd75c7059f6a6fa65f5c49478543"
   },
   "submission_blockers": [
-    "author metadata"
+    "author-visible style",
+    "author metadata",
+    "author confirmation",
+    "OpenReview confirmations",
+    "PDF author metadata"
   ],
   "submission_ready": false
 }

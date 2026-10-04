@@ -19,6 +19,7 @@ class SubmissionAuditTests(unittest.TestCase):
         self.assertEqual(report["episode_exposure"]["untouched_same_task"], 0)
         self.assertEqual(report["adapter_hashes_verified"], 4)
         self.assertEqual(report["pdf_pages"], 4)
+        self.assertRegex(report["paper_build_git_commit"], r"^[0-9a-f]{40}$")
         self.assertIn("author metadata", report["submission_blockers"])
 
     def test_mismatched_generated_asset_is_rejected(self):

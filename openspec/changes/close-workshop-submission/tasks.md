@@ -7,5 +7,5 @@
 - [x] Reconfirm each Table 1/Table 2/Figure 1 value against saved predictions and document per-result PASS/FAIL.
 - [x] Make the requested narrow wording and related-work corrections without changing frozen metrics or conclusions.
 - [x] Make Figure 1 distinguishable without color, rebuild the source-bound PDF, and inspect all pages.
-- [ ] Record and verify the exact committed paper-source hash in the final build receipt; workshop/OpenReview format is checked and author-metadata blocker remains fail-closed.
+- [x] Record and verify the exact committed paper-source hash in the final build receipt; workshop/OpenReview format is checked and author-metadata blocker remains fail-closed.
 - [ ] Insert real author metadata for single-blind review, rebuild, and rerun audit before uploading. User will supply later.

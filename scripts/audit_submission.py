@@ -239,6 +239,8 @@ def audit_submission(root: Path = ROOT) -> dict:
         },
         "pdf_pages": pages,
         "pdf_sha256": paper_build["pdf_sha256"],
+        "paper_build_git_commit": paper_build["git_commit"],
+        "paper_build_source_date_epoch": paper_build["source_date_epoch"],
         "paper_build_source_sha256": paper_build["source_sha256"],
     }
 
