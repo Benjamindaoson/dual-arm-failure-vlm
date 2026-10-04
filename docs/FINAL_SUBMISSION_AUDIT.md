@@ -92,6 +92,17 @@ From the repository root in its project-local `.venv`:
     .\.venv\Scripts\python.exe scripts\build_paper.py --tectonic <path-to-tectonic.exe>
     .\.venv\Scripts\python.exe scripts\audit_submission.py
 
-The complete verification results, including page-by-page visual inspection,
-are recorded in the final handoff. The audit must not be described as an
-OpenReview upload or as proof that the workshop will accept the paper.
+Verification on October 4 passed: 90 regression tests, bytecode compilation,
+strict OpenSpec validation, the 60-episode ledger check, all 44 completed run
+receipts, and full evidence-asset regeneration. Two consecutive certified
+Tectonic builds produced identical PDF SHA-256
+`966fbd8860de0a43e58452a376aa98aa725a0fd54b74d2d62e0fbe41c7f40efa`
+from source commit `4fee1f9`. `pdfinfo` reports five total pages and PDF Author
+`Anonymous Submission`; the auxiliary bibliography label puts references on
+page 5, so the main text occupies four pages. All five rendered pages were
+inspected: tables, figure, citations, and visible URLs are legible and not
+clipped. The default anonymous title block/footer is present by design.
+The paper ends on a relatively sparse page 4; no layout rule was relaxed to
+fill it. The local audit reports `pdf_ready=true` and
+`submission_ready=false` solely because the OpenReview form needs author
+confirmation. This is neither an OpenReview upload nor proof of acceptance.

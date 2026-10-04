@@ -12,6 +12,6 @@
 
 ## 3. Verification and handoff
 
-- [ ] 3.1 Commit the paper inputs, rebuild twice with identical PDF hash, and record the exact source commit.
-- [ ] 3.2 Run all tests, OpenSpec validation, evidence regeneration, and final audit.
-- [ ] 3.3 Visually inspect every PDF page and preserve a double-blind local submission PDF without uploading it.
+- [x] 3.1 Commit the paper inputs, rebuild twice with identical PDF hash, and record the exact source commit.
+- [x] 3.2 Run all tests, OpenSpec validation, evidence regeneration, and final audit.
+- [x] 3.3 Visually inspect every PDF page and preserve a double-blind local submission PDF without uploading it.
