@@ -61,8 +61,22 @@ Table~\ref{tab:paired} quantifies SFT-minus-Base differences under the same sema
 \end{table}
 
 \FloatBarrier
-\paragraph{Minimal reporting checklist for robot execution critics.}
-Our diagnostics motivate reporting (1) the exact past-observation boundary and camera/input configuration; (2) the required output schema and parser/normalization rules; (3) interface-validity rate alongside semantic state metrics, failure precision and recall, nominal false-alarm rate, and predicted-class distribution; and (4) episode-level split and prior-exposure status. This is a proposed reporting convention, not a universal standard.
+\noindent\fbox{\begin{minipage}{0.94\linewidth}
+\textbf{Minimal reporting checklist for robot execution critics}
+\begin{enumerate}
+\item Past-observation boundary and camera/input configuration.
+\item Output schema and parser/normalization rules.
+\item Interface-validity rate, semantic state metrics, and failure precision/recall.
+\item Nominal false-alarm rate and predicted-class distribution.
+\item Episode-level split and prior-exposure status.
+\end{enumerate}
+Our diagnostics motivate this proposed checklist; it is not a universal standard.
+\end{minipage}}
+
+\section{Implications and future tests}
+The fixed-Base contrast establishes output-formulation sensitivity, but does not identify which added field or interaction drives it. A pre-specified $2\times2$ interface study would cross the inclusion of \texttt{phase} and \texttt{failure\_mode} while always requesting \texttt{state}: state only, state+phase, state+failure mode, and state+phase+failure mode. It would hold checkpoint, observations, ordered sample IDs, decoding, a common state parser/normalization rule, and semantic evaluation fixed; exact-schema validity would be reported separately. This would distinguish field and interaction effects from interface compliance, not assume a mechanism in advance.
+
+A second test would freeze the reporting protocol, analysis code, and episode-level split before inspecting another REBOOT task, then ask whether the direction and magnitude of interface sensitivity recur. Both follow-ups treat the interface as an experimental factor rather than an implementation constant. Neither experiment has been run.
 
 \section{Limitations and conclusion}
 This is one critic family on one task, with only six internally exposed final episodes; it is a controlled diagnostic model organism, not an independent or cross-task replication. Annotation-defined failure intervals are not independent human judgments of visual observability. The schema contrast changes the requested fields and associated parser together, so it does not identify a unique prompt component or internal representation mechanism. No production-safety or recovery-policy improvement follows. A planned V2 reward intervention failed its pre-test validation gate, so no V2 GRPO or GSPO was run; historical V1 RL runs are not controlled causal evidence.
